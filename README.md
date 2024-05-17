@@ -16,7 +16,7 @@ API REST desarrollada por estudiantes de la Universidad Técnica de Ambato que p
 1. Instalar las dependencias de la aplicación
 
 ```bash
-$ yarn install
+$ yarn install --frozen-lockfile
 ```
 **Nota**: Si no se reconoce el comando `yarn`, instalarlo con el siguiente comando:
 ```bash
