@@ -28,12 +28,11 @@ $ npm install -g yarn
 ```bash
 PORT="3000"
 
-DB_USERNAME="admin"
-DB_PASSWORD="admin"
-DB_NAME="sales-force"
-DB_HOST="localhost"
-DB_PORT="5450"
-DATABASE_URL="postgresql://admin:admin@localhost:5450/sales-force?schema=public"
+POSTGRES_USER="admin"
+POSTGRES_PASSWORD="admin"
+POSTGRES_DB="sales-force"
+DB_PORT="5432"
+DATABASE_URL="postgresql://admin:admin@localhost:5432/sales-force?schema=public"
 ```
 
 
