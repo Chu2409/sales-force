@@ -16,7 +16,8 @@ services:
 
   api:
     container_name: api
-    image: nestjs-api
+    build:
+      context: .
     restart: always
     environment:
       PORT: ${PORT}
