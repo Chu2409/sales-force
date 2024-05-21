@@ -1,12 +1,15 @@
 ## Descripción
-API REST desarrollada por estudiantes de la Universidad Técnica de Ambato que permite realizar análsis, operaciones y consultas sobre un sistema enfocado en ventas. 
+
+API REST desarrollada por estudiantes de la Universidad Técnica de Ambato que permite realizar análsis, operaciones y consultas sobre un sistema enfocado en ventas.
 
 ## Tecnologías
+
 - Nest.js
 - TypeScript
 - PostgreSQL
 
 ## Requisitos
+
 - Node.js 20.13.1
 - Docker
 - Yarn
@@ -16,9 +19,11 @@ API REST desarrollada por estudiantes de la Universidad Técnica de Ambato que p
 1. Instalar las dependencias de la aplicación
 
 ```bash
-$ yarn install --frozen-lockfile
+$ yarn install
 ```
+
 **Nota**: Si no se reconoce el comando `yarn`, instalarlo con el siguiente comando:
+
 ```bash
 $ npm install -g yarn
 ```
@@ -35,17 +40,17 @@ DB_PORT="5432"
 DATABASE_URL="postgresql://admin:admin@localhost:5432/sales-force?schema=public"
 ```
 
-
 3. Utilizar el siguiente comando para levantar la base de datos en un contenedor de Docker:
 
 ```bash
 $ docker-compose up
 ```
+
 **Nota**: Asegurarse de tener Docker instalado en el sistema.
 
 4. Ejecutar las migraciones:
 
- Este comando creará las tablas necesarias en la base de datos y poblará la base de datos con datos de prueba.
+Este comando creará las tablas necesarias en la base de datos y poblará la base de datos con datos de prueba.
 
 ```bash
 $ yarn migration:run
@@ -53,9 +58,8 @@ $ yarn migration:run
 
 5. Iniciar la aplicación en los diferentes modos:
 
-
 ```bash
-# development 
+# development
 $ yarn run start
 
 # watch mode

@@ -3,7 +3,7 @@ FROM node:20.13.1-alpine as install
 WORKDIR /app
 COPY package.json yarn.lock ./
 COPY prisma/schema.prisma ./prisma/schema.prisma
-RUN yarn install --frozen-lockfile --production=true
+RUN yarn install --production=true
 COPY . .
 
 # Creating a build:
