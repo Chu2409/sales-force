@@ -39,11 +39,11 @@ enum EmployeeRole {
 }
 
 model Employee {
-  id        Int          @id @default(autoincrement()) @map("id")
-  username  String       @unique @map("username")
-  password  String       @map("password")
-  role      EmployeeRole @map("role")
-  is_active Boolean      @default(true) @map("is_active")
+  id       Int          @id @default(autoincrement()) @map("id")
+  username String       @unique @map("username")
+  password String       @map("password")
+  role     EmployeeRole @map("role")
+  isActive Boolean      @default(true) @map("is_active")
 
   personId Int    @unique @map("person_id")
   person   Person @relation(fields: [personId], references: [id])
@@ -59,9 +59,9 @@ enum ConsumerType {
 }
 
 model Consumer {
-  id          Int          @id @default(autoincrement()) @map("id")
-  type        ConsumerType @map("type")
-  is_customer Boolean      @default(true) @map("is_customer")
+  id         Int          @id @default(autoincrement()) @map("id")
+  type       ConsumerType @map("type")
+  isCustomer Boolean      @default(true) @map("is_customer")
 
   personId Int    @unique @map("perso n_id")
   person   Person @relation(fields: [personId], references: [id])
@@ -115,10 +115,10 @@ enum VisitStatus {
 }
 
 model Visit {
-  id         Int          @id @default(autoincrement()) @map("id")
-  date       DateTime     @map("date")
-  created_at DateTime     @default(now()) @map("created_at")
-  status     VisitStatus? @map("status")
+  id        Int          @id @default(autoincrement()) @map("id")
+  date      DateTime     @map("date")
+  createdAt DateTime     @default(now()) @map("created_at")
+  status    VisitStatus? @map("status")
 
   delegationId Int        @map("delegation_id")
   delegation   Delegation @relation(fields: [delegationId], references: [id])
@@ -178,7 +178,7 @@ model Service {
   name         String  @map("name")
   description  String  @map("description")
   pricePerHour Float   @map("price_per_hour")
-  is_available Boolean @default(true) @map("is_available")
+  isAvailable  Boolean @default(true) @map("is_available")
 
   items Item[]
 
@@ -203,14 +203,14 @@ enum TransactionOrigin {
 }
 
 model Transaction {
-  id                  Int                @id @default(autoincrement()) @map("id")
-  date                DateTime           @map("date")
-  total               Float              @map("total")
-  status              TransactionStatus? @map("status")
-  type                TransactionType    @map("type")
-  origin              TransactionOrigin  @map("origin")
-  expiration          DateTime?          @map("expiration")
-  success_probability Int?               @map("success_probability")
+  id                 Int                @id @default(autoincrement()) @map("id")
+  date               DateTime           @map("date")
+  total              Float              @map("total")
+  status             TransactionStatus? @map("status")
+  type               TransactionType    @map("type")
+  origin             TransactionOrigin  @map("origin")
+  expiration         DateTime?          @map("expiration")
+  successProbability Int?               @map("success_probability")
 
   delegationId Int        @map("delegation_id")
   delegation   Delegation @relation(fields: [delegationId], references: [id])
