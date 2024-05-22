@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { EmployeesMapper } from '../mappers/employees.mapper'
 
 @Injectable()
-export class PrismaEmployeeRepositoryAdapter
+export class PrismaEmployeesRepositoryAdapter
   implements IEmployeesRepositoryPort
 {
   constructor(
