@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { EmployeesMapper } from '../mappers/employees.mapper'
 
 @Injectable()
-export class PrismaEmployeeRepositoryAdapter
+export class PrismaEmployeesRepositoryAdapter
   implements IEmployeesRepositoryPort
 {
   constructor(
@@ -59,7 +59,10 @@ export class PrismaEmployeeRepositoryAdapter
   }
 
   async deleteEmployee(id: number): Promise<boolean> {
-    const employee = await this.prismaService.employee.delete({ where: { id } })
+    const employee = await this.prismaService.employee.update({
+      where: { id },
+      data: { isActive: false },
+    })
     return !!employee
   }
 }

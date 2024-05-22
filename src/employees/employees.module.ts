@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { EmployeesService } from './application/employees.service'
 import { EmployeesController } from './infrastructre/adapters/in/employees.controller'
-import { PrismaEmployeeRepositoryAdapter } from './infrastructre/adapters/out/prisma.employees.repository.adapter'
+import { PrismaEmployeesRepositoryAdapter } from './infrastructre/adapters/out/prisma.employees.repository.adapter'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 @Module({
@@ -18,7 +18,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
     },
     {
       provide: 'IEmployeesRepositoryPort',
-      useClass: PrismaEmployeeRepositoryAdapter,
+      useClass: PrismaEmployeesRepositoryAdapter,
     },
   ],
 })

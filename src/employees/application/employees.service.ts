@@ -7,29 +7,29 @@ import { EmployeeModel } from '../domain/models/employee'
 export class EmployeesService implements IEmployeesServicePort {
   constructor(
     @Inject('IEmployeesRepositoryPort')
-    private readonly employeeRepository: IEmployeesRepositoryPort,
+    private readonly repository: IEmployeesRepositoryPort,
   ) {}
 
   public async getEmployees(): Promise<EmployeeModel[]> {
-    return this.employeeRepository.getEmployees()
+    return this.repository.getEmployees()
   }
 
   public async createEmployee(employee: EmployeeModel): Promise<EmployeeModel> {
-    return this.employeeRepository.createEmployee(employee)
+    return this.repository.createEmployee(employee)
   }
 
   public async getEmployeeById(employeeId: number): Promise<EmployeeModel> {
-    return this.employeeRepository.getEmployeeById(employeeId)
+    return this.repository.getEmployeeById(employeeId)
   }
 
   public async updateEmployee(
     id: number,
     employee: EmployeeModel,
   ): Promise<EmployeeModel> {
-    return this.employeeRepository.updateEmployee(id, employee)
+    return this.repository.updateEmployee(id, employee)
   }
 
   public async deleteEmployee(employeeId: number): Promise<boolean> {
-    return this.employeeRepository.deleteEmployee(employeeId)
+    return this.repository.deleteEmployee(employeeId)
   }
 }
