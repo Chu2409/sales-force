@@ -10,15 +10,15 @@ export class CategoriesService implements ICategoriesServicePort {
     private readonly repository: ICategoriesRepositoryPort,
   ) {}
 
-  async createCategory(model: CategoryModel): Promise<CategoryModel> {
-    return this.repository.createCategory(model)
+  async createCategory(category: CategoryModel): Promise<CategoryModel> {
+    return this.repository.createCategory(category)
   }
 
   async updateCategory(
     id: number,
-    model: CategoryModel,
+    category: CategoryModel,
   ): Promise<CategoryModel> {
-    return this.repository.updateCategory(id, model)
+    return this.repository.updateCategory(id, category)
   }
 
   async deleteCategory(id: number): Promise<boolean> {

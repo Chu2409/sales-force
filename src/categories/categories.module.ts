@@ -13,7 +13,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
       useClass: PrismaService,
     },
     {
-      provide: 'CategoriesService',
+      provide: 'ICategoriesServicePort',
       useClass: CategoriesService,
     },
     {

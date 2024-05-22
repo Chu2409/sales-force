@@ -17,7 +17,7 @@ import { UpdateCategoryDto } from './dtos/update-category.dto'
 @Controller('categories')
 export class CategoriesController {
   constructor(
-    @Inject('CategoriesService')
+    @Inject('ICategoriesServicePort')
     private readonly categoriesService: CategoriesService,
   ) {}
 
