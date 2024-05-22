@@ -17,7 +17,7 @@ import { EmployeesMapper } from '../mappers/employees.mapper'
 @Controller('employees')
 export class EmployeesController {
   constructor(
-    @Inject('EmployeesService')
+    @Inject('IEmployeesServicePort')
     private readonly employeesService: EmployeesService,
   ) {}
 
