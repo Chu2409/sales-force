@@ -11,6 +11,7 @@ import { ProductsModule } from './products/products.module'
 import { ConsumersModule } from './consumers/consumers.module'
 import { LocationsModule } from './locations/locations.module'
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,9 +21,11 @@ import { LocationsModule } from './locations/locations.module'
     EmployeesModule,
     CategoriesModule,
     BrandsModule,
+    ServicesModule,
     ProductsModule,
     ConsumersModule,
     LocationsModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],
