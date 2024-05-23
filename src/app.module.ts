@@ -7,6 +7,7 @@ import configuration from 'config/configuration'
 import { EmployeesModule } from './employees/employees.module'
 import { CategoriesModule } from './categories/categories.module'
 import { BrandsModule } from './brands/brands.module'
+import { ServicesModule } from './services/services.module'
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { BrandsModule } from './brands/brands.module'
     EmployeesModule,
     CategoriesModule,
     BrandsModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
