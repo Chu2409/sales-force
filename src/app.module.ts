@@ -7,7 +7,10 @@ import configuration from 'config/configuration'
 import { EmployeesModule } from './employees/employees.module'
 import { CategoriesModule } from './categories/categories.module'
 import { BrandsModule } from './brands/brands.module'
-import { ServicesModule } from './services/services.module'
+import { ProductsModule } from './products/products.module'
+import { ConsumersModule } from './consumers/consumers.module'
+import { LocationsModule } from './locations/locations.module'
+
 
 @Module({
   imports: [
@@ -19,6 +22,10 @@ import { ServicesModule } from './services/services.module'
     CategoriesModule,
     BrandsModule,
     ServicesModule,
+    ProductsModule,
+    ConsumersModule,
+    LocationsModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],
