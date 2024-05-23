@@ -8,6 +8,7 @@ import { EmployeesModule } from './employees/employees.module'
 import { CategoriesModule } from './categories/categories.module'
 import { BrandsModule } from './brands/brands.module'
 import { ProductsModule } from './products/products.module'
+import { ConsumersModule } from './consumers/consumers.module'
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProductsModule } from './products/products.module'
     CategoriesModule,
     BrandsModule,
     ProductsModule,
+    ConsumersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
