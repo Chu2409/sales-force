@@ -1,10 +1,4 @@
-import {
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-  IsString,
-  MinLength,
-} from 'class-validator'
+import { IsBoolean, IsNumber, IsString, MinLength } from 'class-validator'
 
 export class CreateServiceDto {
   @IsString()
@@ -12,8 +6,7 @@ export class CreateServiceDto {
   name: string
 
   @IsString()
-  @IsOptional()
-  description?: string
+  description: string
 
   @IsNumber()
   pricePerHour: number
