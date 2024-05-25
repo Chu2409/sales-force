@@ -1,22 +1,38 @@
+import { ICreateCategoryDto } from '../dtos/create-category.dto'
+
 export class CategoryModel {
-  constructor(
-    private id: number,
-    private name: string,
-  ) {}
+  id: number
+  name: string
 
-  public getId(): number {
-    return this.id
+  private constructor() {}
+
+  static create(category: ICreateCategoryDto) {
+    const categoryCreated = new CategoryModelBuilder(new CategoryModel())
+      .name(category.name)
+      .build()
+
+    return categoryCreated
   }
 
-  public setId(id: number): void {
-    this.id = id
+  static builder() {
+    return new CategoryModelBuilder(new CategoryModel())
+  }
+}
+
+class CategoryModelBuilder {
+  constructor(private category: CategoryModel) {}
+
+  id(id: number) {
+    this.category.id = id
+    return this
   }
 
-  public getName(): string {
-    return this.name
+  name(name: string) {
+    this.category.name = name
+    return this
   }
 
-  public setName(name: string): void {
-    this.name = name
+  build() {
+    return this.category
   }
 }

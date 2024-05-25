@@ -9,15 +9,15 @@ import {
   Patch,
   Post,
 } from '@nestjs/common'
-import { CreateCategoryDto } from './dtos/create-category.dto'
-import { CategoriesMapper } from '../mappers/categories.mapper'
 import { CategoriesService } from 'src/categories/application/categories.service'
-import { UpdateCategoryDto } from './dtos/update-category.dto'
+import { CreateCategoryReq } from '../models/create-category.req'
+import { UpdateCategoryReq } from '../models/update-category.req'
+import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories-providers.consts'
 
 @Controller('categories')
 export class CategoriesController {
   constructor(
-    @Inject('ICategoriesServicePort')
+    @Inject(CATEGORIES_SERVICE_PORT)
     private readonly categoriesService: CategoriesService,
   ) {}
 
@@ -32,21 +32,16 @@ export class CategoriesController {
   }
 
   @Post()
-  async createCategory(@Body() category: CreateCategoryDto) {
-    return await this.categoriesService.createCategory(
-      CategoriesMapper.dtoToModel(category),
-    )
+  async createCategory(@Body() category: CreateCategoryReq) {
+    return await this.categoriesService.createCategory(category)
   }
 
   @Patch(':id')
   async updateCategory(
     @Param('id', ParseIntPipe) id: number,
-    @Body() category: UpdateCategoryDto,
+    @Body() category: UpdateCategoryReq,
   ) {
-    return await this.categoriesService.updateCategory(
-      id,
-      CategoriesMapper.dtoToModel(category),
-    )
+    return await this.categoriesService.updateCategory(id, category)
   }
 
   @Delete(':id')

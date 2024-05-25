@@ -37,7 +37,7 @@ export class PrismaProductsRepositoryAdapter
           stock: product.getStock(),
           price: product.getPrice(),
           brandId: product.getBrand().id,
-          categoryId: product.getCategory().getId(),
+          categoryId: product.getCategory().id,
         },
       }),
     )
@@ -56,7 +56,7 @@ export class PrismaProductsRepositoryAdapter
           stock: product.getStock(),
           price: product.getPrice(),
           brandId: product.getBrand().id,
-          categoryId: product.getCategory().getId(),
+          categoryId: product.getCategory().id,
         },
       }),
     )

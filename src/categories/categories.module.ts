@@ -1,23 +1,28 @@
 import { Module } from '@nestjs/common'
 import { CategoriesService } from './application/categories.service'
-import { CategoriesController } from './infrastructre/adapters/in/categories.controller'
-import { PrismaCategoriesRepositoryAdapter } from './infrastructre/adapters/out/prisma.categories.repository.adapter'
 import { PrismaService } from 'src/prisma/prisma.service'
+import {
+  CATEGORIES_REPOSITORY_PORT,
+  CATEGORIES_SERVICE_PORT,
+} from './shared/categories-providers.consts'
+import { CategoriesController } from './infrastructre/http-server/controllers/categories.controller'
+import { PrismaCategoriesRepositoryAdapter } from './infrastructre/adapters/prisma.categories.repository.adapter'
+import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Module({
   imports: [],
   controllers: [CategoriesController],
   providers: [
     {
-      provide: 'PrismaService',
+      provide: PRISMA_SERVICE,
       useClass: PrismaService,
     },
     {
-      provide: 'ICategoriesServicePort',
+      provide: CATEGORIES_SERVICE_PORT,
       useClass: CategoriesService,
     },
     {
-      provide: 'ICategoriesRepositoryPort',
+      provide: CATEGORIES_REPOSITORY_PORT,
       useClass: PrismaCategoriesRepositoryAdapter,
     },
   ],
