@@ -1,5 +1,5 @@
 import { Brand } from 'src/brands/domain/brand'
-import { CategoryModel } from 'src/categories/domain/models/category'
+import { Category } from 'src/categories/domain/category'
 
 export class ProductModel {
   constructor(
@@ -9,7 +9,7 @@ export class ProductModel {
     private stock: number,
     private price: number,
     private brand: Brand,
-    private category: CategoryModel,
+    private category: Category,
   ) {}
 
   public getId(): number {
@@ -60,11 +60,11 @@ export class ProductModel {
     this.brand = brand
   }
 
-  public getCategory(): CategoryModel {
+  public getCategory(): Category {
     return this.category
   }
 
-  public setCategory(category: CategoryModel): void {
+  public setCategory(category: Category): void {
     this.category = category
   }
 }

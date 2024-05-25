@@ -1,3 +1,3 @@
-export interface ICreateCategoryDto {
-  name: string
-}
+import { ICategoryModel } from '../models/category.model'
+
+export interface ICreateCategoryDto extends Omit<ICategoryModel, 'id'> {}

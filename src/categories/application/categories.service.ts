@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ICategoriesServicePort } from '../domain/ports/in/categories.service.port'
 import { ICategoriesRepositoryPort } from '../domain/ports/out/categories.repository.port'
-import { CategoryModel } from '../domain/models/category'
 import { ICreateCategoryDto } from '../domain/dtos/create-category.dto'
 import { IUpdateCategoryDto } from '../domain/dtos/update-category.dto'
 import { CATEGORIES_REPOSITORY_PORT } from '../shared/categories-providers.consts'
+import { ICategoryRes } from '../domain/dtos/category.res'
 
 @Injectable()
 export class CategoriesService implements ICategoriesServicePort {
@@ -13,35 +13,26 @@ export class CategoriesService implements ICategoriesServicePort {
     private readonly repository: ICategoriesRepositoryPort,
   ) {}
 
-  async createCategory(category: ICreateCategoryDto): Promise<CategoryModel> {
-    return this.repository.createCategory(
-      CategoryModel.create({
-        name: category.name,
-      }),
-    )
+  async createCategory(category: ICreateCategoryDto): Promise<ICategoryRes> {
+    return await this.repository.createCategory(category)
   }
 
   async updateCategory(
     id: number,
     category: IUpdateCategoryDto,
-  ): Promise<CategoryModel> {
-    return this.repository.updateCategory(
-      id,
-      CategoryModel.create({
-        name: category.name,
-      }),
-    )
+  ): Promise<ICategoryRes> {
+    return await this.repository.updateCategory(id, category)
   }
 
   async deleteCategory(id: number): Promise<boolean> {
-    return this.repository.deleteCategory(id)
+    return await this.repository.deleteCategory(id)
   }
 
-  async getCategories(): Promise<CategoryModel[]> {
-    return this.repository.getCategories()
+  async getCategories(): Promise<ICategoryRes[]> {
+    return await this.repository.getCategories()
   }
 
-  async getCategoryById(id: number): Promise<CategoryModel> {
-    return this.repository.getCategoryById(id)
+  async getCategoryById(id: number): Promise<ICategoryRes> {
+    return await this.repository.getCategoryById(id)
   }
 }

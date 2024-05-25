@@ -1,13 +1,14 @@
-import { ICreateCategoryDto } from '../dtos/create-category.dto'
+import { ICreateCategoryDto } from './dtos/create-category.dto'
+import { ICategoryModel } from './models/category.model'
 
-export class CategoryModel {
+export class Category implements ICategoryModel {
   id: number
   name: string
 
   private constructor() {}
 
   static create(category: ICreateCategoryDto) {
-    const categoryCreated = new CategoryModelBuilder(new CategoryModel())
+    const categoryCreated = new CategoryBuilder(new Category())
       .name(category.name)
       .build()
 
@@ -15,12 +16,12 @@ export class CategoryModel {
   }
 
   static builder() {
-    return new CategoryModelBuilder(new CategoryModel())
+    return new CategoryBuilder(new Category())
   }
 }
 
-class CategoryModelBuilder {
-  constructor(private category: CategoryModel) {}
+class CategoryBuilder {
+  constructor(private category: Category) {}
 
   id(id: number) {
     this.category.id = id

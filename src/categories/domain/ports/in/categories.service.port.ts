@@ -1,14 +1,14 @@
 import { ICreateCategoryDto } from '../../dtos/create-category.dto'
 import { IUpdateCategoryDto } from '../../dtos/update-category.dto'
-import { CategoryModel } from '../../models/category'
+import { ICategoryRes } from '../../dtos/category.res'
 
 export interface ICategoriesServicePort {
-  createCategory(category: ICreateCategoryDto): Promise<CategoryModel>
+  createCategory(category: ICreateCategoryDto): Promise<ICategoryRes>
   updateCategory(
     id: number,
     category: IUpdateCategoryDto,
-  ): Promise<CategoryModel>
+  ): Promise<ICategoryRes>
   deleteCategory(id: number): Promise<boolean>
-  getCategories(): Promise<CategoryModel[]>
-  getCategoryById(id: number): Promise<CategoryModel>
+  getCategories(): Promise<ICategoryRes[]>
+  getCategoryById(id: number): Promise<ICategoryRes>
 }

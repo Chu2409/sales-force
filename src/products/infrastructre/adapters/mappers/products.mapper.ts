@@ -4,7 +4,7 @@ import { CreateProductDto } from '../in/dtos/create-product.dto'
 import { UpdateProductDto } from '../in/dtos/update-product.dto'
 import { ProductModel } from 'src/products/domain/models/product'
 import { Brand } from 'src/brands/domain/brand'
-import { CategoryModel } from 'src/categories/domain/models/category'
+import { Category } from 'src/categories/domain/category'
 
 export class ProductsMapper {
   public static toModel(product: Product): ProductModel {
@@ -15,7 +15,7 @@ export class ProductsMapper {
       product.stock,
       product.price,
       Brand.builder().id(product.brandId).build(),
-      CategoryModel.builder().id(product.categoryId).build(),
+      Category.builder().id(product.categoryId).build(),
     )
   }
 
@@ -33,7 +33,7 @@ export class ProductsMapper {
       dto.stock,
       dto.price,
       Brand.builder().id(dto.brandId).build(),
-      CategoryModel.builder().id(dto.categoryId).build(),
+      Category.builder().id(dto.categoryId).build(),
     )
   }
 }
