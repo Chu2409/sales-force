@@ -1,3 +1,3 @@
-export interface ICreateBrandDto {
-  name: string
-}
+import { IBrandModel } from '../models/brand.model'
+
+export interface ICreateBrandDto extends Omit<IBrandModel, 'id'> {}

@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { IBrandsServicePort } from '../domain/ports/in/brands.service.port'
 import { IBrandsRepositoryPort } from '../domain/ports/out/brands.repository.port'
-import { BrandModel } from '../domain/models/brand'
 import { ICreateBrandDto } from '../domain/dtos/create-brand.dto'
 import { IUpdateBrandDto } from '../domain/dtos/update-brand.dto'
 import { BRANDS_REPOSITORY_PORT } from '../shared/brands-providers.consts'
+import { IBrandsRes } from '../domain/dtos/brands.res'
 
 @Injectable()
 export class BrandsService implements IBrandsServicePort {
@@ -13,32 +13,23 @@ export class BrandsService implements IBrandsServicePort {
     private readonly repository: IBrandsRepositoryPort,
   ) {}
 
-  async createBrand(model: ICreateBrandDto): Promise<BrandModel> {
-    return this.repository.createBrand(
-      BrandModel.create({
-        name: model.name,
-      }),
-    )
+  async createBrand(brand: ICreateBrandDto): Promise<IBrandsRes> {
+    return await this.repository.createBrand(brand)
   }
 
-  async updateBrand(id: number, model: IUpdateBrandDto): Promise<BrandModel> {
-    return this.repository.updateBrand(
-      id,
-      BrandModel.create({
-        name: model.name,
-      }),
-    )
+  async updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandsRes> {
+    return await this.repository.updateBrand(id, brand)
   }
 
   async deleteBrand(id: number): Promise<boolean> {
-    return this.repository.deleteBrand(id)
+    return await this.repository.deleteBrand(id)
   }
 
-  async getBrands(): Promise<BrandModel[]> {
-    return this.repository.getBrands()
+  async getBrands(): Promise<IBrandsRes[]> {
+    return await this.repository.getBrands()
   }
 
-  async getBrandById(id: number): Promise<BrandModel> {
-    return this.repository.getBrandById(id)
+  async getBrandById(id: number): Promise<IBrandsRes> {
+    return await this.repository.getBrandById(id)
   }
 }

@@ -3,7 +3,7 @@ import { Product } from '@prisma/client'
 import { CreateProductDto } from '../in/dtos/create-product.dto'
 import { UpdateProductDto } from '../in/dtos/update-product.dto'
 import { ProductModel } from 'src/products/domain/models/product'
-import { BrandModel } from 'src/brands/domain/models/brand'
+import { Brand } from 'src/brands/domain/brand'
 import { CategoryModel } from 'src/categories/domain/models/category'
 
 export class ProductsMapper {
@@ -14,7 +14,7 @@ export class ProductsMapper {
       product.description,
       product.stock,
       product.price,
-      BrandModel.builder().id(product.brandId).build(),
+      Brand.builder().id(product.brandId).build(),
       CategoryModel.builder().id(product.categoryId).build(),
     )
   }
@@ -32,7 +32,7 @@ export class ProductsMapper {
       dto.description,
       dto.stock,
       dto.price,
-      BrandModel.builder().id(dto.brandId).build(),
+      Brand.builder().id(dto.brandId).build(),
       CategoryModel.builder().id(dto.categoryId).build(),
     )
   }

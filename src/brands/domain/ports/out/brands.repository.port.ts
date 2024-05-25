@@ -1,9 +1,11 @@
-import { BrandModel } from '../../models/brand'
+import { IBrandsRes } from '../../dtos/brands.res'
+import { ICreateBrandDto } from '../../dtos/create-brand.dto'
+import { IUpdateBrandDto } from '../../dtos/update-brand.dto'
 
 export interface IBrandsRepositoryPort {
-  createBrand(brand: BrandModel): Promise<BrandModel>
-  updateBrand(id: number, brand: BrandModel): Promise<BrandModel>
+  createBrand(brand: ICreateBrandDto): Promise<IBrandsRes>
+  updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandsRes>
   deleteBrand(id: number): Promise<boolean>
-  getBrands(): Promise<BrandModel[]>
-  getBrandById(id: number): Promise<BrandModel>
+  getBrands(): Promise<IBrandsRes[]>
+  getBrandById(id: number): Promise<IBrandsRes>
 }
