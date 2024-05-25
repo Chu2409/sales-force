@@ -1,3 +1,5 @@
+import { ICreateLocationDto } from '../dtos/create-location.dto'
+
 export enum LocationTypeModel {
   COUNTRY = 'COUNTRY',
   STATE = 'STATE',
@@ -6,42 +8,61 @@ export enum LocationTypeModel {
 }
 
 export class LocationModel {
-  constructor(
-    private id: number,
-    private name: string,
-    private type: LocationTypeModel,
-    private parentId: number | null,
-  ) {}
+  id: number
+  name: string
+  type: LocationTypeModel
+  parent: LocationModel | null
 
-  public getId(): number {
-    return this.id
+  private constructor() {}
+
+  static create(location: ICreateLocationDto) {
+    return new LocationModelBuilder(new LocationModel())
+      .name(location.name)
+      .type(location.type)
+      .parent(
+        location.parentId
+          ? LocationModel.builder().id(location.parentId).build()
+          : null,
+      )
+      .build()
   }
 
-  public setId(id: number): void {
-    this.id = id
+  static createWithouParent(location: ICreateLocationDto) {
+    return new LocationModelBuilder(new LocationModel())
+      .name(location.name)
+      .type(location.type)
+      .build()
   }
 
-  public getName(): string {
-    return this.name
+  static builder() {
+    return new LocationModelBuilder(new LocationModel())
+  }
+}
+
+class LocationModelBuilder {
+  constructor(private location: LocationModel) {}
+
+  id(id: number) {
+    this.location.id = id
+    return this
   }
 
-  public setName(name: string): void {
-    this.name = name
+  name(name: string) {
+    this.location.name = name
+    return this
   }
 
-  public getType(): LocationTypeModel {
-    return this.type
+  type(type: LocationTypeModel) {
+    this.location.type = type
+    return this
   }
 
-  public setType(type: LocationTypeModel): void {
-    this.type = type
+  parent(parent: LocationModel | null) {
+    this.location.parent = parent
+    return this
   }
 
-  public getParentId(): number | null {
-    return this.parentId
-  }
-
-  public setParentId(parentId: number | null): void {
-    this.parentId = parentId
+  build() {
+    return this.location
   }
 }

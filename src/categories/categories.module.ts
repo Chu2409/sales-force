@@ -5,8 +5,8 @@ import {
   CATEGORIES_REPOSITORY_PORT,
   CATEGORIES_SERVICE_PORT,
 } from './shared/categories-providers.consts'
-import { CategoriesController } from './infrastructre/http-server/controllers/categories.controller'
-import { PrismaCategoriesRepositoryAdapter } from './infrastructre/adapters/prisma.categories.repository.adapter'
+import { CategoriesController } from './infrastructure/http-server/controllers/categories.controller'
+import { PrismaCategoriesRepositoryAdapter } from './infrastructure/adapters/prisma.categories.repository.adapter'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Module({
