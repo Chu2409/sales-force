@@ -9,15 +9,15 @@ import {
   Patch,
   Post,
 } from '@nestjs/common'
-import { CreateBrandDto } from './dtos/create-brand.dto'
-import { BrandsMapper } from '../mappers/brands.mapper'
-import { UpdateBrandDto } from './dtos/update-brand.dto'
+import { CreateBrandReq } from '../models/create-brand.req'
+import { UpdateBrandReq } from '../models/update-brand.req'
 import { BrandsService } from 'src/brands/application/brands.service'
+import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands-providers.consts'
 
 @Controller('brands')
 export class BrandsController {
   constructor(
-    @Inject('IBrandsServicePort')
+    @Inject(BRANDS_SERVICE_PORT)
     private readonly brandsService: BrandsService,
   ) {}
 
@@ -32,19 +32,16 @@ export class BrandsController {
   }
 
   @Post()
-  async createBrand(@Body() brand: CreateBrandDto) {
-    return await this.brandsService.createBrand(BrandsMapper.dtoToModel(brand))
+  async createBrand(@Body() brand: CreateBrandReq) {
+    return await this.brandsService.createBrand(brand)
   }
 
   @Patch(':id')
   async updateBrand(
     @Param('id', ParseIntPipe) id: number,
-    @Body() brand: UpdateBrandDto,
+    @Body() brand: UpdateBrandReq,
   ) {
-    return await this.brandsService.updateBrand(
-      id,
-      BrandsMapper.dtoToModel(brand),
-    )
+    return await this.brandsService.updateBrand(id, brand)
   }
 
   @Delete(':id')

@@ -14,7 +14,7 @@ export class ProductsMapper {
       product.description,
       product.stock,
       product.price,
-      new BrandModel(product.brandId, undefined),
+      BrandModel.builder().id(product.brandId).build(),
       new CategoryModel(product.categoryId, undefined),
     )
   }
@@ -32,7 +32,7 @@ export class ProductsMapper {
       dto.description,
       dto.stock,
       dto.price,
-      new BrandModel(dto.brandId, undefined),
+      BrandModel.builder().id(dto.brandId).build(),
       new CategoryModel(dto.categoryId, undefined),
     )
   }

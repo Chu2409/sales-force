@@ -1,22 +1,38 @@
+import { ICreateBrandDto } from '../dtos/create-brand.dto'
+
 export class BrandModel {
-  constructor(
-    private id: number,
-    private name: string,
-  ) {}
+  id: number
+  name: string
 
-  public getId(): number {
-    return this.id
+  private constructor() {}
+
+  static create(brand: ICreateBrandDto) {
+    const brandCreated = new BrandModelBuilder(new BrandModel())
+      .name(brand.name)
+      .build()
+
+    return brandCreated
   }
 
-  public setId(id: number): void {
-    this.id = id
+  static builder() {
+    return new BrandModelBuilder(new BrandModel())
+  }
+}
+
+class BrandModelBuilder {
+  constructor(private brand: BrandModel) {}
+
+  id(id: number) {
+    this.brand.id = id
+    return this
   }
 
-  public getName(): string {
-    return this.name
+  name(name: string) {
+    this.brand.name = name
+    return this
   }
 
-  public setName(name: string): void {
-    this.name = name
+  build() {
+    return this.brand
   }
 }
