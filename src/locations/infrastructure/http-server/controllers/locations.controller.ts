@@ -26,6 +26,11 @@ export class LocationsController {
     return await this.locationsService.getLocations()
   }
 
+  @Get('with-parent')
+  async getLocationsWithParent() {
+    return await this.locationsService.getLocationsWithParent()
+  }
+
   @Get(':id')
   async getLocationById(@Param('id', ParseIntPipe) id: number) {
     return await this.locationsService.getLocationById(id)

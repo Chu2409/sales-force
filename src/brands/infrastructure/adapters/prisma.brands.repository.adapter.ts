@@ -2,8 +2,9 @@ import { Inject, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IBrandsRepositoryPort } from 'src/brands/domain/ports/out/brands.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
-import { CreateBrandReq } from '../http-server/models/create-brand.req'
 import { IBrandRes } from 'src/brands/domain/dtos/brand.res'
+import { ICreateBrandDto } from 'src/brands/domain/dtos/create-brand.dto'
+import { IUpdateBrandDto } from 'src/brands/domain/dtos/update-brand.dto'
 
 @Injectable()
 export class PrismaBrandsRepositoryAdapter implements IBrandsRepositoryPort {
@@ -21,7 +22,7 @@ export class PrismaBrandsRepositoryAdapter implements IBrandsRepositoryPort {
     })
   }
 
-  async createBrand(brand: CreateBrandReq): Promise<IBrandRes> {
+  async createBrand(brand: ICreateBrandDto): Promise<IBrandRes> {
     return await this.prismaService.brand.create({
       data: {
         name: brand.name,
@@ -29,7 +30,7 @@ export class PrismaBrandsRepositoryAdapter implements IBrandsRepositoryPort {
     })
   }
 
-  async updateBrand(id: number, brand: CreateBrandReq): Promise<IBrandRes> {
+  async updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandRes> {
     return await this.prismaService.brand.update({
       where: { id },
       data: {

@@ -1,7 +1,6 @@
-import { LocationTypeModel } from '../models/location'
+import { ILocationModel } from '../models/location.model'
 
-export interface ICreateLocationDto {
-  name: string
-  type: LocationTypeModel
-  parentId: number | null
+export interface ICreateLocationDto
+  extends Omit<ILocationModel, 'id' | 'parent'> {
+  parentId?: number
 }

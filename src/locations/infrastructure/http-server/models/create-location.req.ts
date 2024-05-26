@@ -5,15 +5,16 @@ import {
   IsString,
   MinLength,
 } from 'class-validator'
-import { LocationTypeModel } from 'src/locations/domain/models/location'
+import { ICreateLocationDto } from 'src/locations/domain/dtos/create-location.dto'
+import { LocationType } from 'src/locations/domain/models/location.model'
 
-export class CreateLocationReq {
+export class CreateLocationReq implements ICreateLocationDto {
   @IsString()
   @MinLength(3)
   name: string
 
-  @IsEnum(LocationTypeModel)
-  type: LocationTypeModel
+  @IsEnum(LocationType)
+  type: LocationType
 
   @IsNumber()
   @IsOptional()
