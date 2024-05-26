@@ -7,7 +7,7 @@ import { IUpdateProductDto } from 'src/products/domain/dtos/update-product.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Injectable()
-export class PrismaProductsRepositoryAdapter
+export class ProductsPrismaRepositoryAdapter
   implements IProductsRepositoryPort
 {
   constructor(

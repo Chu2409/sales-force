@@ -1,31 +1,37 @@
 import { Inject } from '@nestjs/common'
 import { IServicesRepositoryPort } from '../domain/ports/out/services.repository'
 import { IServicesServicePort } from '../domain/ports/in/services.service.port'
-import { ServiceModel } from '../domain/models/service'
+import { SERVICES_REPOSITORY_PORT } from '../shared/products-providers.consts'
+import { ICreateServiceDto } from '../domain/dtos/create-service.dto'
+import { IServiceRes } from '../domain/dtos/service.res'
+import { IUpdateServiceDto } from '../domain/dtos/update-service.dto'
 
 export class ServicesService implements IServicesServicePort {
   constructor(
-    @Inject('IServicesRepositoryPort')
+    @Inject(SERVICES_REPOSITORY_PORT)
     private readonly repository: IServicesRepositoryPort,
   ) {}
 
-  createService(service: ServiceModel): Promise<ServiceModel> {
-    return this.repository.createService(service)
+  async createService(service: ICreateServiceDto): Promise<IServiceRes> {
+    return await this.repository.createService(service)
   }
 
-  updateService(id: number, service: ServiceModel): Promise<ServiceModel> {
-    return this.repository.updateService(id, service)
+  async updateService(
+    id: number,
+    service: IUpdateServiceDto,
+  ): Promise<IServiceRes> {
+    return await this.repository.updateService(id, service)
   }
 
-  deleteService(id: number): Promise<boolean> {
-    return this.repository.deleteService(id)
+  async deleteService(id: number): Promise<boolean> {
+    return await this.repository.deleteService(id)
   }
 
-  getServices(): Promise<ServiceModel[]> {
-    return this.repository.getServices()
+  async getServices(): Promise<IServiceRes[]> {
+    return await this.repository.getServices()
   }
 
-  getServiceById(id: number): Promise<ServiceModel> {
-    return this.repository.getServiceById(id)
+  async getServiceById(id: number): Promise<IServiceRes> {
+    return await this.repository.getServiceById(id)
   }
 }

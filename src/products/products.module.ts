@@ -3,7 +3,7 @@ import { ProductsService } from './application/products.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { ProductsController } from './infrastructre/http-server/controllers/products.controller'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
-import { PrismaProductsRepositoryAdapter } from './infrastructre/adapters/prisma.products.repository.adapter'
+import { ProductsPrismaRepositoryAdapter } from './infrastructre/adapters/products.prisma.repository.adapter'
 import {
   PRODUCTS_REPOSITORY_PORT,
   PRODUCTS_SERVICE_PORT,
@@ -23,7 +23,7 @@ import {
     },
     {
       provide: PRODUCTS_REPOSITORY_PORT,
-      useClass: PrismaProductsRepositoryAdapter,
+      useClass: ProductsPrismaRepositoryAdapter,
     },
   ],
 })

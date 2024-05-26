@@ -1,24 +1,29 @@
 import { Module } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { ServicesService } from './application/services.service'
-import { PrismaServicesRepositoryAdapter } from './infraestructure/adapters/out/prisma.services.repository.adapter'
-import { ServicesController } from './infraestructure/adapters/in/services.controller'
+import { ServicesController } from './infraestructure/http-server/controllers/services.controller'
+import { ServicesPrismaRepositoryAdapter } from './infraestructure/adapters/services.prisma.repository.adapter'
+import {
+  SERVICES_REPOSITORY_PORT,
+  SERVICES_SERVICE_PORT,
+} from './shared/products-providers.consts'
+import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Module({
   imports: [],
   controllers: [ServicesController],
   providers: [
     {
-      provide: 'PrismaService',
+      provide: PRISMA_SERVICE,
       useClass: PrismaService,
     },
     {
-      provide: 'IServicesServicePort',
+      provide: SERVICES_SERVICE_PORT,
       useClass: ServicesService,
     },
     {
-      provide: 'IServicesRepositoryPort',
-      useClass: PrismaServicesRepositoryAdapter,
+      provide: SERVICES_REPOSITORY_PORT,
+      useClass: ServicesPrismaRepositoryAdapter,
     },
   ],
 })

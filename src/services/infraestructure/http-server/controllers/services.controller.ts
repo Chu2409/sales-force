@@ -10,14 +10,14 @@ import {
   Post,
 } from '@nestjs/common'
 import { ServicesService } from 'src/services/application/services.service'
-import { CreateServiceDto } from './dtos/create-service.dto'
-import { ServicesMapper } from '../mappers/services.mapper'
-import { UpdateServiceDto } from './dtos/update-service.dto'
+import { SERVICES_SERVICE_PORT } from 'src/services/shared/products-providers.consts'
+import { CreateServiceReq } from '../models/create-service.req'
+import { UpdateServiceReq } from '../models/update-service.req'
 
 @Controller('services')
 export class ServicesController {
   constructor(
-    @Inject('IServicesServicePort')
+    @Inject(SERVICES_SERVICE_PORT)
     private readonly servicesService: ServicesService,
   ) {}
 
@@ -32,21 +32,16 @@ export class ServicesController {
   }
 
   @Post()
-  async CreateService(@Body() service: CreateServiceDto) {
-    return await this.servicesService.createService(
-      ServicesMapper.dtoToModel(service),
-    )
+  async CreateService(@Body() service: CreateServiceReq) {
+    return await this.servicesService.createService(service)
   }
 
   @Patch(':id')
   async updateService(
     @Param('id', ParseIntPipe) id: number,
-    @Body() service: UpdateServiceDto,
+    @Body() service: UpdateServiceReq,
   ) {
-    return await this.servicesService.updateService(
-      id,
-      ServicesMapper.dtoToModel(service),
-    )
+    return await this.servicesService.updateService(id, service)
   }
 
   @Delete(':id')
