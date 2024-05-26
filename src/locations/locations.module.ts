@@ -7,7 +7,7 @@ import {
   LOCATIONS_REPOSITORY_PORT,
   LOCATIONS_SERVICE_PORT,
 } from './shared/locations-providers.consts'
-import { PrismaLocationsRepositoryAdapter } from './infrastructure/adapters/prisma.locations.repository.adapter'
+import { LocationsPrismaRepositoryAdapter } from './infrastructure/adapters/locations.prisma.repository.adapter'
 
 @Module({
   imports: [],
@@ -23,7 +23,7 @@ import { PrismaLocationsRepositoryAdapter } from './infrastructure/adapters/pris
     },
     {
       provide: LOCATIONS_REPOSITORY_PORT,
-      useClass: PrismaLocationsRepositoryAdapter,
+      useClass: LocationsPrismaRepositoryAdapter,
     },
   ],
 })

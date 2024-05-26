@@ -1,11 +1,14 @@
-import { IBrandRes } from 'src/brands/domain/dtos/brand.res'
 import { ICreateCategoryDto } from '../../dtos/create-category.dto'
 import { IUpdateCategoryDto } from '../../dtos/update-category.dto'
+import { ICategoryRes } from '../../dtos/category.res'
 
 export interface ICategoriesRepositoryPort {
-  createCategory(category: ICreateCategoryDto): Promise<IBrandRes>
-  updateCategory(id: number, category: IUpdateCategoryDto): Promise<IBrandRes>
+  createCategory(category: ICreateCategoryDto): Promise<ICategoryRes>
+  updateCategory(
+    id: number,
+    category: IUpdateCategoryDto,
+  ): Promise<ICategoryRes>
   deleteCategory(id: number): Promise<boolean>
-  getCategories(): Promise<IBrandRes[]>
-  getCategoryById(id: number): Promise<IBrandRes>
+  getCategories(): Promise<ICategoryRes[]>
+  getCategoryById(id: number): Promise<ICategoryRes>
 }

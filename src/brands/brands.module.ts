@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { BrandsService } from './application/brands.service'
 import { BrandsController } from './infrastructure/http-server/controllers/brands.controller'
-import { PrismaBrandsRepositoryAdapter } from './infrastructure/adapters/prisma.brands.repository.adapter'
+import { BrandsPrismaRepositoryAdapter } from './infrastructure/adapters/brands.prisma.repository.adapter'
 import { PrismaService } from 'src/prisma/prisma.service'
 import {
   BRANDS_REPOSITORY_PORT,
@@ -23,7 +23,7 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
     },
     {
       provide: BRANDS_REPOSITORY_PORT,
-      useClass: PrismaBrandsRepositoryAdapter,
+      useClass: BrandsPrismaRepositoryAdapter,
     },
   ],
 })

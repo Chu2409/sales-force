@@ -7,7 +7,7 @@ import { ICreateCategoryDto } from 'src/categories/domain/dtos/create-category.d
 import { IUpdateCategoryDto } from 'src/categories/domain/dtos/update-category.dto'
 
 @Injectable()
-export class PrismaCategoriesRepositoryAdapter
+export class CategoriesPrismaRepositoryAdapter
   implements ICategoriesRepositoryPort
 {
   constructor(

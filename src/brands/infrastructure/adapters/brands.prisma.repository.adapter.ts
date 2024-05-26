@@ -7,7 +7,7 @@ import { ICreateBrandDto } from 'src/brands/domain/dtos/create-brand.dto'
 import { IUpdateBrandDto } from 'src/brands/domain/dtos/update-brand.dto'
 
 @Injectable()
-export class PrismaBrandsRepositoryAdapter implements IBrandsRepositoryPort {
+export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
   constructor(
     @Inject(PRISMA_SERVICE) private readonly prismaService: PrismaService,
   ) {}

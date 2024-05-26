@@ -11,7 +11,7 @@ import { ILocationWithParentRes } from 'src/locations/domain/dtos/location-with-
 import { ILocationRes } from 'src/locations/domain/dtos/location.res'
 
 @Injectable()
-export class PrismaLocationsRepositoryAdapter
+export class LocationsPrismaRepositoryAdapter
   implements ILocationsRepositoryPort
 {
   constructor(
@@ -32,8 +32,6 @@ export class PrismaLocationsRepositoryAdapter
     const locations = await this.prismaService.location.findMany({
       include: { parent: true },
     })
-
-    console.log(locations)
 
     return locations.map((location) => ({
       ...location,
