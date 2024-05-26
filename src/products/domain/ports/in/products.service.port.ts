@@ -1,9 +1,11 @@
-import { ProductModel } from '../../models/product'
+import { ICreateProductDto } from '../../dtos/create-product.dto'
+import { IProductRes } from '../../dtos/product.res'
+import { IUpdateProductDto } from '../../dtos/update-product.dto'
 
 export interface IProductsServicePort {
-  getProducts(): Promise<ProductModel[]>
-  getProductById(id: number): Promise<ProductModel | null>
-  createProduct(product: ProductModel): Promise<ProductModel>
-  updateProduct(id: number, product: ProductModel): Promise<ProductModel>
+  getProducts(): Promise<IProductRes[]>
+  getProductById(id: number): Promise<IProductRes | null>
+  createProduct(product: ICreateProductDto): Promise<IProductRes>
+  updateProduct(id: number, product: IUpdateProductDto): Promise<IProductRes>
   deleteProduct(id: number): Promise<boolean>
 }

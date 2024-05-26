@@ -1,35 +1,38 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { IProductsServicePort } from '../domain/ports/in/products.service.port'
 import { IProductsRepositoryPort } from '../domain/ports/out/products.repository.port'
-import { ProductModel } from '../domain/models/product'
+import { IProductRes } from '../domain/dtos/product.res'
+import { ICreateProductDto } from '../domain/dtos/create-product.dto'
+import { IUpdateProductDto } from '../domain/dtos/update-product.dto'
+import { PRODUCTS_REPOSITORY_PORT } from '../shared/products-providers.consts'
 
 @Injectable()
 export class ProductsService implements IProductsServicePort {
   constructor(
-    @Inject('IProductsRepositoryPort')
+    @Inject(PRODUCTS_REPOSITORY_PORT)
     private readonly repository: IProductsRepositoryPort,
   ) {}
 
-  public async getProducts(): Promise<ProductModel[]> {
-    return this.repository.getProducts()
+  async getProducts(): Promise<IProductRes[]> {
+    return await this.repository.getProducts()
   }
 
-  public async createProduct(product: ProductModel): Promise<ProductModel> {
-    return this.repository.createProduct(product)
+  async createProduct(product: ICreateProductDto): Promise<IProductRes> {
+    return await this.repository.createProduct(product)
   }
 
-  public async getProductById(productId: number): Promise<ProductModel> {
-    return this.repository.getProductById(productId)
+  async getProductById(productId: number): Promise<IProductRes> {
+    return await this.repository.getProductById(productId)
   }
 
-  public async updateProduct(
+  async updateProduct(
     id: number,
-    product: ProductModel,
-  ): Promise<ProductModel> {
-    return this.repository.updateProduct(id, product)
+    product: IUpdateProductDto,
+  ): Promise<IProductRes> {
+    return await this.repository.updateProduct(id, product)
   }
 
-  public async deleteProduct(productId: number): Promise<boolean> {
-    return this.repository.deleteProduct(productId)
+  async deleteProduct(productId: number): Promise<boolean> {
+    return await this.repository.deleteProduct(productId)
   }
 }
