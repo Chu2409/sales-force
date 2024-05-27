@@ -1,9 +1,11 @@
-import { ServiceModel } from '../../models/service'
+import { ICreateServiceDto } from '../../dtos/create-service.dto'
+import { IServiceRes } from '../../dtos/service.res'
+import { IUpdateServiceDto } from '../../dtos/update-service.dto'
 
 export interface IServicesRepositoryPort {
-  createService(service: ServiceModel): Promise<ServiceModel>
-  updateService(id: number, service: ServiceModel): Promise<ServiceModel>
+  createService(service: ICreateServiceDto): Promise<IServiceRes>
+  updateService(id: number, service: IUpdateServiceDto): Promise<IServiceRes>
   deleteService(id: number): Promise<boolean>
-  getServices(): Promise<ServiceModel[]>
-  getServiceById(id: number): Promise<ServiceModel>
+  getServices(): Promise<IServiceRes[]>
+  getServiceById(id: number): Promise<IServiceRes>
 }

@@ -1,9 +1,16 @@
-import { LocationModel } from '../../models/location'
+import { ICreateLocationDto } from '../../dtos/create-location.dto'
+import { IUpdateLocationDto } from '../../dtos/update-location.dto'
+import { ILocationWithParentRes } from '../../dtos/location-with-parent.res'
+import { ILocationRes } from '../../dtos/location.res'
 
 export interface ILocationsServicePort {
-  getLocations(): Promise<LocationModel[]>
-  getLocationById(id: number): Promise<LocationModel | null>
-  createLocation(location: LocationModel): Promise<LocationModel>
-  updateLocation(id: number, location: LocationModel): Promise<LocationModel>
+  getLocationsWithParent(): Promise<ILocationWithParentRes[]>
+  getLocations(): Promise<ILocationRes[]>
+  getLocationById(id: number): Promise<ILocationWithParentRes | null>
+  createLocation(location: ICreateLocationDto): Promise<ILocationWithParentRes>
+  updateLocation(
+    id: number,
+    location: IUpdateLocationDto,
+  ): Promise<ILocationWithParentRes>
   deleteLocation(id: number): Promise<boolean>
 }

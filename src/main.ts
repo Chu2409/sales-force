@@ -4,6 +4,7 @@ import { Logger, ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
 import { EnvConfiguration } from 'config/configuration'
+import { AllExceptionFilter } from './shared/infrastructure/http-server/exception-filters/all-exception-filter'
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule)
@@ -14,6 +15,7 @@ const bootstrap = async () => {
       forbidNonWhitelisted: true,
     }),
   )
+  app.useGlobalFilters(new AllExceptionFilter())
 
   const config = new DocumentBuilder()
     .setTitle('Sales-Force API')

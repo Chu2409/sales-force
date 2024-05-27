@@ -1,24 +1,29 @@
 import { Module } from '@nestjs/common'
 import { ProductsService } from './application/products.service'
-import { ProductsController } from './infrastructre/adapters/in/products.controller'
-import { PrismaProductsRepositoryAdapter } from './infrastructre/adapters/out/prisma.products.repository.adapter'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { ProductsController } from './infrastructure/http-server/controllers/products.controller'
+import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
+import { ProductsPrismaRepositoryAdapter } from './infrastructure/adapters/products.prisma.repository.adapter'
+import {
+  PRODUCTS_REPOSITORY_PORT,
+  PRODUCTS_SERVICE_PORT,
+} from './shared/products-providers.consts'
 
 @Module({
   imports: [],
   controllers: [ProductsController],
   providers: [
     {
-      provide: 'PrismaService',
+      provide: PRISMA_SERVICE,
       useClass: PrismaService,
     },
     {
-      provide: 'IProductsServicePort',
+      provide: PRODUCTS_SERVICE_PORT,
       useClass: ProductsService,
     },
     {
-      provide: 'IProductsRepositoryPort',
-      useClass: PrismaProductsRepositoryAdapter,
+      provide: PRODUCTS_REPOSITORY_PORT,
+      useClass: ProductsPrismaRepositoryAdapter,
     },
   ],
 })

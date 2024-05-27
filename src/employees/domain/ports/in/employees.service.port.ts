@@ -1,9 +1,14 @@
-import { EmployeeModel } from '../../models/employee'
+import { ICreateEmployeeDto } from '../../dtos/create-employee.dto'
+import { IEmployeeRes } from '../../dtos/employee.res'
+import { IUpdateEmployeeDto } from '../../dtos/update-employee.dto'
 
 export interface IEmployeesServicePort {
-  getEmployees(): Promise<EmployeeModel[]>
-  getEmployeeById(id: number): Promise<EmployeeModel | null>
-  createEmployee(employee: EmployeeModel): Promise<EmployeeModel>
-  updateEmployee(id: number, employee: EmployeeModel): Promise<EmployeeModel>
+  getEmployees(): Promise<IEmployeeRes[]>
+  getEmployeeById(id: number): Promise<IEmployeeRes | null>
+  createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes>
+  updateEmployee(
+    id: number,
+    employee: IUpdateEmployeeDto,
+  ): Promise<IEmployeeRes>
   deleteEmployee(id: number): Promise<boolean>
 }

@@ -11,7 +11,7 @@ import { ProductsModule } from './products/products.module'
 import { ConsumersModule } from './consumers/consumers.module'
 import { LocationsModule } from './locations/locations.module'
 import { ServicesModule } from './services/services.module'
-import { PaymentMethodsModule } from './payment-methods/payment-methods.module'
+import { PayMethodsModule } from './pay-methods/pay-methods.module'
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { PaymentMethodsModule } from './payment-methods/payment-methods.module'
     ProductsModule,
     ConsumersModule,
     LocationsModule,
-    PaymentMethodsModule,
+    PayMethodsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

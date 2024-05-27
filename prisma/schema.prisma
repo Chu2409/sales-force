@@ -83,8 +83,8 @@ model Location {
   name String       @map("name")
   type LocationType @map("type")
 
-  parentLocationId Int?      @map("parent_location_id")
-  parentLocation   Location? @relation("Location2Locations", fields: [parentLocationId], references: [id])
+  parentId Int?      @map("parent_location_id")
+  parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
 
   locations   Location[]   @relation("Location2Locations")
   delegations Delegation[]
