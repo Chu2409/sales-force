@@ -1,5 +1,7 @@
+import { Type } from 'class-transformer'
 import {
   IsBoolean,
+  IsDefined,
   IsEnum,
   IsOptional,
   IsString,
@@ -27,5 +29,7 @@ export class CreateEmployeeReq implements ICreateEmployeeDto {
   isActive?: boolean
 
   @ValidateNested()
+  @Type(() => CreatePersonReq)
+  @IsDefined()
   person: CreatePersonReq
 }

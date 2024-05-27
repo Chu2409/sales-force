@@ -6,8 +6,6 @@ import { ICreateEmployeeDto } from 'src/employees/domain/dtos/create-employee.dt
 import { IUpdateEmployeeDto } from 'src/employees/domain/dtos/update-employee.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { EmployeeRole } from 'src/employees/domain/models/employee.model'
-import { EmployeeRole as IEmployeeRole } from '@prisma/client'
-import { PersonGender as IPersonGender } from '@prisma/client'
 import { PersonGender } from 'src/people/domain/models/person.model'
 
 @Injectable()
@@ -23,7 +21,8 @@ export class EmployeesPrismaRepositoryAdapter
       include: { person: true },
     })
 
-    return employees.map((employee) => ({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return employees.map(({ personId, ...employee }) => ({
       ...employee,
       role: employee.role as EmployeeRole,
       person: {
@@ -34,10 +33,12 @@ export class EmployeesPrismaRepositoryAdapter
   }
 
   async getEmployeeById(id: number): Promise<IEmployeeRes> {
-    const employee = await this.prismaService.employee.findUnique({
-      where: { id },
-      include: { person: true },
-    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { personId, ...employee } =
+      await this.prismaService.employee.findUnique({
+        where: { id },
+        include: { person: true },
+      })
 
     return {
       ...employee,
@@ -53,19 +54,19 @@ export class EmployeesPrismaRepositoryAdapter
     person,
     ...employee
   }: ICreateEmployeeDto): Promise<IEmployeeRes> {
-    const employeeCreated = await this.prismaService.employee.create({
-      data: {
-        ...employee,
-        role: employee.role as IEmployeeRole,
-        person: {
-          create: {
-            ...person,
-            gender: person.gender as IPersonGender,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { personId, ...employeeCreated } =
+      await this.prismaService.employee.create({
+        data: {
+          ...employee,
+          person: {
+            create: {
+              ...person,
+            },
           },
         },
-      },
-      include: { person: true },
-    })
+        include: { person: true },
+      })
 
     return {
       ...employeeCreated,
@@ -81,22 +82,22 @@ export class EmployeesPrismaRepositoryAdapter
     id: number,
     { person, ...employee }: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes> {
-    const employeeUpdated = await this.prismaService.employee.update({
-      where: { id },
-      data: {
-        ...employee,
-        role: employee.role as IEmployeeRole,
-        person: {
-          update: {
-            data: {
-              ...person,
-              gender: person.gender as IPersonGender,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { personId, ...employeeUpdated } =
+      await this.prismaService.employee.update({
+        where: { id },
+        data: {
+          ...employee,
+          person: {
+            update: {
+              data: {
+                ...person,
+              },
             },
           },
         },
-      },
-      include: { person: true },
-    })
+        include: { person: true },
+      })
 
     return {
       ...employeeUpdated,

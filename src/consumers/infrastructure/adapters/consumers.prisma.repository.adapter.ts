@@ -7,7 +7,6 @@ import { ICreateConsumerDto } from 'src/consumers/domain/dtos/create-consumer.dt
 import { IUpdateConsumerDto } from 'src/consumers/domain/dtos/update-consumer.dto'
 import { ConsumerType } from 'src/consumers/domain/models/consumer.model'
 import { PersonGender } from 'src/people/domain/models/person.model'
-import { PersonGender as IPersonGender } from '@prisma/client'
 
 @Injectable()
 export class ConsumersPrismaRepositoryAdapter
@@ -63,7 +62,6 @@ export class ConsumersPrismaRepositoryAdapter
           person: {
             create: {
               ...person,
-              gender: person.gender as IPersonGender,
             },
           },
         },
@@ -95,7 +93,6 @@ export class ConsumersPrismaRepositoryAdapter
             update: {
               data: {
                 ...person,
-                gender: person.gender as IPersonGender,
               },
             },
           },
