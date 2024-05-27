@@ -1,35 +1,38 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { IEmployeesServicePort } from '../domain/ports/in/employees.service.port'
 import { IEmployeesRepositoryPort } from '../domain/ports/out/employees.repository.port'
-import { EmployeeModel } from '../domain/models/employee'
+import { EMPLOYEES_REPOSITORY_PORT } from '../shared/employees-providers.consts'
+import { IEmployeeRes } from '../domain/dtos/employee.res'
+import { ICreateEmployeeDto } from '../domain/dtos/create-employee.dto'
+import { IUpdateEmployeeDto } from '../domain/dtos/update-employee.dto'
 
 @Injectable()
 export class EmployeesService implements IEmployeesServicePort {
   constructor(
-    @Inject('IEmployeesRepositoryPort')
+    @Inject(EMPLOYEES_REPOSITORY_PORT)
     private readonly repository: IEmployeesRepositoryPort,
   ) {}
 
-  public async getEmployees(): Promise<EmployeeModel[]> {
-    return this.repository.getEmployees()
+  async getEmployees(): Promise<IEmployeeRes[]> {
+    return await this.repository.getEmployees()
   }
 
-  public async createEmployee(employee: EmployeeModel): Promise<EmployeeModel> {
-    return this.repository.createEmployee(employee)
+  async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
+    return await this.repository.createEmployee(employee)
   }
 
-  public async getEmployeeById(employeeId: number): Promise<EmployeeModel> {
-    return this.repository.getEmployeeById(employeeId)
+  async getEmployeeById(employeeId: number): Promise<IEmployeeRes> {
+    return await this.repository.getEmployeeById(employeeId)
   }
 
-  public async updateEmployee(
+  async updateEmployee(
     id: number,
-    employee: EmployeeModel,
-  ): Promise<EmployeeModel> {
-    return this.repository.updateEmployee(id, employee)
+    employee: IUpdateEmployeeDto,
+  ): Promise<IEmployeeRes> {
+    return await this.repository.updateEmployee(id, employee)
   }
 
-  public async deleteEmployee(employeeId: number): Promise<boolean> {
-    return this.repository.deleteEmployee(employeeId)
+  async deleteEmployee(employeeId: number): Promise<boolean> {
+    return await this.repository.deleteEmployee(employeeId)
   }
 }

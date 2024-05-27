@@ -10,14 +10,14 @@ import {
   Post,
 } from '@nestjs/common'
 import { ConsumersService } from 'src/consumers/application/consumers.service'
-import { CreateConsumerDto } from './dtos/create-consumer.dto'
-import { UpdateConsumerDto } from './dtos/update-consumer.dto'
-import { ConsumersMapper } from '../mappers/consumers.mapper'
+import { CONSUMERS_SERVICE_PORT } from 'src/consumers/shared/consumers-providers.consts'
+import { CreateConsumerReq } from '../models/create-consumer.req'
+import { UpdateConsumerReq } from '../models/update-consumer.req'
 
 @Controller('consumers')
 export class ConsumersController {
   constructor(
-    @Inject('IConsumersServicePort')
+    @Inject(CONSUMERS_SERVICE_PORT)
     private readonly consumersService: ConsumersService,
   ) {}
 
@@ -32,21 +32,16 @@ export class ConsumersController {
   }
 
   @Post()
-  async createConsumer(@Body() consumer: CreateConsumerDto) {
-    return await this.consumersService.createConsumer(
-      ConsumersMapper.dtoToModel(consumer),
-    )
+  async createConsumer(@Body() consumer: CreateConsumerReq) {
+    return await this.consumersService.createConsumer(consumer)
   }
 
   @Patch(':id')
   async updateConsumer(
     @Param('id', ParseIntPipe) id: number,
-    @Body() consumer: UpdateConsumerDto,
+    @Body() consumer: UpdateConsumerReq,
   ) {
-    return await this.consumersService.updateConsumer(
-      id,
-      ConsumersMapper.dtoToModel(consumer),
-    )
+    return await this.consumersService.updateConsumer(id, consumer)
   }
 
   @Delete(':id')

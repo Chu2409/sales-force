@@ -1,9 +1,14 @@
-import { ConsumerModel } from '../../models/consumer'
+import { IConsumerRes } from '../../dtos/consumer.res'
+import { ICreateConsumerDto } from '../../dtos/create-consumer.dto'
+import { IUpdateConsumerDto } from '../../dtos/update-consumer.dto'
 
 export interface IConsumersServicePort {
-  getConsumers(): Promise<ConsumerModel[]>
-  getConsumerById(id: number): Promise<ConsumerModel | null>
-  createConsumer(consumer: ConsumerModel): Promise<ConsumerModel>
-  updateConsumer(id: number, consumer: ConsumerModel): Promise<ConsumerModel>
+  getConsumers(): Promise<IConsumerRes[]>
+  getConsumerById(id: number): Promise<IConsumerRes | null>
+  createConsumer(consumer: ICreateConsumerDto): Promise<IConsumerRes>
+  updateConsumer(
+    id: number,
+    consumer: IUpdateConsumerDto,
+  ): Promise<IConsumerRes>
   deleteConsumer(id: number): Promise<boolean>
 }
