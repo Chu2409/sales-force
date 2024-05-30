@@ -8,6 +8,8 @@ import {
   IsDateString,
   Length,
   MinLength,
+  IsNumber,
+  IsPositive,
 } from 'class-validator'
 import { ICreatePersonDto } from 'src/people/domain/dtos/create-person.dto'
 import { PersonGender } from 'src/people/domain/models/person.model'
@@ -49,4 +51,8 @@ export class CreatePersonReq implements ICreatePersonDto {
   @IsDateString()
   @IsOptional()
   birthdate?: Date
+
+  @IsNumber()
+  @IsPositive()
+  locationId: number
 }

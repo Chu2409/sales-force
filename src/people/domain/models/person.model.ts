@@ -1,3 +1,5 @@
+import { ILocationModel } from 'src/locations/domain/models/location.model'
+
 export enum PersonGender {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
@@ -15,4 +17,5 @@ export interface IPersonModel {
   email: string | null
   phone: string | null
   birthdate: Date | null
+  location: ILocationModel
 }
