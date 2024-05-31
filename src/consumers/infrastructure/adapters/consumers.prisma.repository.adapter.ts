@@ -43,7 +43,7 @@ export class ConsumersPrismaRepositoryAdapter
   }
 
   async createConsumer(consumer: ICreateConsumerDto): Promise<IConsumerRes> {
-    const consumerCreated = await this.prismaService.consumer.create({
+    const createdConsumer = await this.prismaService.consumer.create({
       data: {
         ...consumer,
         person: {
@@ -59,7 +59,7 @@ export class ConsumersPrismaRepositoryAdapter
       },
     })
 
-    return ConsumersMapper.toRes(consumerCreated)
+    return ConsumersMapper.toRes(createdConsumer)
   }
 
   async updateConsumer(
@@ -68,7 +68,7 @@ export class ConsumersPrismaRepositoryAdapter
   ): Promise<IConsumerRes> {
     await this.getConsumerById(id)
 
-    const consumerUpdated = await this.prismaService.consumer.update({
+    const updatedConsumer = await this.prismaService.consumer.update({
       where: { id },
       data: {
         ...consumer,
@@ -85,10 +85,12 @@ export class ConsumersPrismaRepositoryAdapter
       },
     })
 
-    return ConsumersMapper.toRes(consumerUpdated)
+    return ConsumersMapper.toRes(updatedConsumer)
   }
 
   async deleteConsumer(id: number): Promise<boolean> {
+    await this.getConsumerById(id)
+
     const consumer = await this.prismaService.consumer.delete({
       where: { id },
     })

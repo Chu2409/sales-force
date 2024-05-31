@@ -1,6 +1,6 @@
 import { IPersonRes } from 'src/people/domain/dtos/person.res'
-import { IEmployeeModel } from '../models/employee.model'
+import { IEmployee } from '../models/employee.interface'
 
-export interface IEmployeeRes extends Omit<IEmployeeModel, 'person'> {
+export interface IEmployeeRes extends Omit<IEmployee, 'person'> {
   person: IPersonRes
 }

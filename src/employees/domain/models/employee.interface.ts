@@ -6,7 +6,7 @@ export enum EmployeeRole {
   ADMIN = 'ADMIN',
 }
 
-export interface IEmployeeModel {
+export interface IEmployee {
   id: number
   username: string
   password: string

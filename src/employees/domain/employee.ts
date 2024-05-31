@@ -1,7 +1,7 @@
 import { IPersonModel } from 'src/people/domain/models/person.model'
-import { EmployeeRole, IEmployeeModel } from './models/employee.model'
+import { EmployeeRole, IEmployee } from './models/employee.interface'
 
-export class Employee implements IEmployeeModel {
+export class Employee implements IEmployee {
   id: number
   username: string
   password: string
@@ -17,7 +17,7 @@ export class Employee implements IEmployeeModel {
 }
 
 class EmployeeBuilder {
-  constructor(private employee: IEmployeeModel) {}
+  constructor(private employee: IEmployee) {}
 
   id(id: number) {
     this.employee.id = id

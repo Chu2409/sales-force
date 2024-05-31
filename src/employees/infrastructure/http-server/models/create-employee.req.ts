@@ -9,7 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator'
 import { ICreateEmployeeDto } from 'src/employees/domain/dtos/create-employee.dto'
-import { EmployeeRole } from 'src/employees/domain/models/employee.model'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 import { CreatePersonReq } from 'src/people/infrastructure/http-server/models/create-person.req'
 
 export class CreateEmployeeReq implements ICreateEmployeeDto {

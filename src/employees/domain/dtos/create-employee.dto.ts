@@ -1,8 +1,8 @@
 import { ICreatePersonDto } from 'src/people/domain/dtos/create-person.dto'
-import { IEmployeeModel } from '../models/employee.model'
+import { IEmployee } from '../models/employee.interface'
 
 export interface ICreateEmployeeDto
-  extends Omit<IEmployeeModel, 'id' | 'person' | 'isActive'> {
+  extends Omit<IEmployee, 'id' | 'person' | 'isActive'> {
   person: ICreatePersonDto
   isActive?: boolean
 }

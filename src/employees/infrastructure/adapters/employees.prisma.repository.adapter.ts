@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { IEmployeesRepositoryPort } from 'src/employees/domain/ports/out/employees.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
 import { ICreateEmployeeDto } from 'src/employees/domain/dtos/create-employee.dto'
 import { IUpdateEmployeeDto } from 'src/employees/domain/dtos/update-employee.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
-import { EmployeeRole } from 'src/employees/domain/models/employee.model'
-import { PersonGender } from 'src/people/domain/models/person.model'
-import { LocationType } from 'src/locations/domain/models/location.model'
+import { EmployeesMapper } from './employees.mapper'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -27,63 +24,31 @@ export class EmployeesPrismaRepositoryAdapter
       },
     })
 
-    return employees.map(({ personId, ...employee }) => {
-      const { locationId, ...person } = employee.person
-      const { parentId, ...location } = person.location
-
-      return {
-        ...employee,
-        role: employee.role as EmployeeRole,
-        person: {
-          ...person,
-          gender: employee.person.gender as PersonGender,
-          location: {
-            ...location,
-            type: location.type as LocationType,
-          },
-        },
-      }
-    })
+    return employees.map((employee) => EmployeesMapper.toRes(employee))
   }
 
   async getEmployeeById(id: number): Promise<IEmployeeRes> {
-    const { personId, ...employee } =
-      await this.prismaService.employee.findUnique({
-        where: { id },
-        include: {
-          person: {
-            include: { location: true },
-          },
-        },
-      })
-
-    const { locationId, ...person } = employee.person
-    const { parentId, ...location } = person.location
-
-    return {
-      ...employee,
-      role: employee.role as EmployeeRole,
-      person: {
-        ...person,
-        gender: employee.person.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
+    const employee = await this.prismaService.employee.findUnique({
+      where: { id },
+      include: {
+        person: {
+          include: { location: true },
         },
       },
-    }
+    })
+
+    if (!employee) throw new NotFoundException('Employee not found')
+
+    return EmployeesMapper.toRes(employee)
   }
 
-  async createEmployee({
-    person: personToCreate,
-    ...employeeToCreate
-  }: ICreateEmployeeDto): Promise<IEmployeeRes> {
-    const { personId, ...employee } = await this.prismaService.employee.create({
+  async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
+    const createdEmployee = await this.prismaService.employee.create({
       data: {
-        ...employeeToCreate,
+        ...employee,
         person: {
           create: {
-            ...personToCreate,
+            ...employee.person,
           },
         },
       },
@@ -94,36 +59,23 @@ export class EmployeesPrismaRepositoryAdapter
       },
     })
 
-    const { locationId, ...person } = employee.person
-    const { parentId, ...location } = person.location
-
-    return {
-      ...employee,
-      role: employee.role as EmployeeRole,
-      person: {
-        ...person,
-        gender: employee.person.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
-        },
-      },
-    }
+    return EmployeesMapper.toRes(createdEmployee)
   }
 
   async updateEmployee(
     id: number,
-    { person: personToUpdate, ...employeeToUpdate }: IUpdateEmployeeDto,
+    employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { personId, ...employee } = await this.prismaService.employee.update({
+    await this.getEmployeeById(id)
+
+    const updatedEmployee = await this.prismaService.employee.update({
       where: { id },
       data: {
-        ...employeeToUpdate,
+        ...employee,
         person: {
           update: {
             data: {
-              ...personToUpdate,
+              ...employee.person,
             },
           },
         },
@@ -135,24 +87,12 @@ export class EmployeesPrismaRepositoryAdapter
       },
     })
 
-    const { locationId, ...person } = employee.person
-    const { parentId, ...location } = person.location
-
-    return {
-      ...employee,
-      role: employee.role as EmployeeRole,
-      person: {
-        ...person,
-        gender: employee.person.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
-        },
-      },
-    }
+    return EmployeesMapper.toRes(updatedEmployee)
   }
 
   async deleteEmployee(id: number): Promise<boolean> {
+    await this.getEmployeeById(id)
+
     const employee = await this.prismaService.employee.update({
       where: { id },
       data: { isActive: false },
