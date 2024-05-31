@@ -4,7 +4,7 @@ import { IUpdateEmployeeDto } from '../../dtos/update-employee.dto'
 
 export interface IEmployeesRepositoryPort {
   getEmployees(): Promise<IEmployeeRes[]>
-  getEmployeeById(id: number): Promise<IEmployeeRes | null>
+  getEmployeeById(id: number): Promise<IEmployeeRes>
   createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes>
   updateEmployee(
     id: number,

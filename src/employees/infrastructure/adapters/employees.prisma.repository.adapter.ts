@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable } from '@nestjs/common'
 import { IEmployeesRepositoryPort } from 'src/employees/domain/ports/out/employees.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -7,6 +8,7 @@ import { IUpdateEmployeeDto } from 'src/employees/domain/dtos/update-employee.dt
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { EmployeeRole } from 'src/employees/domain/models/employee.model'
 import { PersonGender } from 'src/people/domain/models/person.model'
+import { LocationType } from 'src/locations/domain/models/location.model'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -18,93 +20,134 @@ export class EmployeesPrismaRepositoryAdapter
 
   async getEmployees(): Promise<IEmployeeRes[]> {
     const employees = await this.prismaService.employee.findMany({
-      include: { person: true },
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return employees.map(({ personId, ...employee }) => ({
-      ...employee,
-      role: employee.role as EmployeeRole,
-      person: {
-        ...employee.person,
-        gender: employee.person.gender as PersonGender,
-      },
-    }))
+    return employees.map(({ personId, ...employee }) => {
+      const { locationId, ...person } = employee.person
+      const { parentId, ...location } = person.location
+
+      return {
+        ...employee,
+        role: employee.role as EmployeeRole,
+        person: {
+          ...person,
+          gender: employee.person.gender as PersonGender,
+          location: {
+            ...location,
+            type: location.type as LocationType,
+          },
+        },
+      }
+    })
   }
 
   async getEmployeeById(id: number): Promise<IEmployeeRes> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { personId, ...employee } =
       await this.prismaService.employee.findUnique({
         where: { id },
-        include: { person: true },
+        include: {
+          person: {
+            include: { location: true },
+          },
+        },
       })
+
+    const { locationId, ...person } = employee.person
+    const { parentId, ...location } = person.location
 
     return {
       ...employee,
       role: employee.role as EmployeeRole,
       person: {
-        ...employee.person,
+        ...person,
         gender: employee.person.gender as PersonGender,
+        location: {
+          ...location,
+          type: location.type as LocationType,
+        },
       },
     }
   }
 
   async createEmployee({
-    person,
-    ...employee
+    person: personToCreate,
+    ...employeeToCreate
   }: ICreateEmployeeDto): Promise<IEmployeeRes> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { personId, ...employeeCreated } =
-      await this.prismaService.employee.create({
-        data: {
-          ...employee,
-          person: {
-            create: {
-              ...person,
-            },
+    const { personId, ...employee } = await this.prismaService.employee.create({
+      data: {
+        ...employeeToCreate,
+        person: {
+          create: {
+            ...personToCreate,
           },
         },
-        include: { person: true },
-      })
+      },
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
+    })
+
+    const { locationId, ...person } = employee.person
+    const { parentId, ...location } = person.location
 
     return {
-      ...employeeCreated,
-      role: employeeCreated.role as EmployeeRole,
+      ...employee,
+      role: employee.role as EmployeeRole,
       person: {
-        ...employeeCreated.person,
-        gender: employeeCreated.person.gender as PersonGender,
+        ...person,
+        gender: employee.person.gender as PersonGender,
+        location: {
+          ...location,
+          type: location.type as LocationType,
+        },
       },
     }
   }
 
   async updateEmployee(
     id: number,
-    { person, ...employee }: IUpdateEmployeeDto,
+    { person: personToUpdate, ...employeeToUpdate }: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { personId, ...employeeUpdated } =
-      await this.prismaService.employee.update({
-        where: { id },
-        data: {
-          ...employee,
-          person: {
-            update: {
-              data: {
-                ...person,
-              },
+    const { personId, ...employee } = await this.prismaService.employee.update({
+      where: { id },
+      data: {
+        ...employeeToUpdate,
+        person: {
+          update: {
+            data: {
+              ...personToUpdate,
             },
           },
         },
-        include: { person: true },
-      })
+      },
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
+    })
+
+    const { locationId, ...person } = employee.person
+    const { parentId, ...location } = person.location
 
     return {
-      ...employeeUpdated,
-      role: employeeUpdated.role as EmployeeRole,
+      ...employee,
+      role: employee.role as EmployeeRole,
       person: {
-        ...employeeUpdated.person,
-        gender: employeeUpdated.person.gender as PersonGender,
+        ...person,
+        gender: employee.person.gender as PersonGender,
+        location: {
+          ...location,
+          type: location.type as LocationType,
+        },
       },
     }
   }

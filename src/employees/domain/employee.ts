@@ -17,7 +17,7 @@ export class Employee implements IEmployeeModel {
 }
 
 class EmployeeBuilder {
-  constructor(private employee: Employee) {}
+  constructor(private employee: IEmployeeModel) {}
 
   id(id: number) {
     this.employee.id = id
