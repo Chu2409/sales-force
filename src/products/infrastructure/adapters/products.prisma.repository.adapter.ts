@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable } from '@nestjs/common'
 import { IProductsRepositoryPort } from 'src/products/domain/ports/out/products.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -22,93 +23,52 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    return products.map((product) => ({
-      id: product.id,
-      description: product.description,
-      name: product.name,
-      price: product.price,
-      stock: product.stock,
-      brand: product.brand,
-      category: product.category,
-    }))
+    return products.map(({ brandId, categoryId, ...product }) => product)
   }
 
   async getProductById(id: number): Promise<IProductRes> {
-    const product = await this.prismaService.product.findUniqueOrThrow({
-      where: { id },
-      include: {
-        brand: true,
-        category: true,
-      },
-    })
+    const { brandId, categoryId, ...product } =
+      await this.prismaService.product.findUniqueOrThrow({
+        where: { id },
+        include: {
+          brand: true,
+          category: true,
+        },
+      })
 
-    return {
-      id: product.id,
-      description: product.description,
-      name: product.name,
-      price: product.price,
-      stock: product.stock,
-      brand: product.brand,
-      category: product.category,
-    }
+    return product
   }
 
-  async createProduct(product: ICreateProductDto): Promise<IProductRes> {
-    const productCreated = await this.prismaService.product.create({
-      data: {
-        name: product.name,
-        description: product.description,
-        stock: product.stock,
-        price: product.price,
-        brandId: product.brandId,
-        categoryId: product.categoryId,
-      },
-      include: {
-        brand: true,
-        category: true,
-      },
-    })
+  async createProduct(
+    productToCreate: ICreateProductDto,
+  ): Promise<IProductRes> {
+    const { brandId, categoryId, ...product } =
+      await this.prismaService.product.create({
+        data: productToCreate,
+        include: {
+          brand: true,
+          category: true,
+        },
+      })
 
-    return {
-      id: productCreated.id,
-      description: productCreated.description,
-      name: productCreated.name,
-      price: productCreated.price,
-      stock: productCreated.stock,
-      brand: productCreated.brand,
-      category: productCreated.category,
-    }
+    return product
   }
 
   async updateProduct(
     id: number,
-    product: IUpdateProductDto,
+    productToUpdate: IUpdateProductDto,
   ): Promise<IProductRes> {
-    const productUpdated = await this.prismaService.product.update({
-      where: { id },
-      data: {
-        name: product.name,
-        description: product.description,
-        stock: product.stock,
-        price: product.price,
-        brandId: product.brandId,
-        categoryId: product.categoryId,
-      },
-      include: {
-        brand: true,
-        category: true,
-      },
-    })
+    const { brandId, categoryId, ...product } =
+      await this.prismaService.product.update({
+        where: { id },
+        data: productToUpdate,
+        include: {
+          brand: true,
+          category: true,
+        },
+      })
 
-    return {
-      id: productUpdated.id,
-      description: productUpdated.description,
-      name: productUpdated.name,
-      price: productUpdated.price,
-      stock: productUpdated.stock,
-      brand: productUpdated.brand,
-      category: productUpdated.category,
-    }
+    return product
   }
 
   async deleteProduct(id: number): Promise<boolean> {

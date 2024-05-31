@@ -4,7 +4,7 @@ import { IUpdateProductDto } from '../../dtos/update-product.dto'
 
 export interface IProductsRepositoryPort {
   getProducts(): Promise<IProductRes[]>
-  getProductById(id: number): Promise<IProductRes | null>
+  getProductById(id: number): Promise<IProductRes>
   createProduct(product: ICreateProductDto): Promise<IProductRes>
   updateProduct(id: number, product: IUpdateProductDto): Promise<IProductRes>
   deleteProduct(id: number): Promise<boolean>
