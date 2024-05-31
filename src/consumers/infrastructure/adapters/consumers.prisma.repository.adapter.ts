@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable } from '@nestjs/common'
 import { IConsumersRepositoryPort } from 'src/consumers/domain/ports/out/consumers.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -7,6 +8,7 @@ import { ICreateConsumerDto } from 'src/consumers/domain/dtos/create-consumer.dt
 import { IUpdateConsumerDto } from 'src/consumers/domain/dtos/update-consumer.dto'
 import { ConsumerType } from 'src/consumers/domain/models/consumer.model'
 import { PersonGender } from 'src/people/domain/models/person.model'
+import { LocationType } from 'src/locations/domain/models/location.model'
 
 @Injectable()
 export class ConsumersPrismaRepositoryAdapter
@@ -18,34 +20,54 @@ export class ConsumersPrismaRepositoryAdapter
 
   async getConsumers(): Promise<IConsumerRes[]> {
     const consumers = await this.prismaService.consumer.findMany({
-      include: { person: true },
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return consumers.map(({ personId, ...consumer }) => ({
-      ...consumer,
-      type: consumer.type as ConsumerType,
-      person: {
-        ...consumer.person,
-        gender: consumer.person.gender as PersonGender,
-      },
-    }))
+    return consumers.map(({ personId, ...consumer }) => {
+      const { locationId, ...person } = consumer.person
+      const { parentId, ...location } = person.location
+      return {
+        ...consumer,
+        type: consumer.type as ConsumerType,
+        person: {
+          ...person,
+          gender: person.gender as PersonGender,
+          location: {
+            ...location,
+            type: location.type as LocationType,
+          },
+        },
+      }
+    })
   }
 
   async getConsumerById(id: number): Promise<IConsumerRes> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { personId, ...consumer } =
       await this.prismaService.consumer.findUnique({
         where: { id },
-        include: { person: true },
+        include: {
+          person: {
+            include: { location: true },
+          },
+        },
       })
 
+    const { locationId, ...person } = consumer.person
+    const { parentId, ...location } = person.location
     return {
       ...consumer,
       type: consumer.type as ConsumerType,
       person: {
-        ...consumer.person,
-        gender: consumer.person.gender as PersonGender,
+        ...person,
+        gender: person.gender as PersonGender,
+        location: {
+          ...location,
+          type: location.type as LocationType,
+        },
       },
     }
   }
@@ -54,7 +76,6 @@ export class ConsumersPrismaRepositoryAdapter
     person,
     ...consumer
   }: ICreateConsumerDto): Promise<IConsumerRes> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { personId, ...consumerCreated } =
       await this.prismaService.consumer.create({
         data: {
@@ -66,15 +87,25 @@ export class ConsumersPrismaRepositoryAdapter
           },
         },
 
-        include: { person: true },
+        include: {
+          person: {
+            include: { location: true },
+          },
+        },
       })
 
+    const { locationId, ...personCreated } = consumerCreated.person
+    const { parentId, ...location } = personCreated.location
     return {
       ...consumerCreated,
       type: consumerCreated.type as ConsumerType,
       person: {
-        ...consumerCreated.person,
-        gender: consumerCreated.person.gender as PersonGender,
+        ...personCreated,
+        gender: personCreated.gender as PersonGender,
+        location: {
+          ...location,
+          type: location.type as LocationType,
+        },
       },
     }
   }
@@ -83,7 +114,6 @@ export class ConsumersPrismaRepositoryAdapter
     id: number,
     { person, ...consumer }: IUpdateConsumerDto,
   ): Promise<IConsumerRes> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { personId, ...consumerUpdated } =
       await this.prismaService.consumer.update({
         where: { id },
@@ -97,15 +127,25 @@ export class ConsumersPrismaRepositoryAdapter
             },
           },
         },
-        include: { person: true },
+        include: {
+          person: {
+            include: { location: true },
+          },
+        },
       })
 
+    const { locationId, ...personCreated } = consumerUpdated.person
+    const { parentId, ...location } = personCreated.location
     return {
       ...consumerUpdated,
       type: consumerUpdated.type as ConsumerType,
       person: {
-        ...consumerUpdated.person,
-        gender: consumerUpdated.person.gender as PersonGender,
+        ...personCreated,
+        gender: personCreated.gender as PersonGender,
+        location: {
+          ...location,
+          type: location.type as LocationType,
+        },
       },
     }
   }
