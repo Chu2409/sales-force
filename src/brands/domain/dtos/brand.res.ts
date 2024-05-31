@@ -1,3 +1,3 @@
-import { IBrand } from '../models/brand.model'
+import { IBrand } from '../models/brand.interface'
 
 export interface IBrandRes extends IBrand {}

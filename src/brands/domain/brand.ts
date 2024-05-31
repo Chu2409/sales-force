@@ -1,5 +1,5 @@
 import { ICreateBrandDto } from './dtos/create-brand.dto'
-import { IBrand } from './models/brand.model'
+import { IBrand } from './models/brand.interface'
 
 export class Brand implements IBrand {
   id: number

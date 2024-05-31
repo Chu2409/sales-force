@@ -1,3 +1,3 @@
-import { ICategoryModel } from '../models/category.model'
+import { ICategory } from '../models/category.interface'
 
-export interface ICategoryRes extends ICategoryModel {}
+export interface ICategoryRes extends ICategory {}

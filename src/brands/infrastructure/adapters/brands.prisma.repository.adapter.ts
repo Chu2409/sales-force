@@ -35,13 +35,10 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
     const brandExists = await this.prismaService.brand.findFirst({
       where: { name: brand.name },
     })
-
     if (brandExists) throw new BadRequestException('Brand already exists')
 
     return await this.prismaService.brand.create({
-      data: {
-        name: brand.name,
-      },
+      data: brand,
     })
   }
 
@@ -50,14 +47,11 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
     const brandExists = await this.prismaService.brand.findFirst({
       where: { name: brand.name, id: { not: id } },
     })
-
     if (brandExists) throw new BadRequestException('Brand already exists')
 
     return await this.prismaService.brand.update({
       where: { id },
-      data: {
-        name: brand.name,
-      },
+      data: brand,
     })
   }
 

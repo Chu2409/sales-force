@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { ICategoriesRepositoryPort } from 'src/categories/domain/ports/out/categories.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -19,16 +24,23 @@ export class CategoriesPrismaRepositoryAdapter
   }
 
   async getCategoryById(id: number): Promise<ICategoryRes> {
-    return await this.prismaService.category.findUniqueOrThrow({
+    const category = await this.prismaService.category.findUniqueOrThrow({
       where: { id },
     })
+
+    if (!category) throw new NotFoundException('Category not found')
+
+    return category
   }
 
   async createCategory(category: ICreateCategoryDto): Promise<ICategoryRes> {
+    const categoryExists = await this.prismaService.category.findFirst({
+      where: { name: category.name },
+    })
+    if (categoryExists) throw new BadRequestException('Category already exists')
+
     return await this.prismaService.category.create({
-      data: {
-        name: category.name,
-      },
+      data: category,
     })
   }
 
@@ -36,15 +48,21 @@ export class CategoriesPrismaRepositoryAdapter
     id: number,
     category: IUpdateCategoryDto,
   ): Promise<ICategoryRes> {
+    await this.getCategoryById(id)
+    const categoryExists = await this.prismaService.category.findFirst({
+      where: { name: category.name, id: { not: id } },
+    })
+    if (categoryExists) throw new BadRequestException('Category already exists')
+
     return await this.prismaService.category.update({
       where: { id },
-      data: {
-        name: category.name,
-      },
+      data: category,
     })
   }
 
   async deleteCategory(id: number): Promise<boolean> {
+    await this.getCategoryById(id)
+
     const category = await this.prismaService.category.delete({
       where: { id },
     })
