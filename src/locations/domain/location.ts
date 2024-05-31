@@ -1,4 +1,3 @@
-import { ICreateLocationDto } from './dtos/create-location.dto'
 import { ILocationModel, LocationType } from './models/location.model'
 
 export class Location implements ILocationModel {
@@ -8,25 +7,6 @@ export class Location implements ILocationModel {
   parent: ILocationModel | null
 
   private constructor() {}
-
-  static create(location: ICreateLocationDto) {
-    return new LocationBuilder(new Location())
-      .name(location.name)
-      .type(location.type)
-      .parent(
-        location.parentId
-          ? Location.builder().id(location.parentId).build()
-          : null,
-      )
-      .build()
-  }
-
-  static createWithouParent(location: ICreateLocationDto) {
-    return new LocationBuilder(new Location())
-      .name(location.name)
-      .type(location.type)
-      .build()
-  }
 
   static builder() {
     return new LocationBuilder(new Location())
