@@ -28,9 +28,7 @@ export class PayMethodsPrismaRepositoryAdapter
     payMethod: ICreatePayMethodDto,
   ): Promise<IPayMethodRes> {
     return await this.prismaService.payMethod.create({
-      data: {
-        name: payMethod.name,
-      },
+      data: payMethod,
     })
   }
 
@@ -40,9 +38,7 @@ export class PayMethodsPrismaRepositoryAdapter
   ): Promise<IPayMethodRes> {
     return await this.prismaService.payMethod.update({
       where: { id },
-      data: {
-        name: payMethod.name,
-      },
+      data: payMethod,
     })
   }
 
