@@ -5,7 +5,7 @@ export enum ConsumerType {
   COMPANY = 'COMPANY',
 }
 
-export interface IConsumerModel {
+export interface IConsumer {
   id: number
   type: ConsumerType
   isCustomer: boolean

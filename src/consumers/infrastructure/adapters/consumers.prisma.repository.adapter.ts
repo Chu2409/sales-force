@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { IConsumersRepositoryPort } from 'src/consumers/domain/ports/out/consumers.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { IConsumerRes } from 'src/consumers/domain/dtos/consumer.res'
 import { ICreateConsumerDto } from 'src/consumers/domain/dtos/create-consumer.dto'
 import { IUpdateConsumerDto } from 'src/consumers/domain/dtos/update-consumer.dto'
-import { ConsumerType } from 'src/consumers/domain/models/consumer.model'
-import { PersonGender } from 'src/people/domain/models/person.model'
-import { LocationType } from 'src/locations/domain/models/location.model'
+import { ConsumersMapper } from './consumers.mapper'
 
 @Injectable()
 export class ConsumersPrismaRepositoryAdapter
@@ -27,127 +24,68 @@ export class ConsumersPrismaRepositoryAdapter
       },
     })
 
-    return consumers.map(({ personId, ...consumer }) => {
-      const { locationId, ...person } = consumer.person
-      const { parentId, ...location } = person.location
-      return {
-        ...consumer,
-        type: consumer.type as ConsumerType,
-        person: {
-          ...person,
-          gender: person.gender as PersonGender,
-          location: {
-            ...location,
-            type: location.type as LocationType,
-          },
-        },
-      }
-    })
+    return consumers.map((consumer) => ConsumersMapper.toRes(consumer))
   }
 
   async getConsumerById(id: number): Promise<IConsumerRes> {
-    const { personId, ...consumer } =
-      await this.prismaService.consumer.findUnique({
-        where: { id },
-        include: {
-          person: {
-            include: { location: true },
-          },
-        },
-      })
-
-    const { locationId, ...person } = consumer.person
-    const { parentId, ...location } = person.location
-    return {
-      ...consumer,
-      type: consumer.type as ConsumerType,
-      person: {
-        ...person,
-        gender: person.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
+    const consumer = await this.prismaService.consumer.findUnique({
+      where: { id },
+      include: {
+        person: {
+          include: { location: true },
         },
       },
-    }
+    })
+
+    if (!consumer) throw new NotFoundException('Consumer not found')
+
+    return ConsumersMapper.toRes(consumer)
   }
 
-  async createConsumer({
-    person,
-    ...consumer
-  }: ICreateConsumerDto): Promise<IConsumerRes> {
-    const { personId, ...consumerCreated } =
-      await this.prismaService.consumer.create({
-        data: {
-          ...consumer,
-          person: {
-            create: {
-              ...person,
-            },
+  async createConsumer(consumer: ICreateConsumerDto): Promise<IConsumerRes> {
+    const consumerCreated = await this.prismaService.consumer.create({
+      data: {
+        ...consumer,
+        person: {
+          create: {
+            ...consumer.person,
           },
-        },
-
-        include: {
-          person: {
-            include: { location: true },
-          },
-        },
-      })
-
-    const { locationId, ...personCreated } = consumerCreated.person
-    const { parentId, ...location } = personCreated.location
-    return {
-      ...consumerCreated,
-      type: consumerCreated.type as ConsumerType,
-      person: {
-        ...personCreated,
-        gender: personCreated.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
         },
       },
-    }
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
+    })
+
+    return ConsumersMapper.toRes(consumerCreated)
   }
 
   async updateConsumer(
     id: number,
-    { person, ...consumer }: IUpdateConsumerDto,
+    consumer: IUpdateConsumerDto,
   ): Promise<IConsumerRes> {
-    const { personId, ...consumerUpdated } =
-      await this.prismaService.consumer.update({
-        where: { id },
-        data: {
-          ...consumer,
-          person: {
-            update: {
-              data: {
-                ...person,
-              },
-            },
-          },
-        },
-        include: {
-          person: {
-            include: { location: true },
-          },
-        },
-      })
+    await this.getConsumerById(id)
 
-    const { locationId, ...personCreated } = consumerUpdated.person
-    const { parentId, ...location } = personCreated.location
-    return {
-      ...consumerUpdated,
-      type: consumerUpdated.type as ConsumerType,
-      person: {
-        ...personCreated,
-        gender: personCreated.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
+    const consumerUpdated = await this.prismaService.consumer.update({
+      where: { id },
+      data: {
+        ...consumer,
+        person: {
+          update: {
+            ...consumer.person,
+          },
         },
       },
-    }
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
+    })
+
+    return ConsumersMapper.toRes(consumerUpdated)
   }
 
   async deleteConsumer(id: number): Promise<boolean> {

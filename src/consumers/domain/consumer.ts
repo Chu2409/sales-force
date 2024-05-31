@@ -1,7 +1,7 @@
 import { IPersonModel } from 'src/people/domain/models/person.model'
-import { ConsumerType, IConsumerModel } from './models/consumer.model'
+import { ConsumerType, IConsumer } from './models/consumer.interface'
 
-export class Consumer implements IConsumerModel {
+export class Consumer implements IConsumer {
   id: number
   type: ConsumerType
   isCustomer: boolean

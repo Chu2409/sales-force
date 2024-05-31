@@ -24,7 +24,7 @@ export class CategoriesPrismaRepositoryAdapter
   }
 
   async getCategoryById(id: number): Promise<ICategoryRes> {
-    const category = await this.prismaService.category.findUniqueOrThrow({
+    const category = await this.prismaService.category.findUnique({
       where: { id },
     })
 
@@ -49,6 +49,7 @@ export class CategoriesPrismaRepositoryAdapter
     category: IUpdateCategoryDto,
   ): Promise<ICategoryRes> {
     await this.getCategoryById(id)
+
     const categoryExists = await this.prismaService.category.findFirst({
       where: { name: category.name, id: { not: id } },
     })

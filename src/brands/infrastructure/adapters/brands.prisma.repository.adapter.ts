@@ -44,6 +44,7 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
 
   async updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandRes> {
     await this.getBrandById(id)
+
     const brandExists = await this.prismaService.brand.findFirst({
       where: { name: brand.name, id: { not: id } },
     })

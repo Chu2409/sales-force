@@ -1,6 +1,6 @@
 import { IPersonRes } from 'src/people/domain/dtos/person.res'
-import { IConsumerModel } from '../models/consumer.model'
+import { IConsumer } from '../models/consumer.interface'
 
-export interface IConsumerRes extends Omit<IConsumerModel, 'person'> {
+export interface IConsumerRes extends Omit<IConsumer, 'person'> {
   person: IPersonRes
 }

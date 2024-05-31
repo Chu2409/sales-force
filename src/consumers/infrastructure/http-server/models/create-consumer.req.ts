@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator'
 import { ICreateConsumerDto } from 'src/consumers/domain/dtos/create-consumer.dto'
-import { ConsumerType } from 'src/consumers/domain/models/consumer.model'
+import { ConsumerType } from 'src/consumers/domain/models/consumer.interface'
 import { CreatePersonReq } from 'src/people/infrastructure/http-server/models/create-person.req'
 
 export class CreateConsumerReq implements ICreateConsumerDto {
