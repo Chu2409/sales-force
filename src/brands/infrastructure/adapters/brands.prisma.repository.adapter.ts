@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IBrandsRepositoryPort } from 'src/brands/domain/ports/out/brands.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -17,12 +22,22 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
   }
 
   async getBrandById(id: number): Promise<IBrandRes> {
-    return await this.prismaService.brand.findUniqueOrThrow({
+    const brand = await this.prismaService.brand.findUnique({
       where: { id },
     })
+
+    if (!brand) throw new NotFoundException('Brand not found')
+
+    return brand
   }
 
   async createBrand(brand: ICreateBrandDto): Promise<IBrandRes> {
+    const brandExists = await this.prismaService.brand.findFirst({
+      where: { name: brand.name },
+    })
+
+    if (brandExists) throw new BadRequestException('Brand already exists')
+
     return await this.prismaService.brand.create({
       data: {
         name: brand.name,
@@ -31,6 +46,13 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
   }
 
   async updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandRes> {
+    await this.getBrandById(id)
+    const brandExists = await this.prismaService.brand.findFirst({
+      where: { name: brand.name, id: { not: id } },
+    })
+
+    if (brandExists) throw new BadRequestException('Brand already exists')
+
     return await this.prismaService.brand.update({
       where: { id },
       data: {
@@ -40,6 +62,8 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
   }
 
   async deleteBrand(id: number): Promise<boolean> {
+    await this.getBrandById(id)
+
     const brand = await this.prismaService.brand.delete({
       where: { id },
     })

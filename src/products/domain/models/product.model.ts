@@ -1,4 +1,4 @@
-import { IBrandModel } from 'src/brands/domain/models/brand.model'
+import { IBrand } from 'src/brands/domain/models/brand.model'
 import { ICategoryModel } from 'src/categories/domain/models/category.model'
 
 export interface IProductModel {
@@ -8,5 +8,5 @@ export interface IProductModel {
   price: number
   stock: number
   category: ICategoryModel
-  brand: IBrandModel
+  brand: IBrand
 }

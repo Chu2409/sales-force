@@ -1,5 +1,5 @@
 import { IProductModel } from './models/product.model'
-import { IBrandModel } from 'src/brands/domain/models/brand.model'
+import { IBrand } from 'src/brands/domain/models/brand.model'
 import { ICategoryModel } from 'src/categories/domain/models/category.model'
 
 export class Product implements IProductModel {
@@ -9,7 +9,7 @@ export class Product implements IProductModel {
   stock: number
   price: number
   category: ICategoryModel
-  brand: IBrandModel
+  brand: IBrand
 
   private constructor() {}
 
@@ -51,7 +51,7 @@ class ProductBuilder {
     return this
   }
 
-  brand(brand: IBrandModel) {
+  brand(brand: IBrand) {
     this.product.brand = brand
     return this
   }
