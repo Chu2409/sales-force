@@ -26,12 +26,7 @@ export class ServicesPrismaRepositoryAdapter
 
   async createService(service: ICreateServiceDto): Promise<IServiceRes> {
     return await this.prismaService.service.create({
-      data: {
-        name: service.name,
-        description: service.description,
-        pricePerHour: service.pricePerHour,
-        isAvailable: service.isAvailable,
-      },
+      data: service,
     })
   }
 
@@ -41,12 +36,7 @@ export class ServicesPrismaRepositoryAdapter
   ): Promise<IServiceRes> {
     return await this.prismaService.service.update({
       where: { id },
-      data: {
-        name: service.name,
-        description: service.description,
-        pricePerHour: service.pricePerHour,
-        isAvailable: service.isAvailable,
-      },
+      data: service,
     })
   }
 

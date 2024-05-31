@@ -8,6 +8,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum LocationType {
+  COUNTRY
+  STATE
+  CITY
+  NEIGHBORHOOD
+}
+
+model Location {
+  id   Int          @id @default(autoincrement()) @map("id")
+  name String       @map("name")
+  type LocationType @map("type")
+
+  parentId Int?      @map("parent_id")
+  parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
+
+  locations Location[] @relation("Location2Locations")
+  people    Person[]
+
+  @@map("locations")
+}
+
 enum PersonGender {
   MALE
   FEMALE
@@ -29,7 +50,31 @@ model Person {
   employee Employee?
   consumer Consumer?
 
+  locationId Int      @map("location_id")
+  location   Location @relation(fields: [locationId], references: [id])
+
   @@map("people")
+}
+
+model Module {
+  id          Int     @id @default(autoincrement()) @map("id")
+  name        String  @unique @map("name")
+  description String? @map("description")
+
+  permissions Permission[]
+
+  @@map("modules")
+}
+
+model Permission {
+  id Int @id @default(autoincrement()) @map("id")
+
+  employeeId Int      @map("employee_id")
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  moduleId   Int      @map("module_id")
+  module     Module   @relation(fields: [moduleId], references: [id])
+
+  @@map("permissions")
 }
 
 enum EmployeeRole {
@@ -49,8 +94,20 @@ model Employee {
   person   Person @relation(fields: [personId], references: [id])
 
   delegations Delegation[]
+  permissions Permission[]
 
   @@map("employees")
+}
+
+model Quota {
+  id         Int      @id @default(autoincrement()) @map("id")
+  startDate  DateTime @map("start_date")
+  endDate    DateTime @map("end_date")
+  goal       Float    @map("goal")
+  commission Float    @map("commission")
+  isAchieved Boolean  @default(false) @map("is_achieved")
+
+  @@map("quotas")
 }
 
 enum ConsumerType {
@@ -63,7 +120,7 @@ model Consumer {
   type       ConsumerType @map("type")
   isCustomer Boolean      @default(true) @map("is_customer")
 
-  personId Int    @unique @map("perso n_id")
+  personId Int    @unique @map("person_id")
   person   Person @relation(fields: [personId], references: [id])
 
   delegations Delegation[]
@@ -71,66 +128,69 @@ model Consumer {
   @@map("consumers")
 }
 
-enum LocationType {
-  COUNTRY
-  STATE
-  CITY
-  NEIGHBORHOOD
-}
-
-model Location {
-  id   Int          @id @default(autoincrement()) @map("id")
-  name String       @map("name")
-  type LocationType @map("type")
-
-  parentId Int?      @map("parent_location_id")
-  parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
-
-  locations   Location[]   @relation("Location2Locations")
-  delegations Delegation[]
-
-  @@map("locations")
-}
-
 model Delegation {
   id Int @id @default(autoincrement()) @map("id")
 
-  consumerId Int       @map("consumer_id")
-  consumer   Consumer  @relation(fields: [consumerId], references: [id])
-  employeeId Int?      @map("employee_id")
-  employee   Employee? @relation(fields: [employeeId], references: [id])
-  locationId Int       @map("location_id")
-  location   Location  @relation(fields: [locationId], references: [id])
+  consumerId Int      @map("consumer_id")
+  consumer   Consumer @relation(fields: [consumerId], references: [id])
+  employeeId Int      @map("employee_id")
+  employee   Employee @relation(fields: [employeeId], references: [id])
 
-  visits       Visit[]
+  tasks        Task[]
   transactions Transaction[]
+  chances      Chance[]
 
   @@map("delegations")
 }
 
-enum VisitStatus {
+enum ChanceStatus {
+  WON
+  LOST
+}
+
+model Chance {
+  id     Int           @id @default(autoincrement()) @map("id")
+  amount Float         @map("amount")
+  status ChanceStatus? @map("status")
+  date   DateTime      @map("date")
+
+  delegationId Int        @map("delegation_id")
+  delegation   Delegation @relation(fields: [delegationId], references: [id])
+
+  @@map("chances")
+}
+
+enum TaskStatus {
   CANCELED
   COMPLETED
   RESCHEDULED
 }
 
-model Visit {
-  id        Int          @id @default(autoincrement()) @map("id")
-  date      DateTime     @map("date")
-  createdAt DateTime     @default(now()) @map("created_at")
-  status    VisitStatus? @map("status")
+enum TaskType {
+  VISIT
+  CALL
+}
+
+model Task {
+  id            Int         @id @default(autoincrement()) @map("id")
+  date          DateTime    @map("date")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  status        TaskStatus? @map("status")
+  type          TaskType    @map("type")
+  estimatedTime Int?        @map("estimated_time")
 
   delegationId Int        @map("delegation_id")
   delegation   Delegation @relation(fields: [delegationId], references: [id])
 
   transactions Transaction[]
 
-  @@map("visits")
+  @@map("tasks")
 }
 
 model PayMethod {
   id   Int    @id @default(autoincrement()) @map("id")
   name String @unique @map("name")
+  tax  Float  @map("tax")
 
   transactions Transaction[]
 
@@ -164,9 +224,8 @@ model Product {
 
   categoryId Int      @map("category_id")
   category   Category @relation(fields: [categoryId], references: [id])
-
-  brandId Int   @map("brand_id")
-  brand   Brand @relation(fields: [brandId], references: [id])
+  brandId    Int      @map("brand_id")
+  brand      Brand    @relation(fields: [brandId], references: [id])
 
   items Item[]
 
@@ -205,7 +264,7 @@ enum TransactionOrigin {
 model Transaction {
   id                 Int                @id @default(autoincrement()) @map("id")
   date               DateTime           @map("date")
-  total              Float              @map("total")
+  total              Float?             @map("total")
   status             TransactionStatus? @map("status")
   type               TransactionType    @map("type")
   origin             TransactionOrigin  @map("origin")
@@ -214,10 +273,10 @@ model Transaction {
 
   delegationId Int        @map("delegation_id")
   delegation   Delegation @relation(fields: [delegationId], references: [id])
-  visitId      Int?       @map("visit_id")
-  visit        Visit?     @relation(fields: [visitId], references: [id])
-  payMethodId  Int        @map("pay_method_id")
-  payMethod    PayMethod  @relation(fields: [payMethodId], references: [id])
+  taskId       Int?       @map("task_id")
+  task         Task?      @relation(fields: [taskId], references: [id])
+  payMethodId  Int?       @map("pay_method_id")
+  payMethod    PayMethod? @relation(fields: [payMethodId], references: [id])
 
   items Item[]
 

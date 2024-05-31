@@ -6,7 +6,7 @@ import { IUpdateLocationDto } from '../../dtos/update-location.dto'
 export interface ILocationsRepositoryPort {
   getLocationsWithParent(): Promise<ILocationWithParentRes[]>
   getLocations(): Promise<ILocationRes[]>
-  getLocationById(id: number): Promise<ILocationWithParentRes | null>
+  getLocationById(id: number): Promise<ILocationWithParentRes>
   createLocation(location: ICreateLocationDto): Promise<ILocationWithParentRes>
   updateLocation(
     id: number,

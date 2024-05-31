@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable } from '@nestjs/common'
 
 import { ILocationsRepositoryPort } from 'src/locations/domain/ports/out/locations.repository.port'
@@ -21,9 +22,8 @@ export class LocationsPrismaRepositoryAdapter
   async getLocations(): Promise<ILocationRes[]> {
     const locations = await this.prismaService.location.findMany()
 
-    return locations.map((location) => ({
-      id: location.id,
-      name: location.name,
+    return locations.map(({ parentId, ...location }) => ({
+      ...location,
       type: location.type as LocationType,
     }))
   }
@@ -33,22 +33,48 @@ export class LocationsPrismaRepositoryAdapter
       include: { parent: true },
     })
 
-    return locations.map((location) => ({
+    return locations.map(({ parentId, ...location }) => ({
       ...location,
       type: location.type as LocationType,
       parent: location.parent
-        ? ({
+        ? {
             id: location.parent.id,
             name: location.parent.name,
             type: location.parent.type as LocationType,
-          } as Location)
+          }
         : null,
     }))
   }
 
   async getLocationById(id: number): Promise<ILocationWithParentRes> {
-    const location = await this.prismaService.location.findUniqueOrThrow({
-      where: { id },
+    const { parentId, ...location } =
+      await this.prismaService.location.findUniqueOrThrow({
+        where: { id },
+        include: { parent: true },
+      })
+
+    return {
+      ...location,
+      type: location.type as LocationType,
+      parent: location.parent
+        ? {
+            id: location.parent.id,
+            name: location.parent.name,
+            type: location.parent.type as LocationType,
+          }
+        : null,
+    }
+  }
+
+  async createLocation(
+    locationToCreate: ICreateLocationDto,
+  ): Promise<ILocationWithParentRes> {
+    const { parentId, ...location } = await this.prismaService.location.create({
+      data: {
+        name: locationToCreate.name,
+        type: locationToCreate.type,
+        parentId: locationToCreate.parentId,
+      },
       include: { parent: true },
     })
 
@@ -56,63 +82,38 @@ export class LocationsPrismaRepositoryAdapter
       ...location,
       type: location.type as LocationType,
       parent: location.parent
-        ? ({
+        ? {
             id: location.parent.id,
             name: location.parent.name,
             type: location.parent.type as LocationType,
-          } as Location)
-        : null,
-    }
-  }
-
-  async createLocation(
-    location: ICreateLocationDto,
-  ): Promise<ILocationWithParentRes> {
-    const locationCreated = await this.prismaService.location.create({
-      data: {
-        name: location.name,
-        type: location.type,
-        parentId: location.parentId,
-      },
-      include: { parent: true },
-    })
-
-    return {
-      ...locationCreated,
-      type: locationCreated.type as LocationType,
-      parent: locationCreated.parent
-        ? ({
-            id: locationCreated.parent.id,
-            name: locationCreated.parent.name,
-            type: locationCreated.parent.type as LocationType,
-          } as Location)
+          }
         : null,
     }
   }
 
   async updateLocation(
     id: number,
-    location: IUpdateLocationDto,
+    locationToUpdate: IUpdateLocationDto,
   ): Promise<ILocationWithParentRes> {
-    const locationUpdated = await this.prismaService.location.update({
+    const { parentId, ...location } = await this.prismaService.location.update({
       where: { id },
       data: {
-        name: location.name,
-        type: location.type,
-        parentId: location.parentId,
+        name: locationToUpdate.name,
+        type: locationToUpdate.type,
+        parentId: locationToUpdate.parentId,
       },
       include: { parent: true },
     })
 
     return {
-      ...locationUpdated,
-      type: locationUpdated.type as LocationType,
-      parent: locationUpdated.parent
-        ? ({
-            id: locationUpdated.parent.id,
-            name: locationUpdated.parent.name,
-            type: locationUpdated.parent.type as LocationType,
-          } as Location)
+      ...location,
+      type: location.type as LocationType,
+      parent: location.parent
+        ? {
+            id: location.parent.id,
+            name: location.parent.name,
+            type: location.parent.type as LocationType,
+          }
         : null,
     }
   }

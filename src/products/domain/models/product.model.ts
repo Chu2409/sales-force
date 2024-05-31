@@ -5,8 +5,8 @@ export interface IProductModel {
   id: number
   name: string
   description: string | null
-  stock: number
   price: number
+  stock: number
   category: ICategoryModel
   brand: IBrandModel
 }

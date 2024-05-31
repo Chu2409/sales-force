@@ -1,3 +1,4 @@
+import { ILocationModel } from 'src/locations/domain/models/location.model'
 import { IPersonModel, PersonGender } from './models/person.model'
 
 export class Person implements IPersonModel {
@@ -11,6 +12,7 @@ export class Person implements IPersonModel {
   email: string | null
   phone: string | null
   birthdate: Date | null
+  location: ILocationModel
 
   private constructor() {}
 
@@ -68,6 +70,11 @@ class PersonBuilder {
 
   birthdate(birthdate: Date) {
     this.person.birthdate = birthdate
+    return this
+  }
+
+  location(location: ILocationModel) {
+    this.person.location = location
     return this
   }
 
