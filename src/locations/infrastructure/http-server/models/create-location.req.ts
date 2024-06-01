@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator'
 import { ICreateLocationDto } from 'src/locations/domain/dtos/create-location.dto'
-import { LocationType } from 'src/locations/domain/models/location.model'
+import { LocationType } from 'src/locations/domain/models/location.interface'
 
 export class CreateLocationReq implements ICreateLocationDto {
   @IsString()

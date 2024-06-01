@@ -1,3 +1,3 @@
-import { ILocationModel } from '../models/location.model'
+import { ILocation } from '../models/location.interface'
 
-export interface ILocationRes extends Omit<ILocationModel, 'parent'> {}
+export interface ILocationRes extends Omit<ILocation, 'parent'> {}

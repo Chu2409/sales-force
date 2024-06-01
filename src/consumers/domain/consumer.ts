@@ -15,7 +15,7 @@ export class Consumer implements IConsumer {
 }
 
 class ConsumerBuilder {
-  constructor(private consumer: Consumer) {}
+  constructor(private consumer: IConsumer) {}
 
   id(id: number) {
     this.consumer.id = id

@@ -1,4 +1,4 @@
-import { ILocationModel } from 'src/locations/domain/models/location.model'
+import { ILocation } from 'src/locations/domain/models/location.interface'
 import { IPersonModel, PersonGender } from './models/person.model'
 
 export class Person implements IPersonModel {
@@ -12,7 +12,7 @@ export class Person implements IPersonModel {
   email: string | null
   phone: string | null
   birthdate: Date | null
-  location: ILocationModel
+  location: ILocation
 
   private constructor() {}
 
@@ -73,7 +73,7 @@ class PersonBuilder {
     return this
   }
 
-  location(location: ILocationModel) {
+  location(location: ILocation) {
     this.person.location = location
     return this
   }

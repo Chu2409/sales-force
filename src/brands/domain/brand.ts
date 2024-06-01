@@ -19,7 +19,7 @@ export class Brand implements IBrand {
 }
 
 class BrandBuilder {
-  constructor(private brand: Brand) {}
+  constructor(private brand: IBrand) {}
 
   id(id: number) {
     this.brand.id = id

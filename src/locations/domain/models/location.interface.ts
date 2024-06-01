@@ -5,9 +5,9 @@ export enum LocationType {
   NEIGHBORHOOD = 'NEIGHBORHOOD',
 }
 
-export interface ILocationModel {
+export interface ILocation {
   id: number
   name: string
   type: LocationType
-  parent: ILocationModel | null
+  parent: ILocation | null
 }

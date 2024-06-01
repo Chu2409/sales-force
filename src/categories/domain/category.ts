@@ -12,7 +12,7 @@ export class Category implements ICategory {
 }
 
 class CategoryBuilder {
-  constructor(private category: Category) {}
+  constructor(private category: ICategory) {}
 
   id(id: number) {
     this.category.id = id

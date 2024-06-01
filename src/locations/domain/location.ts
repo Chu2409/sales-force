@@ -1,10 +1,10 @@
-import { ILocationModel, LocationType } from './models/location.model'
+import { ILocation, LocationType } from './models/location.interface'
 
-export class Location implements ILocationModel {
+export class Location implements ILocation {
   id: number
   name: string
   type: LocationType
-  parent: ILocationModel | null
+  parent: ILocation | null
 
   private constructor() {}
 
@@ -14,7 +14,7 @@ export class Location implements ILocationModel {
 }
 
 class LocationBuilder {
-  constructor(private location: Location) {}
+  constructor(private location: ILocation) {}
 
   id(id: number) {
     this.location.id = id

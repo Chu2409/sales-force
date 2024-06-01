@@ -38,11 +38,7 @@ export class LocationsController {
 
   @Post()
   async createLocation(@Body() location: CreateLocationReq) {
-    return await this.locationsService.createLocation({
-      name: location.name,
-      type: location.type,
-      parentId: location.parentId,
-    })
+    return await this.locationsService.createLocation(location)
   }
 
   @Patch(':id')
@@ -50,11 +46,7 @@ export class LocationsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() location: UpdateLocationReq,
   ) {
-    return await this.locationsService.updateLocation(id, {
-      name: location.name,
-      type: location.type,
-      parentId: location.parentId,
-    })
+    return await this.locationsService.updateLocation(id, location)
   }
 
   @Delete(':id')
