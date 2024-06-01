@@ -1,3 +1,3 @@
-import { IServiceModel } from '../models/service.model'
+import { IService } from '../models/service.interface'
 
-export interface IServiceRes extends IServiceModel {}
+export interface IServiceRes extends IService {}

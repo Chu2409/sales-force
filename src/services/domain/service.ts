@@ -1,6 +1,6 @@
-import { IServiceModel } from './models/service.model'
+import { IService } from './models/service.interface'
 
-export class Service implements IServiceModel {
+export class Service implements IService {
   id: number
   name: string
   description: string
@@ -15,7 +15,7 @@ export class Service implements IServiceModel {
 }
 
 class ServiceBuilder {
-  constructor(private readonly service: Service) {}
+  constructor(private readonly service: IService) {}
 
   id(id: number) {
     this.service.id = id

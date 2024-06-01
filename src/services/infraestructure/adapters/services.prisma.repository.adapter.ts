@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common'
+import { Inject, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IServicesRepositoryPort } from 'src/services/domain/ports/out/services.repository'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -19,9 +19,13 @@ export class ServicesPrismaRepositoryAdapter
   }
 
   async getServiceById(id: number): Promise<IServiceRes> {
-    return await this.prismaService.service.findUniqueOrThrow({
+    const service = await this.prismaService.service.findUnique({
       where: { id },
     })
+
+    if (!service) throw new NotFoundException('Service not found')
+
+    return service
   }
 
   async createService(service: ICreateServiceDto): Promise<IServiceRes> {
@@ -34,6 +38,8 @@ export class ServicesPrismaRepositoryAdapter
     id: number,
     service: IUpdateServiceDto,
   ): Promise<IServiceRes> {
+    await this.getServiceById(id)
+
     return await this.prismaService.service.update({
       where: { id },
       data: service,
@@ -41,6 +47,8 @@ export class ServicesPrismaRepositoryAdapter
   }
 
   async deleteService(id: number): Promise<boolean> {
+    await this.getServiceById(id)
+
     const service = await this.prismaService.service.delete({
       where: { id },
     })

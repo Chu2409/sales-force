@@ -19,7 +19,7 @@ export class Product implements IProduct {
 }
 
 class ProductBuilder {
-  constructor(private product: Product) {}
+  constructor(private product: IProduct) {}
 
   id(id: number) {
     this.product.id = id

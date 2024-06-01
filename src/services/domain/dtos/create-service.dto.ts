@@ -1,3 +1,3 @@
-import { IServiceModel } from '../models/service.model'
+import { IService } from '../models/service.interface'
 
-export interface ICreateServiceDto extends Omit<IServiceModel, 'id'> {}
+export interface ICreateServiceDto extends Omit<IService, 'id'> {}
