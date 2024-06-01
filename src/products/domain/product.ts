@@ -1,8 +1,8 @@
 import { IBrand } from 'src/brands/domain/models/brand.interface'
-import { IProductModel } from './models/product.model'
+import { IProduct } from './models/product.interface'
 import { ICategory } from 'src/categories/domain/models/category.interface'
 
-export class Product implements IProductModel {
+export class Product implements IProduct {
   id: number
   name: string
   description: string | null

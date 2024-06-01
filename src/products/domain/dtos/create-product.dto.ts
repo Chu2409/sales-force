@@ -1,7 +1,7 @@
-import { IProductModel } from '../models/product.model'
+import { IProduct } from '../models/product.interface'
 
 export interface ICreateProductDto
-  extends Omit<IProductModel, 'id' | 'description' | 'category' | 'brand'> {
+  extends Omit<IProduct, 'id' | 'description' | 'category' | 'brand'> {
   description?: string
   categoryId: number
   brandId: number

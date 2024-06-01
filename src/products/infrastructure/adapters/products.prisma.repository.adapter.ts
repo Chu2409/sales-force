@@ -6,6 +6,7 @@ import { IProductRes } from 'src/products/domain/dtos/product.res'
 import { ICreateProductDto } from 'src/products/domain/dtos/create-product.dto'
 import { IUpdateProductDto } from 'src/products/domain/dtos/update-product.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
+import { ProductsMapper } from './products.mapper'
 
 @Injectable()
 export class ProductsPrismaRepositoryAdapter
@@ -23,55 +24,56 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    return products.map(({ brandId, categoryId, ...product }) => product)
+    return products.map((product) => ProductsMapper.toRes(product))
   }
 
   async getProductById(id: number): Promise<IProductRes> {
-    const { brandId, categoryId, ...product } =
-      await this.prismaService.product.findUniqueOrThrow({
-        where: { id },
-        include: {
-          brand: true,
-          category: true,
-        },
-      })
+    const product = await this.prismaService.product.findUnique({
+      where: { id },
+      include: {
+        brand: true,
+        category: true,
+      },
+    })
+
+    if (!product) throw new Error('Product not found')
 
     return product
   }
 
-  async createProduct(
-    productToCreate: ICreateProductDto,
-  ): Promise<IProductRes> {
-    const { brandId, categoryId, ...product } =
-      await this.prismaService.product.create({
-        data: productToCreate,
-        include: {
-          brand: true,
-          category: true,
-        },
-      })
+  async createProduct(product: ICreateProductDto): Promise<IProductRes> {
+    const createdProduct = await this.prismaService.product.create({
+      data: product,
+      include: {
+        brand: true,
+        category: true,
+      },
+    })
 
-    return product
+    return ProductsMapper.toRes(createdProduct)
   }
 
   async updateProduct(
     id: number,
-    productToUpdate: IUpdateProductDto,
+    product: IUpdateProductDto,
   ): Promise<IProductRes> {
-    const { brandId, categoryId, ...product } =
-      await this.prismaService.product.update({
-        where: { id },
-        data: productToUpdate,
-        include: {
-          brand: true,
-          category: true,
-        },
-      })
+    await this.getProductById(id)
 
-    return product
+    const updatedProduct = await this.prismaService.product.update({
+      where: { id },
+      data: product,
+      include: {
+        brand: true,
+        category: true,
+      },
+    })
+
+    return ProductsMapper.toRes(updatedProduct)
   }
 
   async deleteProduct(id: number): Promise<boolean> {
+    await this.getProductById(id)
+
     const product = await this.prismaService.product.delete({
       where: { id },
     })
