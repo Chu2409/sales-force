@@ -12,7 +12,7 @@ import {
   IsPositive,
 } from 'class-validator'
 import { ICreatePersonDto } from 'src/people/domain/dtos/create-person.dto'
-import { PersonGender } from 'src/people/domain/models/person.model'
+import { PersonGender } from 'src/people/domain/models/person.interface'
 
 export class CreatePersonReq implements ICreatePersonDto {
   @IsNumberString()

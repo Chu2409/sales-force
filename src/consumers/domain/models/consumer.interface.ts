@@ -1,4 +1,4 @@
-import { IPersonModel } from 'src/people/domain/models/person.model'
+import { IPerson } from 'src/people/domain/models/person.interface'
 
 export enum ConsumerType {
   NATURAL = 'NATURAL',
@@ -9,5 +9,5 @@ export interface IConsumer {
   id: number
   type: ConsumerType
   isCustomer: boolean
-  person: IPersonModel
+  person: IPerson
 }

@@ -1,4 +1,4 @@
-import { IPersonModel } from 'src/people/domain/models/person.model'
+import { IPerson } from 'src/people/domain/models/person.interface'
 
 export enum EmployeeRole {
   SELLER = 'SELLER',
@@ -12,5 +12,5 @@ export interface IEmployee {
   password: string
   role: EmployeeRole
   isActive: boolean
-  person: IPersonModel
+  person: IPerson
 }

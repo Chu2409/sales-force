@@ -1,7 +1,7 @@
 import { ILocation } from 'src/locations/domain/models/location.interface'
-import { IPersonModel, PersonGender } from './models/person.model'
+import { IPerson, PersonGender } from './models/person.interface'
 
-export class Person implements IPersonModel {
+export class Person implements IPerson {
   id: number
   dni: string
   name: string
@@ -22,7 +22,7 @@ export class Person implements IPersonModel {
 }
 
 class PersonBuilder {
-  constructor(private person: Person) {}
+  constructor(private person: IPerson) {}
 
   id(id: number) {
     this.person.id = id

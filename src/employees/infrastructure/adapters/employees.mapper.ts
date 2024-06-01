@@ -3,7 +3,7 @@ import { Employee, Location, Person } from '@prisma/client'
 import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
 import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 import { LocationType } from 'src/locations/domain/models/location.interface'
-import { PersonGender } from 'src/people/domain/models/person.model'
+import { PersonGender } from 'src/people/domain/models/person.interface'
 
 interface IFullEmployeePrisma extends Employee {
   person: Person & { location: Location }

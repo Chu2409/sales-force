@@ -6,7 +6,7 @@ export enum PersonGender {
   OTHER = 'OTHER',
 }
 
-export interface IPersonModel {
+export interface IPerson {
   id: number
   dni: string
   name: string

@@ -3,7 +3,7 @@ import { Consumer, Location, Person } from '@prisma/client'
 import { IConsumerRes } from 'src/consumers/domain/dtos/consumer.res'
 import { ConsumerType } from 'src/consumers/domain/models/consumer.interface'
 import { LocationType } from 'src/locations/domain/models/location.interface'
-import { PersonGender } from 'src/people/domain/models/person.model'
+import { PersonGender } from 'src/people/domain/models/person.interface'
 
 interface IFullConsumerPrisma extends Consumer {
   person: Person & { location: Location }

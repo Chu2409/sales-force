@@ -1,7 +1,7 @@
-import { IPersonModel, PersonGender } from '../models/person.model'
+import { IPerson, PersonGender } from '../models/person.interface'
 
 export interface ICreatePersonDto
-  extends Pick<IPersonModel, 'dni' | 'name' | 'lastName'> {
+  extends Pick<IPerson, 'dni' | 'name' | 'lastName'> {
   secondName?: string
   secondLastName?: string
   gender?: PersonGender

@@ -1,4 +1,4 @@
-import { IPersonModel } from 'src/people/domain/models/person.model'
+import { IPerson } from 'src/people/domain/models/person.interface'
 import { EmployeeRole, IEmployee } from './models/employee.interface'
 
 export class Employee implements IEmployee {
@@ -7,7 +7,7 @@ export class Employee implements IEmployee {
   password: string
   role: EmployeeRole
   isActive: boolean
-  person: IPersonModel
+  person: IPerson
 
   constructor() {}
 
@@ -44,7 +44,7 @@ class EmployeeBuilder {
     return this
   }
 
-  person(person: IPersonModel) {
+  person(person: IPerson) {
     this.employee.person = person
     return this
   }

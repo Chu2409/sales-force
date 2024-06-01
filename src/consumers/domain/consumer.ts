@@ -1,11 +1,11 @@
-import { IPersonModel } from 'src/people/domain/models/person.model'
+import { IPerson } from 'src/people/domain/models/person.interface'
 import { ConsumerType, IConsumer } from './models/consumer.interface'
 
 export class Consumer implements IConsumer {
   id: number
   type: ConsumerType
   isCustomer: boolean
-  person: IPersonModel
+  person: IPerson
 
   private constructor() {}
 
@@ -32,7 +32,7 @@ class ConsumerBuilder {
     return this
   }
 
-  person(person: IPersonModel) {
+  person(person: IPerson) {
     this.consumer.person = person
     return this
   }

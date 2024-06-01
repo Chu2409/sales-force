@@ -1,6 +1,6 @@
 import { ILocationRes } from 'src/locations/domain/dtos/location.res'
-import { IPersonModel } from '../models/person.model'
+import { IPerson } from '../models/person.interface'
 
-export interface IPersonRes extends Omit<IPersonModel, 'location'> {
+export interface IPersonRes extends Omit<IPerson, 'location'> {
   location: ILocationRes
 }
