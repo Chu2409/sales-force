@@ -8,10 +8,292 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement()) @map("id")
-  email String  @unique @map("email")
-  name  String? @map("name")
+enum LocationType {
+  COUNTRY
+  STATE
+  CITY
+  NEIGHBORHOOD
+}
 
-  @@map("users")
+model Location {
+  id   Int          @id @default(autoincrement()) @map("id")
+  name String       @map("name")
+  type LocationType @map("type")
+
+  parentId Int?      @map("parent_id")
+  parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
+
+  locations Location[] @relation("Location2Locations")
+  people    Person[]
+
+  @@map("locations")
+}
+
+enum PersonGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Person {
+  id             Int           @id @default(autoincrement()) @map("id")
+  dni            String        @unique @map("dni")
+  name           String        @map("name")
+  secondName     String?       @map("second_name")
+  lastName       String        @map("last_name")
+  secondLastName String?       @map("second_last_name")
+  gender         PersonGender? @map("gender")
+  email          String?       @unique @map("email")
+  phone          String?       @map("phone")
+  birthdate      DateTime?     @map("birthdate")
+
+  employee Employee?
+  consumer Consumer?
+
+  locationId Int      @map("location_id")
+  location   Location @relation(fields: [locationId], references: [id])
+
+  @@map("people")
+}
+
+model Module {
+  id          Int     @id @default(autoincrement()) @map("id")
+  name        String  @unique @map("name")
+  description String? @map("description")
+
+  permissions Permission[]
+
+  @@map("modules")
+}
+
+model Permission {
+  id Int @id @default(autoincrement()) @map("id")
+
+  employeeId Int      @map("employee_id")
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  moduleId   Int      @map("module_id")
+  module     Module   @relation(fields: [moduleId], references: [id])
+
+  @@map("permissions")
+}
+
+enum EmployeeRole {
+  SELLER
+  SUPERVISOR
+  ADMIN
+}
+
+model Employee {
+  id       Int          @id @default(autoincrement()) @map("id")
+  username String       @unique @map("username")
+  password String       @map("password")
+  role     EmployeeRole @map("role")
+  isActive Boolean      @default(true) @map("is_active")
+
+  personId Int    @unique @map("person_id")
+  person   Person @relation(fields: [personId], references: [id])
+
+  delegations Delegation[]
+  permissions Permission[]
+
+  @@map("employees")
+}
+
+model Quota {
+  id         Int      @id @default(autoincrement()) @map("id")
+  startDate  DateTime @map("start_date")
+  endDate    DateTime @map("end_date")
+  goal       Float    @map("goal")
+  commission Float    @map("commission")
+  isAchieved Boolean  @default(false) @map("is_achieved")
+
+  @@map("quotas")
+}
+
+enum ConsumerType {
+  NATURAL
+  COMPANY
+}
+
+model Consumer {
+  id         Int          @id @default(autoincrement()) @map("id")
+  type       ConsumerType @map("type")
+  isCustomer Boolean      @default(true) @map("is_customer")
+
+  personId Int    @unique @map("person_id")
+  person   Person @relation(fields: [personId], references: [id])
+
+  delegations Delegation[]
+
+  @@map("consumers")
+}
+
+model Delegation {
+  id Int @id @default(autoincrement()) @map("id")
+
+  consumerId Int      @map("consumer_id")
+  consumer   Consumer @relation(fields: [consumerId], references: [id])
+  employeeId Int      @map("employee_id")
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  tasks        Task[]
+  transactions Transaction[]
+  chances      Chance[]
+
+  @@map("delegations")
+}
+
+enum ChanceStatus {
+  WON
+  LOST
+}
+
+model Chance {
+  id     Int           @id @default(autoincrement()) @map("id")
+  amount Float         @map("amount")
+  status ChanceStatus? @map("status")
+  date   DateTime      @map("date")
+
+  delegationId Int        @map("delegation_id")
+  delegation   Delegation @relation(fields: [delegationId], references: [id])
+
+  @@map("chances")
+}
+
+enum TaskStatus {
+  CANCELED
+  COMPLETED
+  RESCHEDULED
+}
+
+enum TaskType {
+  VISIT
+  CALL
+}
+
+model Task {
+  id            Int         @id @default(autoincrement()) @map("id")
+  date          DateTime    @map("date")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  status        TaskStatus? @map("status")
+  type          TaskType    @map("type")
+  estimatedTime Int?        @map("estimated_time")
+
+  delegationId Int        @map("delegation_id")
+  delegation   Delegation @relation(fields: [delegationId], references: [id])
+
+  transactions Transaction[]
+
+  @@map("tasks")
+}
+
+model PayMethod {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @unique @map("name")
+  tax  Float  @map("tax")
+
+  transactions Transaction[]
+
+  @@map("pay_methods")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @unique @map("name")
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Brand {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @unique @map("name")
+
+  products Product[]
+
+  @@map("brands")
+}
+
+model Product {
+  id          Int     @id @default(autoincrement()) @map("id")
+  name        String  @map("name")
+  description String? @map("description")
+  price       Float   @map("price")
+  stock       Int     @map("stock")
+
+  categoryId Int      @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id])
+  brandId    Int      @map("brand_id")
+  brand      Brand    @relation(fields: [brandId], references: [id])
+
+  items Item[]
+
+  @@map("products")
+}
+
+model Service {
+  id           Int     @id @default(autoincrement()) @map("id")
+  name         String  @map("name")
+  description  String  @map("description")
+  pricePerHour Float   @map("price_per_hour")
+  isAvailable  Boolean @default(true) @map("is_available")
+
+  items Item[]
+
+  @@map("services")
+}
+
+enum TransactionStatus {
+  PAID
+  PENDING
+  CANCELED
+}
+
+enum TransactionType {
+  LOCAL
+  ONLINE
+  DOOR_TO_DOOR
+}
+
+enum TransactionOrigin {
+  SALE
+  QUOTATION
+}
+
+model Transaction {
+  id                 Int                @id @default(autoincrement()) @map("id")
+  date               DateTime           @map("date")
+  total              Float?             @map("total")
+  status             TransactionStatus? @map("status")
+  type               TransactionType    @map("type")
+  origin             TransactionOrigin  @map("origin")
+  expiration         DateTime?          @map("expiration")
+  successProbability Int?               @map("success_probability")
+
+  delegationId Int        @map("delegation_id")
+  delegation   Delegation @relation(fields: [delegationId], references: [id])
+  taskId       Int?       @map("task_id")
+  task         Task?      @relation(fields: [taskId], references: [id])
+  payMethodId  Int?       @map("pay_method_id")
+  payMethod    PayMethod? @relation(fields: [payMethodId], references: [id])
+
+  items Item[]
+
+  @@map("transactions")
+}
+
+model Item {
+  id       Int    @id @default(autoincrement()) @map("id")
+  quantity Int    @map("quantity")
+  discount Float? @map("discount")
+
+  transactionId Int         @map("transaction_id")
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  productId     Int?        @map("product_id")
+  product       Product?    @relation(fields: [productId], references: [id])
+  serviceId     Int?        @map("service_id")
+  service       Service?    @relation(fields: [serviceId], references: [id])
+
+  @@map("items")
 }
