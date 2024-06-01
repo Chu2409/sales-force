@@ -1,6 +1,6 @@
-import { IPayMethodModel } from './models/pay-method.model'
+import { IPayMethod } from './models/pay-method.interface'
 
-export class PayMethod implements IPayMethodModel {
+export class PayMethod implements IPayMethod {
   id: number
   name: string
   tax: number
@@ -13,7 +13,7 @@ export class PayMethod implements IPayMethodModel {
 }
 
 class PayMethodBuilder {
-  constructor(private payMethod: PayMethod) {}
+  constructor(private payMethod: IPayMethod) {}
 
   id(id: number) {
     this.payMethod.id = id

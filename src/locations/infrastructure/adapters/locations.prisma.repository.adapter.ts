@@ -34,7 +34,7 @@ export class LocationsPrismaRepositoryAdapter
   }
 
   async getLocationById(id: number): Promise<ILocationWithParentRes> {
-    const location = await this.prismaService.location.findUniqueOrThrow({
+    const location = await this.prismaService.location.findUnique({
       where: { id },
       include: { parent: true },
     })

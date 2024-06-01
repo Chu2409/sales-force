@@ -1,3 +1,3 @@
-import { IPayMethodModel } from '../models/pay-method.model'
+import { IPayMethod } from '../models/pay-method.interface'
 
-export interface IPayMethodRes extends IPayMethodModel {}
+export interface IPayMethodRes extends IPayMethod {}

@@ -1,3 +1,3 @@
-import { IPayMethodModel } from '../models/pay-method.model'
+import { IPayMethod } from '../models/pay-method.interface'
 
-export interface ICreatePayMethodDto extends Omit<IPayMethodModel, 'id'> {}
+export interface ICreatePayMethodDto extends Omit<IPayMethod, 'id'> {}
