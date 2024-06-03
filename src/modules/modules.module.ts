@@ -26,5 +26,6 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
       useClass: ModulesPrismaRepositoryAdapter,
     },
   ],
+  exports: [MODULES_SERVICE_PORT],
 })
 export class ModulesModule {}
