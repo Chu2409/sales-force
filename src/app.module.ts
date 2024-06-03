@@ -12,6 +12,7 @@ import { ConsumersModule } from './consumers/consumers.module'
 import { LocationsModule } from './locations/locations.module'
 import { ServicesModule } from './services/services.module'
 import { PayMethodsModule } from './pay-methods/pay-methods.module'
+import { ModulesModule } from './modules/modules.module'
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PayMethodsModule } from './pay-methods/pay-methods.module'
       load: [configuration],
     }),
     PrismaModule,
+    ModulesModule,
     EmployeesModule,
     CategoriesModule,
     BrandsModule,
