@@ -62,8 +62,9 @@ export class ModulesPrismaRepositoryAdapter implements IModulesRepositoryPort {
   async deleteModule(id: number): Promise<boolean> {
     await this.getModuleById(id)
 
-    const module = await this.prismaService.module.delete({
+    const module = await this.prismaService.module.update({
       where: { id },
+      data: { isActive: false },
     })
 
     return !!module

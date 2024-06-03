@@ -59,8 +59,9 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
   async deleteBrand(id: number): Promise<boolean> {
     await this.getBrandById(id)
 
-    const brand = await this.prismaService.brand.delete({
+    const brand = await this.prismaService.brand.update({
       where: { id },
+      data: { isActive: false },
     })
 
     return !!brand

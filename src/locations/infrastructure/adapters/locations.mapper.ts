@@ -29,6 +29,7 @@ export class LocationsMapper {
             id: parent.id,
             name: parent.name,
             type: parent.type as LocationType,
+            isActive: parent.isActive,
           }
         : null,
     }

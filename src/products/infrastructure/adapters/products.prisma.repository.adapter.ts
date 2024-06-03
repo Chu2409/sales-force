@@ -74,8 +74,9 @@ export class ProductsPrismaRepositoryAdapter
   async deleteProduct(id: number): Promise<boolean> {
     await this.getProductById(id)
 
-    const product = await this.prismaService.product.delete({
+    const product = await this.prismaService.product.update({
       where: { id },
+      data: { isActive: false },
     })
     return !!product
   }

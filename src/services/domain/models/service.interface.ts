@@ -4,4 +4,5 @@ export interface IService {
   description: string
   pricePerHour: number
   isAvailable: boolean
+  isActive: boolean
 }

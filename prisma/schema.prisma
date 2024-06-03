@@ -16,9 +16,10 @@ enum LocationType {
 }
 
 model Location {
-  id   Int          @id @default(autoincrement()) @map("id")
-  name String       @map("name")
-  type LocationType @map("type")
+  id       Int          @id @default(autoincrement()) @map("id")
+  name     String       @map("name")
+  type     LocationType @map("type")
+  isActive Boolean      @default(true) @map("is_active")
 
   parentId Int?      @map("parent_id")
   parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
@@ -60,6 +61,7 @@ model Module {
   id          Int     @id @default(autoincrement()) @map("id")
   name        String  @unique @map("name")
   description String? @map("description")
+  isActive    Boolean @default(true) @map("is_active")
 
   permissions Permission[]
 
@@ -106,6 +108,7 @@ model Quota {
   goal       Float    @map("goal")
   commission Float    @map("commission")
   isAchieved Boolean  @default(false) @map("is_achieved")
+  isActive   Boolean  @default(true) @map("is_active")
 
   @@map("quotas")
 }
@@ -119,6 +122,7 @@ model Consumer {
   id         Int          @id @default(autoincrement()) @map("id")
   type       ConsumerType @map("type")
   isCustomer Boolean      @default(true) @map("is_customer")
+  isActive   Boolean      @default(true) @map("is_active")
 
   personId Int    @unique @map("person_id")
   person   Person @relation(fields: [personId], references: [id])
@@ -188,9 +192,10 @@ model Task {
 }
 
 model PayMethod {
-  id   Int    @id @default(autoincrement()) @map("id")
-  name String @unique @map("name")
-  tax  Float  @map("tax")
+  id       Int     @id @default(autoincrement()) @map("id")
+  name     String  @unique @map("name")
+  tax      Float   @map("tax")
+  isActive Boolean @default(true) @map("is_active")
 
   transactions Transaction[]
 
@@ -198,8 +203,9 @@ model PayMethod {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement()) @map("id")
-  name String @unique @map("name")
+  id       Int     @id @default(autoincrement()) @map("id")
+  name     String  @unique @map("name")
+  isActive Boolean @default(true) @map("is_active")
 
   products Product[]
 
@@ -207,8 +213,9 @@ model Category {
 }
 
 model Brand {
-  id   Int    @id @default(autoincrement()) @map("id")
-  name String @unique @map("name")
+  id       Int     @id @default(autoincrement()) @map("id")
+  name     String  @unique @map("name")
+  isActive Boolean @default(true) @map("is_active")
 
   products Product[]
 
@@ -221,6 +228,7 @@ model Product {
   description String? @map("description")
   price       Float   @map("price")
   stock       Int     @map("stock")
+  isActive    Boolean @default(true) @map("is_active")
 
   categoryId Int      @map("category_id")
   category   Category @relation(fields: [categoryId], references: [id])
@@ -238,6 +246,7 @@ model Service {
   description  String  @map("description")
   pricePerHour Float   @map("price_per_hour")
   isAvailable  Boolean @default(true) @map("is_available")
+  isActive     Boolean @default(true) @map("is_active")
 
   items Item[]
 

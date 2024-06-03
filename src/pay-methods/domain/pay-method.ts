@@ -4,6 +4,7 @@ export class PayMethod implements IPayMethod {
   id: number
   name: string
   tax: number
+  isActive: boolean
 
   private constructor() {}
 
@@ -22,6 +23,11 @@ class PayMethodBuilder {
 
   name(name: string) {
     this.payMethod.name = name
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.payMethod.isActive = isActive
     return this
   }
 

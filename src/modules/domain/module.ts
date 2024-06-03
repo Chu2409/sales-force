@@ -4,6 +4,7 @@ export class Module implements IModule {
   id: number
   name: string
   description: string | null
+  isActive: boolean
 
   private constructor() {}
 
@@ -27,6 +28,11 @@ class ModuleBuilder {
 
   description(description: string | null) {
     this.brand.description = description
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.brand.isActive = isActive
     return this
   }
 

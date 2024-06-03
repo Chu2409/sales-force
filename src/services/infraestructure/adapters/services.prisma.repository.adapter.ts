@@ -49,8 +49,9 @@ export class ServicesPrismaRepositoryAdapter
   async deleteService(id: number): Promise<boolean> {
     await this.getServiceById(id)
 
-    const service = await this.prismaService.service.delete({
+    const service = await this.prismaService.service.update({
       where: { id },
+      data: { isActive: false },
     })
 
     return !!service

@@ -6,6 +6,7 @@ export class Service implements IService {
   description: string
   pricePerHour: number
   isAvailable: boolean
+  isActive: boolean
 
   private constructor() {}
 
@@ -39,6 +40,11 @@ class ServiceBuilder {
 
   isAvailable(isAvailable: boolean) {
     this.service.isAvailable = isAvailable
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.service.isActive = isActive
     return this
   }
 

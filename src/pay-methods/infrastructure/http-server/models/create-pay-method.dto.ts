@@ -1,4 +1,10 @@
-import { IsString, Min, MinLength } from 'class-validator'
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+  Min,
+  MinLength,
+} from 'class-validator'
 import { ICreatePayMethodDto } from 'src/pay-methods/domain/dtos/create-pay-method.dto'
 
 export class CreatePayMethodReq implements ICreatePayMethodDto {
@@ -8,4 +14,8 @@ export class CreatePayMethodReq implements ICreatePayMethodDto {
 
   @Min(0)
   tax: number
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean
 }

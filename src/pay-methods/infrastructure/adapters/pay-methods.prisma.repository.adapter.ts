@@ -64,8 +64,9 @@ export class PayMethodsPrismaRepositoryAdapter
   async deletePayMethod(id: number): Promise<boolean> {
     await this.getPayMethodById(id)
 
-    const payMethod = await this.prismaService.payMethod.delete({
+    const payMethod = await this.prismaService.payMethod.update({
       where: { id },
+      data: { isActive: false },
     })
 
     return !!payMethod

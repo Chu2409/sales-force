@@ -1,4 +1,4 @@
-import { IsOptional, IsString, MinLength } from 'class-validator'
+import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator'
 import { ICreateModuleDto } from 'src/modules/domain/dtos/create-module.dto'
 
 export class CreateModuleReq implements ICreateModuleDto {
@@ -8,5 +8,9 @@ export class CreateModuleReq implements ICreateModuleDto {
 
   @IsString()
   @IsOptional()
-  description: string
+  description?: string
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean
 }

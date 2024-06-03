@@ -18,6 +18,10 @@ export class CreateConsumerReq implements ICreateConsumerDto {
   @IsOptional()
   isCustomer?: boolean
 
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean
+
   @ValidateNested()
   @Type(() => CreatePersonReq)
   @IsDefined()

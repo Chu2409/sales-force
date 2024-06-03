@@ -73,8 +73,9 @@ export class LocationsPrismaRepositoryAdapter
   async deleteLocation(id: number): Promise<boolean> {
     await this.getLocationById(id)
 
-    const location = await this.prismaService.location.delete({
+    const location = await this.prismaService.location.update({
       where: { id },
+      data: { isActive: false },
     })
     return !!location
   }

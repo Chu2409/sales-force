@@ -64,8 +64,9 @@ export class CategoriesPrismaRepositoryAdapter
   async deleteCategory(id: number): Promise<boolean> {
     await this.getCategoryById(id)
 
-    const category = await this.prismaService.category.delete({
+    const category = await this.prismaService.category.update({
       where: { id },
+      data: { isActive: false },
     })
 
     return !!category

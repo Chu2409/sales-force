@@ -91,8 +91,9 @@ export class ConsumersPrismaRepositoryAdapter
   async deleteConsumer(id: number): Promise<boolean> {
     await this.getConsumerById(id)
 
-    const consumer = await this.prismaService.consumer.delete({
+    const consumer = await this.prismaService.consumer.update({
       where: { id },
+      data: { isActive: false },
     })
     return !!consumer
   }

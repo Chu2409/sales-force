@@ -3,6 +3,7 @@ import { ICategory } from './models/category.interface'
 export class Category implements ICategory {
   id: number
   name: string
+  isActive: boolean
 
   private constructor() {}
 
@@ -21,6 +22,11 @@ class CategoryBuilder {
 
   name(name: string) {
     this.category.name = name
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.category.isActive = isActive
     return this
   }
 

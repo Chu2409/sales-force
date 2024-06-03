@@ -7,6 +7,7 @@ export interface IProduct {
   description: string | null
   price: number
   stock: number
+  isActive: boolean
   category: ICategory
   brand: IBrand
 }
