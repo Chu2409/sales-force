@@ -13,6 +13,7 @@ import { LocationsModule } from './locations/locations.module'
 import { ServicesModule } from './services/services.module'
 import { PayMethodsModule } from './pay-methods/pay-methods.module'
 import { ModulesModule } from './modules/modules.module'
+import { QuotasModule } from './quotas/quotas.module'
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ModulesModule } from './modules/modules.module'
     BrandsModule,
     ServicesModule,
     ProductsModule,
+    QuotasModule,
     ConsumersModule,
     LocationsModule,
     PayMethodsModule,
