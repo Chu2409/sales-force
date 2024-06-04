@@ -17,6 +17,7 @@ import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules-providers.const
 import { ModulesService } from 'src/modules/application/modules.service'
 import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations-providers.consts'
 import { LocationsService } from 'src/locations/application/locations.service'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -101,9 +102,12 @@ export class EmployeesPrismaRepositoryAdapter
   async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
     await this.locationsService.getLocationById(employee.person.locationId)
 
+    const encryptedPassword = await bcrypt.hash(employee.password, 10)
+
     const createdEmployee = await this.prismaService.employee.create({
       data: {
         ...employee,
+        password: encryptedPassword,
         person: {
           create: {
             ...employee.person,
@@ -130,10 +134,15 @@ export class EmployeesPrismaRepositoryAdapter
       await this.locationsService.getLocationById(employee.person.locationId)
     }
 
+    const encryptedPassword = employee.password
+      ? await bcrypt.hash(employee.password, 10)
+      : undefined
+
     const updatedEmployee = await this.prismaService.employee.update({
       where: { id },
       data: {
         ...employee,
+        password: encryptedPassword,
         person: {
           update: {
             data: {

@@ -28,6 +28,5 @@ import { LocationsModule } from 'src/locations/locations.module'
       useClass: EmployeesPrismaRepositoryAdapter,
     },
   ],
-  exports: [EMPLOYEES_SERVICE_PORT],
 })
 export class EmployeesModule {}
