@@ -9,9 +9,10 @@ import { EmployeesController } from './infrastructure/http-server/controllers/em
 import { EmployeesService } from './application/employees.service'
 import { EmployeesPrismaRepositoryAdapter } from './infrastructure/adapters/employees.prisma.repository.adapter'
 import { ModulesModule } from 'src/modules/modules.module'
+import { LocationsModule } from 'src/locations/locations.module'
 
 @Module({
-  imports: [ModulesModule],
+  imports: [ModulesModule, LocationsModule],
   controllers: [EmployeesController],
   providers: [
     {

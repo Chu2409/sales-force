@@ -26,5 +26,6 @@ import { LocationsPrismaRepositoryAdapter } from './infrastructure/adapters/loca
       useClass: LocationsPrismaRepositoryAdapter,
     },
   ],
+  exports: [LOCATIONS_SERVICE_PORT],
 })
 export class LocationsModule {}

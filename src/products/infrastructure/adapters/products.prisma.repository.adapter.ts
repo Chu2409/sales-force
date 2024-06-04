@@ -6,6 +6,10 @@ import { ICreateProductDto } from 'src/products/domain/dtos/create-product.dto'
 import { IUpdateProductDto } from 'src/products/domain/dtos/update-product.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ProductsMapper } from './products.mapper'
+import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands-providers.consts'
+import { BrandsService } from 'src/brands/application/brands.service'
+import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories-providers.consts'
+import { CategoriesService } from 'src/categories/application/categories.service'
 
 @Injectable()
 export class ProductsPrismaRepositoryAdapter
@@ -13,6 +17,9 @@ export class ProductsPrismaRepositoryAdapter
 {
   constructor(
     @Inject(PRISMA_SERVICE) private readonly prismaService: PrismaService,
+    @Inject(BRANDS_SERVICE_PORT) private readonly brandsService: BrandsService,
+    @Inject(CATEGORIES_SERVICE_PORT)
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   async getProducts(): Promise<IProductRes[]> {
@@ -41,6 +48,9 @@ export class ProductsPrismaRepositoryAdapter
   }
 
   async createProduct(product: ICreateProductDto): Promise<IProductRes> {
+    await this.brandsService.getBrandById(product.brandId)
+    await this.categoriesService.getCategoryById(product.categoryId)
+
     const createdProduct = await this.prismaService.product.create({
       data: product,
       include: {
@@ -57,6 +67,10 @@ export class ProductsPrismaRepositoryAdapter
     product: IUpdateProductDto,
   ): Promise<IProductRes> {
     await this.getProductById(id)
+
+    if (product.brandId) await this.brandsService.getBrandById(product.brandId)
+    if (product.categoryId)
+      await this.categoriesService.getCategoryById(product.categoryId)
 
     const updatedProduct = await this.prismaService.product.update({
       where: { id },

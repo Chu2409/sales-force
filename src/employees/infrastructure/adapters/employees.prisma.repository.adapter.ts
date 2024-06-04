@@ -15,6 +15,8 @@ import { IEmployeePermissionsRes } from 'src/employees/domain/dtos/employee-perm
 import { IAssignPermissionDto } from 'src/employees/domain/dtos/assign-permission.dto'
 import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules-providers.consts'
 import { ModulesService } from 'src/modules/application/modules.service'
+import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations-providers.consts'
+import { LocationsService } from 'src/locations/application/locations.service'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -24,6 +26,8 @@ export class EmployeesPrismaRepositoryAdapter
     @Inject(PRISMA_SERVICE) private readonly prismaService: PrismaService,
     @Inject(MODULES_SERVICE_PORT)
     private readonly modulesService: ModulesService,
+    @Inject(LOCATIONS_SERVICE_PORT)
+    private readonly locationsService: LocationsService,
   ) {}
 
   async getEmployees(): Promise<IEmployeeRes[]> {
@@ -95,6 +99,8 @@ export class EmployeesPrismaRepositoryAdapter
   }
 
   async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
+    await this.locationsService.getLocationById(employee.person.locationId)
+
     const createdEmployee = await this.prismaService.employee.create({
       data: {
         ...employee,
@@ -119,6 +125,10 @@ export class EmployeesPrismaRepositoryAdapter
     employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes> {
     await this.getEmployeeById(id)
+
+    if (employee.person?.locationId) {
+      await this.locationsService.getLocationById(employee.person.locationId)
+    }
 
     const updatedEmployee = await this.prismaService.employee.update({
       where: { id },

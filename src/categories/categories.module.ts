@@ -26,5 +26,6 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
       useClass: CategoriesPrismaRepositoryAdapter,
     },
   ],
+  exports: [CATEGORIES_SERVICE_PORT],
 })
 export class CategoriesModule {}
