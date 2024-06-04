@@ -5,6 +5,8 @@ import { EMPLOYEES_REPOSITORY_PORT } from '../shared/employees-providers.consts'
 import { IEmployeeRes } from '../domain/dtos/employee.res'
 import { ICreateEmployeeDto } from '../domain/dtos/create-employee.dto'
 import { IUpdateEmployeeDto } from '../domain/dtos/update-employee.dto'
+import { IEmployeePermissionsRes } from '../domain/dtos/employee-permissions.res'
+import { IAssignPermissionDto } from '../domain/dtos/assign-permission.dto'
 
 @Injectable()
 export class EmployeesService implements IEmployeesServicePort {
@@ -15,6 +17,19 @@ export class EmployeesService implements IEmployeesServicePort {
 
   async getEmployees(): Promise<IEmployeeRes[]> {
     return await this.repository.getEmployees()
+  }
+
+  async getPermissionsByEmployeeId(
+    id: number,
+  ): Promise<IEmployeePermissionsRes> {
+    return await this.repository.getPermissionsByEmployeeId(id)
+  }
+
+  async assignPermission(
+    id: number,
+    dto: IAssignPermissionDto,
+  ): Promise<boolean> {
+    return await this.repository.assignPermission(id, dto)
   }
 
   async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {

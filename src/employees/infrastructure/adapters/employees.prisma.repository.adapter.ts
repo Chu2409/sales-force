@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { IEmployeesRepositoryPort } from 'src/employees/domain/ports/out/employees.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
@@ -6,6 +11,10 @@ import { ICreateEmployeeDto } from 'src/employees/domain/dtos/create-employee.dt
 import { IUpdateEmployeeDto } from 'src/employees/domain/dtos/update-employee.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { EmployeesMapper } from './employees.mapper'
+import { IEmployeePermissionsRes } from 'src/employees/domain/dtos/employee-permissions.res'
+import { IAssignPermissionDto } from 'src/employees/domain/dtos/assign-permission.dto'
+import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules-providers.consts'
+import { ModulesService } from 'src/modules/application/modules.service'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -13,6 +22,8 @@ export class EmployeesPrismaRepositoryAdapter
 {
   constructor(
     @Inject(PRISMA_SERVICE) private readonly prismaService: PrismaService,
+    @Inject(MODULES_SERVICE_PORT)
+    private readonly modulesService: ModulesService,
   ) {}
 
   async getEmployees(): Promise<IEmployeeRes[]> {
@@ -25,6 +36,47 @@ export class EmployeesPrismaRepositoryAdapter
     })
 
     return employees.map((employee) => EmployeesMapper.toRes(employee))
+  }
+
+  async getPermissionsByEmployeeId(
+    id: number,
+  ): Promise<IEmployeePermissionsRes> {
+    const employee = await this.prismaService.employee.findUnique({
+      where: { id },
+      include: {
+        person: {
+          include: { location: true },
+        },
+        permissions: {
+          include: { module: true },
+        },
+      },
+    })
+
+    if (!employee) throw new NotFoundException('Employee not found')
+
+    return EmployeesMapper.toResWithPermissions(employee)
+  }
+
+  async assignPermission(
+    employeeId: number,
+    dto: IAssignPermissionDto,
+  ): Promise<boolean> {
+    await this.getEmployeeById(employeeId)
+    await this.modulesService.getModuleById(dto.moduleId)
+
+    const permissionExists = await this.prismaService.permission.findFirst({
+      where: { employeeId, moduleId: dto.moduleId },
+    })
+
+    if (permissionExists)
+      throw new BadRequestException('Permission already exists')
+
+    const permisssion = await this.prismaService.permission.create({
+      data: { employeeId, moduleId: dto.moduleId },
+    })
+
+    return !!permisssion
   }
 
   async getEmployeeById(id: number): Promise<IEmployeeRes> {

@@ -8,9 +8,10 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { EmployeesController } from './infrastructure/http-server/controllers/employees.controller'
 import { EmployeesService } from './application/employees.service'
 import { EmployeesPrismaRepositoryAdapter } from './infrastructure/adapters/employees.prisma.repository.adapter'
+import { ModulesModule } from 'src/modules/modules.module'
 
 @Module({
-  imports: [],
+  imports: [ModulesModule],
   controllers: [EmployeesController],
   providers: [
     {

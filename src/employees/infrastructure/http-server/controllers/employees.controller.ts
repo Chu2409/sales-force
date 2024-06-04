@@ -13,6 +13,7 @@ import { EmployeesService } from 'src/employees/application/employees.service'
 import { EMPLOYEES_SERVICE_PORT } from 'src/employees/shared/employees-providers.consts'
 import { CreateEmployeeReq } from '../models/create-employee.req'
 import { UpdateEmployeeReq } from '../models/update-employee.req'
+import { AssignPermissionReq } from '../models/assign-permission.req'
 
 @Controller('employees')
 export class EmployeesController {
@@ -29,6 +30,19 @@ export class EmployeesController {
   @Get(':id')
   async getEmployeeById(@Param('id', ParseIntPipe) id: number) {
     return await this.employeesService.getEmployeeById(id)
+  }
+
+  @Get(':id/permissions')
+  async getPermissionsByEmployeeId(@Param('id', ParseIntPipe) id: number) {
+    return await this.employeesService.getPermissionsByEmployeeId(id)
+  }
+
+  @Post(':id/permissions')
+  async assignPermission(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: AssignPermissionReq,
+  ) {
+    return await this.employeesService.assignPermission(id, dto)
   }
 
   @Post()
