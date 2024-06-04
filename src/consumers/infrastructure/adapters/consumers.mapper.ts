@@ -1,29 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Consumer, Location, Person } from '@prisma/client'
+import { Consumer } from '@prisma/client'
 import { IConsumerRes } from 'src/consumers/domain/dtos/consumer.res'
 import { ConsumerType } from 'src/consumers/domain/models/consumer.interface'
-import { LocationType } from 'src/locations/domain/models/location.interface'
-import { PersonGender } from 'src/people/domain/models/person.interface'
+import {
+  PeopleMapper,
+  IPrismaPersonWithLocation,
+} from 'src/people/infrastructure/adapters/people.mapper'
 
-interface IFullConsumerPrisma extends Consumer {
-  person: Person & { location: Location }
+interface IPrismaFullConsumer extends Consumer {
+  person: IPrismaPersonWithLocation
 }
-
 export class ConsumersMapper {
-  static toRes({ personId, ...consumer }: IFullConsumerPrisma): IConsumerRes {
-    const { locationId, ...person } = consumer.person
-    const { parentId, ...location } = person.location
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static toRes({ personId, ...consumer }: IPrismaFullConsumer): IConsumerRes {
     return {
       ...consumer,
       type: consumer.type as ConsumerType,
-      person: {
-        ...person,
-        gender: person.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
-        },
-      },
+      person: PeopleMapper.toResWithLocation(consumer.person),
     }
   }
 }

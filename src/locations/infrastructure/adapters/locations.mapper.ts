@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Location } from '@prisma/client'
 import { ILocationWithParentRes } from 'src/locations/domain/dtos/location-with-parent.res'
 import { ILocationRes } from 'src/locations/domain/dtos/location.res'
 import { LocationType } from 'src/locations/domain/models/location.interface'
 
-interface ILocationWithParentPrisma extends Location {
+interface PrismaLocationWithParent extends Location {
   parent: Location | null
 }
 
 export class LocationsMapper {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static toRes({ parentId, ...location }: Location): ILocationRes {
     return {
       ...location,
@@ -17,13 +17,11 @@ export class LocationsMapper {
   }
 
   static toResWithParent({
-    parentId,
     parent,
     ...location
-  }: ILocationWithParentPrisma): ILocationWithParentRes {
+  }: PrismaLocationWithParent): ILocationWithParentRes {
     return {
-      ...location,
-      type: location.type as LocationType,
+      ...this.toRes(location),
       parent: parent
         ? {
             id: parent.id,

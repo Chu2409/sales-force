@@ -2,7 +2,7 @@
 import { Brand, Category, Product } from '@prisma/client'
 import { IProductRes } from 'src/products/domain/dtos/product.res'
 
-interface IFullProductPrisma extends Product {
+interface IPrismaFullProduct extends Product {
   brand: Brand
   category: Category
 }
@@ -12,7 +12,7 @@ export class ProductsMapper {
     brandId,
     categoryId,
     ...product
-  }: IFullProductPrisma): IProductRes {
+  }: IPrismaFullProduct): IProductRes {
     return product
   }
 }
