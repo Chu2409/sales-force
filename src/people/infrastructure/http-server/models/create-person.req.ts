@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer'
 import {
   IsString,
   IsNotEmpty,
@@ -5,11 +6,11 @@ import {
   IsOptional,
   IsEmail,
   IsNumberString,
-  IsDateString,
   Length,
   MinLength,
   IsNumber,
   IsPositive,
+  IsDate,
 } from 'class-validator'
 import { ICreatePersonDto } from 'src/people/domain/dtos/create-person.dto'
 import { PersonGender } from 'src/people/domain/models/person.interface'
@@ -48,8 +49,9 @@ export class CreatePersonReq implements ICreatePersonDto {
   @IsOptional()
   phone?: string
 
-  @IsDateString()
   @IsOptional()
+  @IsDate()
+  @Type(() => Date)
   birthdate?: Date
 
   @IsNumber()
