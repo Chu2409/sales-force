@@ -7,7 +7,7 @@ import {
   PeopleMapper,
 } from 'src/people/infrastructure/adapters/people.mapper'
 
-interface IPrismaFullEmployee extends Employee {
+export interface IPrismaFullEmployee extends Employee {
   person: IPrismaPersonWithLocation
 }
 
