@@ -18,7 +18,9 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
   ) {}
 
   async getBrands(): Promise<IBrandRes[]> {
-    return await this.prismaService.brand.findMany()
+    return await this.prismaService.brand.findMany({
+      orderBy: { name: 'asc' },
+    })
   }
 
   async getBrandById(id: number): Promise<IBrandRes> {
@@ -56,12 +58,14 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
     })
   }
 
-  async deleteBrand(id: number): Promise<boolean> {
+  async toggleBrandAvaliabilty(id: number): Promise<boolean> {
     await this.getBrandById(id)
 
-    const brand = await this.prismaService.brand.update({
+    const brand = await this.getBrandById(id)
+
+    await this.prismaService.brand.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: !brand.isActive },
     })
 
     return !!brand

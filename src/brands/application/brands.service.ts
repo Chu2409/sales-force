@@ -22,7 +22,7 @@ export class BrandsService implements IBrandsServicePort {
   }
 
   async deleteBrand(id: number): Promise<boolean> {
-    return await this.repository.deleteBrand(id)
+    return await this.repository.toggleBrandAvaliabilty(id)
   }
 
   async getBrands(): Promise<IBrandRes[]> {
