@@ -43,6 +43,5 @@ import { EnvConfiguration } from 'config/configuration'
     },
     JwtStrategy,
   ],
-  exports: [JwtStrategy, PassportModule, JwtModule],
 })
 export class AuthModule {}

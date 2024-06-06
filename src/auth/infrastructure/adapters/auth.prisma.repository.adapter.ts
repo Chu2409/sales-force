@@ -11,6 +11,7 @@ import { IAuthLoginDto } from 'src/auth/domain/dtos/auth-login.dto'
 import { IAuthRes } from 'src/auth/domain/dtos/auth.res'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
+import { EmployeesMapper } from 'src/employees/infrastructure/adapters/employees.mapper'
 
 @Injectable()
 export class AuthPrismaRepositoryAdapter implements IAuthRepositoryPort {
@@ -26,6 +27,11 @@ export class AuthPrismaRepositoryAdapter implements IAuthRepositoryPort {
       where: {
         username,
       },
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
     })
 
     if (!employee) throw new NotFoundException('Employee not found')
@@ -35,6 +41,7 @@ export class AuthPrismaRepositoryAdapter implements IAuthRepositoryPort {
 
     return {
       token: this.jwtService.sign({ id: employee.id }),
+      employee: EmployeesMapper.toRes(employee),
     }
   }
 }
