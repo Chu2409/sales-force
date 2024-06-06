@@ -28,6 +28,7 @@ export class ProductsPrismaRepositoryAdapter
         brand: true,
         category: true,
       },
+      orderBy: { name: 'asc' },
     })
 
     return products.map((product) => ProductsMapper.toRes(product))
@@ -84,12 +85,12 @@ export class ProductsPrismaRepositoryAdapter
     return ProductsMapper.toRes(updatedProduct)
   }
 
-  async deleteProduct(id: number): Promise<boolean> {
-    await this.getProductById(id)
+  async toggleProductAvailability(id: number): Promise<boolean> {
+    const preoductToUpdate = await this.getProductById(id)
 
     const product = await this.prismaService.product.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: !preoductToUpdate.isActive },
     })
     return !!product
   }

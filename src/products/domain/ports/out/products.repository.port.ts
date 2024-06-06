@@ -7,5 +7,5 @@ export interface IProductsRepositoryPort {
   getProductById(id: number): Promise<IProductRes>
   createProduct(product: ICreateProductDto): Promise<IProductRes>
   updateProduct(id: number, product: IUpdateProductDto): Promise<IProductRes>
-  deleteProduct(id: number): Promise<boolean>
+  toggleProductAvailability(id: number): Promise<boolean>
 }

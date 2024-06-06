@@ -32,7 +32,7 @@ export class ProductsService implements IProductsServicePort {
     return await this.repository.updateProduct(id, product)
   }
 
-  async deleteProduct(productId: number): Promise<boolean> {
-    return await this.repository.deleteProduct(productId)
+  async toggleProductAvailability(productId: number): Promise<boolean> {
+    return await this.repository.toggleProductAvailability(productId)
   }
 }

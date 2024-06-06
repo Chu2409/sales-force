@@ -46,6 +46,6 @@ export class ProductsController {
 
   @Delete(':id')
   async deleteProduct(@Param('id', ParseIntPipe) id: number) {
-    return await this.productsService.deleteProduct(id)
+    return await this.productsService.toggleProductAvailability(id)
   }
 }
