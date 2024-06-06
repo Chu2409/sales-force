@@ -17,7 +17,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       `Application error (${request.method}) at {${request.path}} error: ${exception.message}`,
     )
 
-    response.status(HttpStatus.BAD_REQUEST).json({
+    response.status(exception.status || HttpStatus.BAD_REQUEST).json({
       status: exception.status || HttpStatus.BAD_REQUEST,
       message:
         exception.response?.message || exception.message || 'Internal error',
