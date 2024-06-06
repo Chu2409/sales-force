@@ -8,7 +8,7 @@ export interface ICategoriesRepositoryPort {
     id: number,
     category: IUpdateCategoryDto,
   ): Promise<ICategoryRes>
-  deleteCategory(id: number): Promise<boolean>
+  toggleCategoryAvailability(id: number): Promise<boolean>
   getCategories(): Promise<ICategoryRes[]>
   getCategoryById(id: number): Promise<ICategoryRes>
 }

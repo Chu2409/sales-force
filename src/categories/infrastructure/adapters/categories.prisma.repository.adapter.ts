@@ -20,7 +20,9 @@ export class CategoriesPrismaRepositoryAdapter
   ) {}
 
   async getCategories(): Promise<ICategoryRes[]> {
-    return await this.prismaService.category.findMany()
+    return await this.prismaService.category.findMany({
+      orderBy: { name: 'asc' },
+    })
   }
 
   async getCategoryById(id: number): Promise<ICategoryRes> {
@@ -61,12 +63,12 @@ export class CategoriesPrismaRepositoryAdapter
     })
   }
 
-  async deleteCategory(id: number): Promise<boolean> {
-    await this.getCategoryById(id)
+  async toggleCategoryAvailability(id: number): Promise<boolean> {
+    const categoryToUpdate = await this.getCategoryById(id)
 
     const category = await this.prismaService.category.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: !categoryToUpdate.isActive },
     })
 
     return !!category

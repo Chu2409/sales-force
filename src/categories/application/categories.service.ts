@@ -25,7 +25,7 @@ export class CategoriesService implements ICategoriesServicePort {
   }
 
   async deleteCategory(id: number): Promise<boolean> {
-    return await this.repository.deleteCategory(id)
+    return await this.repository.toggleCategoryAvailability(id)
   }
 
   async getCategories(): Promise<ICategoryRes[]> {
