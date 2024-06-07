@@ -11,13 +11,13 @@ import { ICreateEmployeeDto } from 'src/employees/domain/dtos/create-employee.dt
 import { IUpdateEmployeeDto } from 'src/employees/domain/dtos/update-employee.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { EmployeesMapper } from './employees.mapper'
-import { IEmployeePermissionsRes } from 'src/employees/domain/dtos/employee-permissions.res'
 import { IAssignPermissionDto } from 'src/employees/domain/dtos/assign-permission.dto'
 import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules-providers.consts'
 import { ModulesService } from 'src/modules/application/modules.service'
 import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations-providers.consts'
 import { LocationsService } from 'src/locations/application/locations.service'
 import * as bcrypt from 'bcrypt'
+import { IModuleRes } from 'src/modules/domain/dtos/module.res'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -43,24 +43,15 @@ export class EmployeesPrismaRepositoryAdapter
     return employees.map((employee) => EmployeesMapper.toRes(employee))
   }
 
-  async getPermissionsByEmployeeId(
-    id: number,
-  ): Promise<IEmployeePermissionsRes> {
-    const employee = await this.prismaService.employee.findUnique({
-      where: { id },
-      include: {
-        person: {
-          include: { location: true },
-        },
-        permissions: {
-          include: { module: true },
-        },
-      },
+  async getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]> {
+    await this.getEmployeeById(id)
+
+    const modules = await this.prismaService.permission.findMany({
+      where: { employeeId: id },
+      include: { module: true },
     })
 
-    if (!employee) throw new NotFoundException('Employee not found')
-
-    return EmployeesMapper.toResWithPermissions(employee)
+    return modules.map((module) => module.module)
   }
 
   async assignPermission(

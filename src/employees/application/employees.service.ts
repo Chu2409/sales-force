@@ -7,6 +7,7 @@ import { ICreateEmployeeDto } from '../domain/dtos/create-employee.dto'
 import { IUpdateEmployeeDto } from '../domain/dtos/update-employee.dto'
 import { IEmployeePermissionsRes } from '../domain/dtos/employee-permissions.res'
 import { IAssignPermissionDto } from '../domain/dtos/assign-permission.dto'
+import { IModuleRes } from 'src/modules/domain/dtos/module.res'
 
 @Injectable()
 export class EmployeesService implements IEmployeesServicePort {
@@ -19,9 +20,7 @@ export class EmployeesService implements IEmployeesServicePort {
     return await this.repository.getEmployees()
   }
 
-  async getPermissionsByEmployeeId(
-    id: number,
-  ): Promise<IEmployeePermissionsRes> {
+  async getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]> {
     return await this.repository.getPermissionsByEmployeeId(id)
   }
 
