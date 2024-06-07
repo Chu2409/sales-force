@@ -18,9 +18,14 @@ export class LocationsPrismaRepositoryAdapter
   ) {}
 
   async getLocations(): Promise<ILocationRes[]> {
-    const locations = await this.prismaService.location.findMany()
+    const locations = await this.prismaService.location.findMany({
+      include: { parent: true },
+      orderBy: { name: 'asc' },
+    })
 
-    return locations.map((location) => LocationsMapper.toRes(location))
+    return locations.map((location) =>
+      LocationsMapper.toResWithParent(location),
+    )
   }
 
   async getLocationsWithParent(): Promise<ILocationWithParentRes[]> {
@@ -71,11 +76,11 @@ export class LocationsPrismaRepositoryAdapter
   }
 
   async deleteLocation(id: number): Promise<boolean> {
-    await this.getLocationById(id)
+    const locationToUpdate = await this.getLocationById(id)
 
     const location = await this.prismaService.location.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: !locationToUpdate.isActive },
     })
     return !!location
   }
