@@ -5,7 +5,6 @@ import { EMPLOYEES_REPOSITORY_PORT } from '../shared/employees-providers.consts'
 import { IEmployeeRes } from '../domain/dtos/employee.res'
 import { ICreateEmployeeDto } from '../domain/dtos/create-employee.dto'
 import { IUpdateEmployeeDto } from '../domain/dtos/update-employee.dto'
-import { IEmployeePermissionsRes } from '../domain/dtos/employee-permissions.res'
 import { IAssignPermissionDto } from '../domain/dtos/assign-permission.dto'
 import { IModuleRes } from 'src/modules/domain/dtos/module.res'
 
