@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -58,8 +57,8 @@ export class EmployeesController {
     return await this.employeesService.updateEmployee(id, employee)
   }
 
-  @Delete(':id')
-  async deleteEmployee(@Param('id', ParseIntPipe) id: number) {
-    return await this.employeesService.deleteEmployee(id)
+  @Patch(':id/toggle-active')
+  async toggleEmployeeActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.employeesService.toggleEmployeeActive(id)
   }
 }

@@ -12,7 +12,8 @@ export interface IEmployeesRepositoryPort {
     id: number,
     employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes>
-  deleteEmployee(id: number): Promise<boolean>
+  setEmployeeActive(id: number, state: boolean): Promise<boolean>
+  checkPermissionExists(employeeId: number, moduleId: number): Promise<boolean>
   getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]>
   assignPermission(id: number, dto: IAssignPermissionDto): Promise<boolean>
 }

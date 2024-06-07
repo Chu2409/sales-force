@@ -12,7 +12,7 @@ export interface IEmployeesServicePort {
     id: number,
     employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes>
-  deleteEmployee(id: number): Promise<boolean>
+  toggleEmployeeActive(id: number): Promise<boolean>
   getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]>
   assignPermission(id: number, dto: IAssignPermissionDto): Promise<boolean>
 }
