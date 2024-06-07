@@ -1,17 +1,11 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IAuthRepositoryPort } from 'src/auth/domain/ports/out/auth.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
-import { IAuthLoginDto } from 'src/auth/domain/dtos/auth-login.dto'
-import { IAuthRes } from 'src/auth/domain/dtos/auth.res'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { EmployeesMapper } from 'src/employees/infrastructure/adapters/employees.mapper'
+import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
 
 @Injectable()
 export class AuthPrismaRepositoryAdapter implements IAuthRepositoryPort {
@@ -22,7 +16,7 @@ export class AuthPrismaRepositoryAdapter implements IAuthRepositoryPort {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login({ username, password }: IAuthLoginDto): Promise<IAuthRes> {
+  async getEmployeeByUsername(username: string): Promise<IEmployeeRes> {
     const employee = await this.prismaService.employee.findFirst({
       where: {
         username,
@@ -34,14 +28,14 @@ export class AuthPrismaRepositoryAdapter implements IAuthRepositoryPort {
       },
     })
 
-    if (!employee) throw new NotFoundException('Employee not found')
+    return employee ? EmployeesMapper.toRes(employee) : null
+  }
 
-    if (!bcrypt.compareSync(password, employee.password))
-      throw new UnauthorizedException('Credentials are not valid (password)')
+  comparePasswords(password: string, hash: string): boolean {
+    return bcrypt.compareSync(password, hash)
+  }
 
-    return {
-      token: this.jwtService.sign({ id: employee.id }),
-      employee: EmployeesMapper.toRes(employee),
-    }
+  signIn(id: number): string {
+    return this.jwtService.sign({ id })
   }
 }

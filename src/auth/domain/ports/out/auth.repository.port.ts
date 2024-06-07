@@ -1,6 +1,9 @@
-import { IAuthLoginDto } from '../../dtos/auth-login.dto'
-import { IAuthRes } from '../../dtos/auth.res'
+import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
 
 export interface IAuthRepositoryPort {
-  login(dto: IAuthLoginDto): Promise<IAuthRes>
+  getEmployeeByUsername(username: string): Promise<IEmployeeRes>
+
+  comparePasswords(password: string, hash: string): boolean
+
+  signIn(id: number): string
 }
