@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -10,7 +9,7 @@ import {
   Post,
 } from '@nestjs/common'
 import { ConsumersService } from 'src/consumers/application/consumers.service'
-import { CONSUMERS_SERVICE_PORT } from 'src/consumers/shared/consumers-providers.consts'
+import { CONSUMERS_SERVICE_PORT } from 'src/consumers/shared/consumers.consts'
 import { CreateConsumerReq } from '../models/create-consumer.req'
 import { UpdateConsumerReq } from '../models/update-consumer.req'
 
@@ -44,8 +43,8 @@ export class ConsumersController {
     return await this.consumersService.updateConsumer(id, consumer)
   }
 
-  @Delete(':id')
-  async deleteConsumer(@Param('id', ParseIntPipe) id: number) {
-    return await this.consumersService.deleteConsumer(id)
+  @Patch(':id/toggle-active')
+  async toggleConsumerActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.consumersService.toggleConsumerActive(id)
   }
 }

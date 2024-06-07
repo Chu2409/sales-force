@@ -5,7 +5,7 @@ import { IBrandRes } from '../../dtos/brand.res'
 export interface IBrandsServicePort {
   createBrand(brand: ICreateBrandDto): Promise<IBrandRes>
   updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandRes>
-  toggleBrandAvailability(id: number): Promise<boolean>
+  toggleBrandActive(id: number): Promise<boolean>
   getBrands(): Promise<IBrandRes[]>
   getBrandById(id: number): Promise<IBrandRes>
 }

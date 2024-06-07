@@ -48,10 +48,7 @@ export class CategoriesPrismaRepositoryAdapter
     })
   }
 
-  async toggleCategoryAvailability(
-    id: number,
-    state: boolean,
-  ): Promise<boolean> {
+  async setCategoryActive(id: number, state: boolean): Promise<boolean> {
     const category = await this.prismaService.category.update({
       where: { id },
       data: { isActive: state },

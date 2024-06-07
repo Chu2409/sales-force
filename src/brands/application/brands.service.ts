@@ -33,10 +33,10 @@ export class BrandsService implements IBrandsServicePort {
     return await this.repository.updateBrand(id, brand)
   }
 
-  async toggleBrandAvailability(id: number): Promise<boolean> {
+  async toggleBrandActive(id: number): Promise<boolean> {
     const brand = await this.getBrandById(id)
 
-    return await this.repository.toggleBrandAvailability(id, !brand.isActive)
+    return await this.repository.setBrandActive(id, !brand.isActive)
   }
 
   async getBrands(): Promise<IBrandRes[]> {

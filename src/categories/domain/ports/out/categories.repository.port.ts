@@ -8,7 +8,7 @@ export interface ICategoriesRepositoryPort {
     id: number,
     category: IUpdateCategoryDto,
   ): Promise<ICategoryRes>
-  toggleCategoryAvailability(id: number, state: boolean): Promise<boolean>
+  setCategoryActive(id: number, state: boolean): Promise<boolean>
   getCategories(): Promise<ICategoryRes[]>
   getCategoryById(id: number): Promise<ICategoryRes>
   getCategoryByName(name: string): Promise<ICategoryRes>

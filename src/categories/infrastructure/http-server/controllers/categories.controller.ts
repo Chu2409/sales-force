@@ -43,8 +43,8 @@ export class CategoriesController {
     return await this.categoriesService.updateCategory(id, category)
   }
 
-  @Patch(':id/toggle-availability')
-  async toggleCategoryAvailability(@Param('id', ParseIntPipe) id: number) {
-    return await this.categoriesService.toggleCategoryAvailability(id)
+  @Patch(':id/toggle-active')
+  async toggleCategoryActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.categoriesService.toggleCategoryActive(id)
   }
 }

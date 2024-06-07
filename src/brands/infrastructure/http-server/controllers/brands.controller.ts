@@ -43,8 +43,8 @@ export class BrandsController {
     return await this.brandsService.updateBrand(id, brand)
   }
 
-  @Patch(':id/toggle-availability')
-  async toggleBrandAvailability(@Param('id', ParseIntPipe) id: number) {
-    return await this.brandsService.toggleBrandAvailability(id)
+  @Patch(':id/toggle-active')
+  async toggleBrandActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.brandsService.toggleBrandActive(id)
   }
 }

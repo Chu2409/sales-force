@@ -40,13 +40,10 @@ export class CategoriesService implements ICategoriesServicePort {
     return await this.repository.updateCategory(id, category)
   }
 
-  async toggleCategoryAvailability(id: number): Promise<boolean> {
+  async toggleCategoryActive(id: number): Promise<boolean> {
     const category = await this.getCategoryById(id)
 
-    return await this.repository.toggleCategoryAvailability(
-      id,
-      !category.isActive,
-    )
+    return await this.repository.setCategoryActive(id, !category.isActive)
   }
 
   async getCategories(): Promise<ICategoryRes[]> {

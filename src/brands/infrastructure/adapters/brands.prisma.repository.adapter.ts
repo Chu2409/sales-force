@@ -43,7 +43,7 @@ export class BrandsPrismaRepositoryAdapter implements IBrandsRepositoryPort {
     })
   }
 
-  async toggleBrandAvailability(id: number, state: boolean): Promise<boolean> {
+  async setBrandActive(id: number, state: boolean): Promise<boolean> {
     const brand = await this.prismaService.brand.update({
       where: { id },
       data: { isActive: state },

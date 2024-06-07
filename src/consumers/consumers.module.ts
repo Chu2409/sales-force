@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import {
   CONSUMERS_REPOSITORY_PORT,
   CONSUMERS_SERVICE_PORT,
-} from './shared/consumers-providers.consts'
+} from './shared/consumers.consts'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ConsumersController } from './infrastructure/http-server/controllers/consumers.controller'
 import { ConsumersPrismaRepositoryAdapter } from './infrastructure/adapters/consumers.prisma.repository.adapter'
