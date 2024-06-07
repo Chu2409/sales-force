@@ -45,7 +45,6 @@ export class BrandsService implements IBrandsServicePort {
 
   async getBrandById(id: number): Promise<IBrandRes> {
     const brand = await this.repository.getBrandById(id)
-
     if (!brand) throw new AppError('Brand not found', Errors.NOT_FOUND)
 
     return brand

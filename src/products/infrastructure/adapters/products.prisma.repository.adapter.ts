@@ -8,7 +8,7 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ProductsMapper } from './products.mapper'
 import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands.consts'
 import { BrandsService } from 'src/brands/application/brands.service'
-import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories-providers.consts'
+import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories.consts'
 import { CategoriesService } from 'src/categories/application/categories.service'
 
 @Injectable()

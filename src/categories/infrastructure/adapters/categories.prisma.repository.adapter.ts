@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { ICategoriesRepositoryPort } from 'src/categories/domain/ports/out/categories.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -26,21 +21,18 @@ export class CategoriesPrismaRepositoryAdapter
   }
 
   async getCategoryById(id: number): Promise<ICategoryRes> {
-    const category = await this.prismaService.category.findUnique({
+    return await this.prismaService.category.findUnique({
       where: { id },
     })
+  }
 
-    if (!category) throw new NotFoundException('Category not found')
-
-    return category
+  async getCategoryByName(name: string): Promise<ICategoryRes> {
+    return await this.prismaService.category.findUnique({
+      where: { name },
+    })
   }
 
   async createCategory(category: ICreateCategoryDto): Promise<ICategoryRes> {
-    const categoryExists = await this.prismaService.category.findFirst({
-      where: { name: category.name },
-    })
-    if (categoryExists) throw new BadRequestException('Category already exists')
-
     return await this.prismaService.category.create({
       data: category,
     })
@@ -50,25 +42,19 @@ export class CategoriesPrismaRepositoryAdapter
     id: number,
     category: IUpdateCategoryDto,
   ): Promise<ICategoryRes> {
-    await this.getCategoryById(id)
-
-    const categoryExists = await this.prismaService.category.findFirst({
-      where: { name: category.name, id: { not: id } },
-    })
-    if (categoryExists) throw new BadRequestException('Category already exists')
-
     return await this.prismaService.category.update({
       where: { id },
       data: category,
     })
   }
 
-  async toggleCategoryAvailability(id: number): Promise<boolean> {
-    const categoryToUpdate = await this.getCategoryById(id)
-
+  async toggleCategoryAvailability(
+    id: number,
+    state: boolean,
+  ): Promise<boolean> {
     const category = await this.prismaService.category.update({
       where: { id },
-      data: { isActive: !categoryToUpdate.isActive },
+      data: { isActive: state },
     })
 
     return !!category
