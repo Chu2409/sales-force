@@ -6,20 +6,12 @@ import { ICreateProductDto } from 'src/products/domain/dtos/create-product.dto'
 import { IUpdateProductDto } from 'src/products/domain/dtos/update-product.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ProductsMapper } from './products.mapper'
-import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands.consts'
-import { BrandsService } from 'src/brands/application/brands.service'
-import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories.consts'
-import { CategoriesService } from 'src/categories/application/categories.service'
-
 @Injectable()
 export class ProductsPrismaRepositoryAdapter
   implements IProductsRepositoryPort
 {
   constructor(
     @Inject(PRISMA_SERVICE) private readonly prismaService: PrismaService,
-    @Inject(BRANDS_SERVICE_PORT) private readonly brandsService: BrandsService,
-    @Inject(CATEGORIES_SERVICE_PORT)
-    private readonly categoriesService: CategoriesService,
   ) {}
 
   async getProducts(): Promise<IProductRes[]> {
@@ -43,15 +35,10 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    if (!product) throw new Error('Product not found')
-
-    return product
+    return product ? ProductsMapper.toRes(product) : null
   }
 
   async createProduct(product: ICreateProductDto): Promise<IProductRes> {
-    await this.brandsService.getBrandById(product.brandId)
-    await this.categoriesService.getCategoryById(product.categoryId)
-
     const createdProduct = await this.prismaService.product.create({
       data: product,
       include: {
@@ -60,19 +47,13 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    return ProductsMapper.toRes(createdProduct)
+    return createdProduct ? ProductsMapper.toRes(createdProduct) : null
   }
 
   async updateProduct(
     id: number,
     product: IUpdateProductDto,
   ): Promise<IProductRes> {
-    await this.getProductById(id)
-
-    if (product.brandId) await this.brandsService.getBrandById(product.brandId)
-    if (product.categoryId)
-      await this.categoriesService.getCategoryById(product.categoryId)
-
     const updatedProduct = await this.prismaService.product.update({
       where: { id },
       data: product,
@@ -82,15 +63,13 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    return ProductsMapper.toRes(updatedProduct)
+    return updatedProduct ? ProductsMapper.toRes(updatedProduct) : null
   }
 
-  async toggleProductAvailability(id: number): Promise<boolean> {
-    const preoductToUpdate = await this.getProductById(id)
-
+  async setProductActive(id: number, state: boolean): Promise<boolean> {
     const product = await this.prismaService.product.update({
       where: { id },
-      data: { isActive: !preoductToUpdate.isActive },
+      data: { isActive: state },
     })
     return !!product
   }

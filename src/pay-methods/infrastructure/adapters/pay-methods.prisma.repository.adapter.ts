@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { ICreatePayMethodDto } from 'src/pay-methods/domain/dtos/create-pay-method.dto'
 import { IPayMethodRes } from 'src/pay-methods/domain/dtos/pay-method.res'
 import { IUpdatePayMethodDto } from 'src/pay-methods/domain/dtos/update-pay-method.dto'
@@ -19,25 +19,20 @@ export class PayMethodsPrismaRepositoryAdapter
   }
 
   async getPayMethodById(id: number): Promise<IPayMethodRes> {
-    const payMethod = await this.prismaService.payMethod.findUnique({
+    return await this.prismaService.payMethod.findUnique({
       where: { id },
     })
+  }
 
-    if (!payMethod) throw new BadRequestException('Pay method not found')
-
-    return payMethod
+  async getPayMethodByName(name: string): Promise<IPayMethodRes> {
+    return await this.prismaService.payMethod.findFirst({
+      where: { name },
+    })
   }
 
   async createPayMethod(
     payMethod: ICreatePayMethodDto,
   ): Promise<IPayMethodRes> {
-    const payMethodExists = await this.prismaService.payMethod.findFirst({
-      where: { name: payMethod.name },
-    })
-
-    if (payMethodExists)
-      throw new BadRequestException('Pay method already exists')
-
     return await this.prismaService.payMethod.create({
       data: payMethod,
     })
@@ -47,26 +42,16 @@ export class PayMethodsPrismaRepositoryAdapter
     id: number,
     payMethod: IUpdatePayMethodDto,
   ): Promise<IPayMethodRes> {
-    await this.getPayMethodById(id)
-
-    const payMethodExists = await this.prismaService.payMethod.findFirst({
-      where: { name: payMethod.name, id: { not: id } },
-    })
-    if (payMethodExists)
-      throw new BadRequestException('Pay method already exists')
-
     return await this.prismaService.payMethod.update({
       where: { id },
       data: payMethod,
     })
   }
 
-  async deletePayMethod(id: number): Promise<boolean> {
-    await this.getPayMethodById(id)
-
+  async setPayMethodActive(id: number, state: boolean): Promise<boolean> {
     const payMethod = await this.prismaService.payMethod.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: state },
     })
 
     return !!payMethod

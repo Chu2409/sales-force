@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common'
 import { ServicesService } from 'src/services/application/services.service'
-import { SERVICES_SERVICE_PORT } from 'src/services/shared/products-providers.consts'
+import { SERVICES_SERVICE_PORT } from 'src/services/shared/services-providers.consts'
 import { CreateServiceReq } from '../models/create-service.req'
 import { UpdateServiceReq } from '../models/update-service.req'
 

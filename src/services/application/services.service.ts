@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common'
 import { IServicesRepositoryPort } from '../domain/ports/out/services.repository'
 import { IServicesServicePort } from '../domain/ports/in/services.service.port'
-import { SERVICES_REPOSITORY_PORT } from '../shared/products-providers.consts'
+import { SERVICES_REPOSITORY_PORT } from '../shared/services-providers.consts'
 import { ICreateServiceDto } from '../domain/dtos/create-service.dto'
 import { IServiceRes } from '../domain/dtos/service.res'
 import { IUpdateServiceDto } from '../domain/dtos/update-service.dto'
