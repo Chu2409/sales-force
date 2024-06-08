@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 
 import { ILocationsRepositoryPort } from 'src/locations/domain/ports/out/locations.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -44,9 +44,7 @@ export class LocationsPrismaRepositoryAdapter
       include: { parent: true },
     })
 
-    if (!location) throw new NotFoundException('Location not found')
-
-    return LocationsMapper.toResWithParent(location)
+    return location ? LocationsMapper.toResWithParent(location) : null
   }
 
   async createLocation(
@@ -57,30 +55,30 @@ export class LocationsPrismaRepositoryAdapter
       include: { parent: true },
     })
 
-    return LocationsMapper.toResWithParent(createdLocation)
+    return createdLocation
+      ? LocationsMapper.toResWithParent(createdLocation)
+      : null
   }
 
   async updateLocation(
     id: number,
     location: IUpdateLocationDto,
   ): Promise<ILocationWithParentRes> {
-    await this.getLocationById(id)
-
     const updatedLocation = await this.prismaService.location.update({
       where: { id },
       data: location,
       include: { parent: true },
     })
 
-    return LocationsMapper.toResWithParent(updatedLocation)
+    return updatedLocation
+      ? LocationsMapper.toResWithParent(updatedLocation)
+      : null
   }
 
-  async deleteLocation(id: number): Promise<boolean> {
-    const locationToUpdate = await this.getLocationById(id)
-
+  async setLocationActive(id: number, state: boolean): Promise<boolean> {
     const location = await this.prismaService.location.update({
       where: { id },
-      data: { isActive: !locationToUpdate.isActive },
+      data: { isActive: state },
     })
     return !!location
   }

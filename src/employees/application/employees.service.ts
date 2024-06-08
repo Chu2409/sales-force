@@ -30,8 +30,7 @@ export class EmployeesService implements IEmployeesServicePort {
   }
 
   async getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]> {
-    const employee = await this.getEmployeeById(id)
-    if (!employee) throw new AppError('Employee not found', Errors.NOT_FOUND)
+    await this.getEmployeeById(id)
 
     return await this.repository.getPermissionsByEmployeeId(id)
   }
@@ -53,7 +52,6 @@ export class EmployeesService implements IEmployeesServicePort {
     await this.locationsService.getLocationById(employee.person.locationId)
 
     const createdEmployee = await this.repository.createEmployee(employee)
-
     if (!createdEmployee)
       throw new AppError('Employee not created', Errors.INTERNAL_SERVER_ERROR)
 
@@ -77,7 +75,6 @@ export class EmployeesService implements IEmployeesServicePort {
     }
 
     const updatedEmployee = await this.repository.updateEmployee(id, employee)
-
     if (!updatedEmployee)
       throw new AppError('Employee not updated', Errors.INTERNAL_SERVER_ERROR)
 
@@ -86,7 +83,6 @@ export class EmployeesService implements IEmployeesServicePort {
 
   async toggleEmployeeActive(employeeId: number): Promise<boolean> {
     const employee = await this.getEmployeeById(employeeId)
-    if (!employee) throw new AppError('Employee not found', Errors.NOT_FOUND)
 
     return await this.repository.setEmployeeActive(
       employeeId,

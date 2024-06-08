@@ -74,13 +74,15 @@ export class EmployeesPrismaRepositoryAdapter
     return employee ? EmployeesMapper.toRes(employee) : null
   }
 
-  async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
-    const encryptedPassword = bcrypt.hashSync(employee.password, 10)
+  encryptPassword(password: string): string {
+    return bcrypt.hashSync(password, 10)
+  }
 
+  async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
     const createdEmployee = await this.prismaService.employee.create({
       data: {
         ...employee,
-        password: encryptedPassword,
+        password: this.encryptPassword(employee.password),
         person: {
           create: {
             ...employee.person,
@@ -101,15 +103,13 @@ export class EmployeesPrismaRepositoryAdapter
     id: number,
     employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes> {
-    const encryptedPassword = employee.password
-      ? bcrypt.hashSync(employee.password, 10)
-      : undefined
-
     const updatedEmployee = await this.prismaService.employee.update({
       where: { id },
       data: {
         ...employee,
-        password: encryptedPassword,
+        password: employee.password
+          ? this.encryptPassword(employee.password)
+          : undefined,
         person: {
           update: {
             data: {

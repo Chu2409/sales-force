@@ -12,5 +12,5 @@ export interface ILocationsServicePort {
     id: number,
     location: IUpdateLocationDto,
   ): Promise<ILocationWithParentRes>
-  deleteLocation(id: number): Promise<boolean>
+  toggleLocationActive(id: number): Promise<boolean>
 }
