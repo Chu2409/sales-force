@@ -20,7 +20,11 @@ export class ModulesService implements IModulesServicePort {
     if (moduleExists)
       throw new AppError('Module already exists', Errors.CONFLICT)
 
-    return await this.repository.createModule(module)
+    const createdModule = await this.repository.createModule(module)
+    if (!createdModule)
+      throw new AppError('Module not created', Errors.INTERNAL_SERVER_ERROR)
+
+    return createdModule
   }
 
   async updateModule(
@@ -32,7 +36,11 @@ export class ModulesService implements IModulesServicePort {
     if (moduleExists && moduleExists.id !== id)
       throw new AppError('Module already exists', Errors.CONFLICT)
 
-    return await this.repository.updateModule(id, module)
+    const updatedModule = await this.repository.updateModule(id, module)
+    if (!updatedModule)
+      throw new AppError('Module not updated', Errors.INTERNAL_SERVER_ERROR)
+
+    return updatedModule
   }
 
   async toggleModuleActive(id: number): Promise<boolean> {

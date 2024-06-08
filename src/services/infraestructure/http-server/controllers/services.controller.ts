@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -10,7 +9,7 @@ import {
   Post,
 } from '@nestjs/common'
 import { ServicesService } from 'src/services/application/services.service'
-import { SERVICES_SERVICE_PORT } from 'src/services/shared/services-providers.consts'
+import { SERVICES_SERVICE_PORT } from 'src/services/shared/services.consts'
 import { CreateServiceReq } from '../models/create-service.req'
 import { UpdateServiceReq } from '../models/update-service.req'
 
@@ -44,8 +43,8 @@ export class ServicesController {
     return await this.servicesService.updateService(id, service)
   }
 
-  @Delete(':id')
-  async deleteService(@Param('id', ParseIntPipe) id: number) {
-    return await this.servicesService.deleteService(id)
+  @Patch(':id/toggle-active')
+  async toggleServiceActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.servicesService.toggleServiceActive(id)
   }
 }

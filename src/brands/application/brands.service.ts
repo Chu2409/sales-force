@@ -20,7 +20,11 @@ export class BrandsService implements IBrandsServicePort {
     if (brandExists)
       throw new AppError('Brand already exists', Errors.BAD_REQUEST)
 
-    return await this.repository.createBrand(brand)
+    const createdBrand = await this.repository.createBrand(brand)
+    if (!createdBrand)
+      throw new AppError('Brand not created', Errors.INTERNAL_SERVER_ERROR)
+
+    return createdBrand
   }
 
   async updateBrand(id: number, brand: IUpdateBrandDto): Promise<IBrandRes> {
@@ -30,7 +34,11 @@ export class BrandsService implements IBrandsServicePort {
     if (brandExists && brandExists.id !== id)
       throw new AppError('Brand already exists', Errors.BAD_REQUEST)
 
-    return await this.repository.updateBrand(id, brand)
+    const updatedBrand = await this.repository.updateBrand(id, brand)
+    if (!updatedBrand)
+      throw new AppError('Brand not updated', Errors.INTERNAL_SERVER_ERROR)
+
+    return updatedBrand
   }
 
   async toggleBrandActive(id: number): Promise<boolean> {

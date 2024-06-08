@@ -1,10 +1,12 @@
 import { Inject } from '@nestjs/common'
 import { IServicesRepositoryPort } from '../domain/ports/out/services.repository'
 import { IServicesServicePort } from '../domain/ports/in/services.service.port'
-import { SERVICES_REPOSITORY_PORT } from '../shared/services-providers.consts'
+import { SERVICES_REPOSITORY_PORT } from '../shared/services.consts'
 import { ICreateServiceDto } from '../domain/dtos/create-service.dto'
 import { IServiceRes } from '../domain/dtos/service.res'
 import { IUpdateServiceDto } from '../domain/dtos/update-service.dto'
+import { AppError } from 'src/shared/domain/models/app.error'
+import { Errors } from 'src/shared/domain/consts/errors'
 
 export class ServicesService implements IServicesServicePort {
   constructor(
@@ -13,18 +15,30 @@ export class ServicesService implements IServicesServicePort {
   ) {}
 
   async createService(service: ICreateServiceDto): Promise<IServiceRes> {
-    return await this.repository.createService(service)
+    const createdService = await this.repository.createService(service)
+    if (!createdService)
+      throw new AppError('Service not created', Errors.INTERNAL_SERVER_ERROR)
+
+    return createdService
   }
 
   async updateService(
     id: number,
     service: IUpdateServiceDto,
   ): Promise<IServiceRes> {
-    return await this.repository.updateService(id, service)
+    await this.getServiceById(id)
+
+    const updatedService = await this.repository.updateService(id, service)
+    if (!updatedService)
+      throw new AppError('Service not updated', Errors.INTERNAL_SERVER_ERROR)
+
+    return updatedService
   }
 
-  async deleteService(id: number): Promise<boolean> {
-    return await this.repository.deleteService(id)
+  async toggleServiceActive(id: number): Promise<boolean> {
+    const service = await this.getServiceById(id)
+
+    return await this.repository.setServiceActive(id, !service.isActive)
   }
 
   async getServices(): Promise<IServiceRes[]> {
@@ -32,6 +46,9 @@ export class ServicesService implements IServicesServicePort {
   }
 
   async getServiceById(id: number): Promise<IServiceRes> {
-    return await this.repository.getServiceById(id)
+    const service = await this.repository.getServiceById(id)
+    if (!service) throw new AppError('Service not found', Errors.NOT_FOUND)
+
+    return service
   }
 }

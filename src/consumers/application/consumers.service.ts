@@ -49,11 +49,11 @@ export class ConsumersService implements IConsumersServicePort {
     if (consumer.person?.locationId)
       await this.locationsService.getLocationById(consumer.person.locationId)
 
-    const updatedtConsumer = await this.repository.updateConsumer(id, consumer)
-    if (!updatedtConsumer)
+    const updatedConsumer = await this.repository.updateConsumer(id, consumer)
+    if (!updatedConsumer)
       throw new AppError('Consumer not updated', Errors.INTERNAL_SERVER_ERROR)
 
-    return updatedtConsumer
+    return updatedConsumer
   }
 
   async toggleConsumerActive(consumerId: number): Promise<boolean> {

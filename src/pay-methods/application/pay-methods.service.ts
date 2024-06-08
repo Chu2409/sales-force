@@ -24,7 +24,11 @@ export class PayMethodsService implements IPayMethodsServicePort {
     if (payMethodExists)
       throw new AppError('Pay method already exists', Errors.CONFLICT)
 
-    return await this.repository.createPayMethod(payMethod)
+    const createdPayMethod = await this.repository.createPayMethod(payMethod)
+    if (!createdPayMethod)
+      throw new AppError('Pay method not created', Errors.INTERNAL_SERVER_ERROR)
+
+    return createdPayMethod
   }
 
   async updatePayMethod(
@@ -39,7 +43,14 @@ export class PayMethodsService implements IPayMethodsServicePort {
     if (payMethodExists && payMethodExists.id !== id)
       throw new AppError('Pay method already exists', Errors.CONFLICT)
 
-    return await this.repository.updatePayMethod(id, payMethod)
+    const updatedPayMethod = await this.repository.updatePayMethod(
+      id,
+      payMethod,
+    )
+    if (!updatedPayMethod)
+      throw new AppError('Pay method not updated', Errors.INTERNAL_SERVER_ERROR)
+
+    return updatedPayMethod
   }
 
   async togglePayMethodActive(id: number): Promise<boolean> {

@@ -22,7 +22,11 @@ export class CategoriesService implements ICategoriesServicePort {
     if (categoryExists)
       throw new AppError('Category already exists', Errors.BAD_REQUEST)
 
-    return await this.repository.createCategory(category)
+    const createdCategory = await this.repository.createCategory(category)
+    if (!createdCategory)
+      throw new AppError('Category not created', Errors.INTERNAL_SERVER_ERROR)
+
+    return createdCategory
   }
 
   async updateCategory(
@@ -37,7 +41,11 @@ export class CategoriesService implements ICategoriesServicePort {
     if (categoryExists && categoryExists.id !== id)
       throw new AppError('Category already exists', Errors.BAD_REQUEST)
 
-    return await this.repository.updateCategory(id, category)
+    const updatedCategory = await this.repository.updateCategory(id, category)
+    if (!updatedCategory)
+      throw new AppError('Category not updated', Errors.INTERNAL_SERVER_ERROR)
+
+    return updatedCategory
   }
 
   async toggleCategoryActive(id: number): Promise<boolean> {

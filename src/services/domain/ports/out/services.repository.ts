@@ -5,7 +5,7 @@ import { IUpdateServiceDto } from '../../dtos/update-service.dto'
 export interface IServicesRepositoryPort {
   createService(service: ICreateServiceDto): Promise<IServiceRes>
   updateService(id: number, service: IUpdateServiceDto): Promise<IServiceRes>
-  deleteService(id: number): Promise<boolean>
+  setServiceActive(id: number, state: boolean): Promise<boolean>
   getServices(): Promise<IServiceRes[]>
   getServiceById(id: number): Promise<IServiceRes>
 }
