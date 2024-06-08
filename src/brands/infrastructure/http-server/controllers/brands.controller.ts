@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -12,7 +11,7 @@ import {
 import { CreateBrandReq } from '../models/create-brand.req'
 import { UpdateBrandReq } from '../models/update-brand.req'
 import { BrandsService } from 'src/brands/application/brands.service'
-import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands-providers.consts'
+import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands.consts'
 
 @Controller('brands')
 export class BrandsController {
@@ -44,8 +43,8 @@ export class BrandsController {
     return await this.brandsService.updateBrand(id, brand)
   }
 
-  @Delete(':id')
-  async deleteBrand(@Param('id', ParseIntPipe) id: number) {
-    return await this.brandsService.deleteBrand(id)
+  @Patch(':id/toggle-active')
+  async toggleBrandActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.brandsService.toggleBrandActive(id)
   }
 }

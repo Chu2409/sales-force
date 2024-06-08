@@ -10,5 +10,5 @@ export interface IConsumersServicePort {
     id: number,
     consumer: IUpdateConsumerDto,
   ): Promise<IConsumerRes>
-  deleteConsumer(id: number): Promise<boolean>
+  toggleConsumerActive(id: number): Promise<boolean>
 }

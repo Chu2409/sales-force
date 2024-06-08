@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -12,7 +11,7 @@ import {
 import { PayMethodsService } from 'src/pay-methods/application/pay-methods.service'
 import { CreatePayMethodReq } from '../models/create-pay-method.dto'
 import { UpdatePayMethoReq } from '../models/update-pay-method.dto'
-import { PAY_METHODS_SERVICE_PORT } from 'src/pay-methods/shared/pay-methods-providers.consts'
+import { PAY_METHODS_SERVICE_PORT } from 'src/pay-methods/shared/pay-methods.consts'
 
 @Controller('pay-methods')
 export class PayMethodsController {
@@ -44,8 +43,8 @@ export class PayMethodsController {
     return await this.payMethodsService.updatePayMethod(id, payMethod)
   }
 
-  @Delete(':id')
-  async deletePayMethod(@Param('id', ParseIntPipe) id: number) {
-    return await this.payMethodsService.deletePayMethod(id)
+  @Patch(':id/toggle-active')
+  async togglePayMethodActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.payMethodsService.togglePayMethodActive(id)
   }
 }

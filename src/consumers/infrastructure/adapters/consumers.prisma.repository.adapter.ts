@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { IConsumersRepositoryPort } from 'src/consumers/domain/ports/out/consumers.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -37,9 +37,7 @@ export class ConsumersPrismaRepositoryAdapter
       },
     })
 
-    if (!consumer) throw new NotFoundException('Consumer not found')
-
-    return ConsumersMapper.toRes(consumer)
+    return consumer ? ConsumersMapper.toRes(consumer) : null
   }
 
   async createConsumer(consumer: ICreateConsumerDto): Promise<IConsumerRes> {
@@ -59,15 +57,13 @@ export class ConsumersPrismaRepositoryAdapter
       },
     })
 
-    return ConsumersMapper.toRes(createdConsumer)
+    return createdConsumer ? ConsumersMapper.toRes(createdConsumer) : null
   }
 
   async updateConsumer(
     id: number,
     consumer: IUpdateConsumerDto,
   ): Promise<IConsumerRes> {
-    await this.getConsumerById(id)
-
     const updatedConsumer = await this.prismaService.consumer.update({
       where: { id },
       data: {
@@ -85,14 +81,13 @@ export class ConsumersPrismaRepositoryAdapter
       },
     })
 
-    return ConsumersMapper.toRes(updatedConsumer)
+    return updatedConsumer ? ConsumersMapper.toRes(updatedConsumer) : null
   }
 
-  async deleteConsumer(id: number): Promise<boolean> {
-    await this.getConsumerById(id)
-
-    const consumer = await this.prismaService.consumer.delete({
+  async setConsumerActive(id: number, state: boolean): Promise<boolean> {
+    const consumer = await this.prismaService.consumer.update({
       where: { id },
+      data: { isActive: state },
     })
     return !!consumer
   }

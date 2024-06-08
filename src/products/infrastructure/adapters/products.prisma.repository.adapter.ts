@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable } from '@nestjs/common'
 import { IProductsRepositoryPort } from 'src/products/domain/ports/out/products.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -7,7 +6,6 @@ import { ICreateProductDto } from 'src/products/domain/dtos/create-product.dto'
 import { IUpdateProductDto } from 'src/products/domain/dtos/update-product.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ProductsMapper } from './products.mapper'
-
 @Injectable()
 export class ProductsPrismaRepositoryAdapter
   implements IProductsRepositoryPort
@@ -22,6 +20,7 @@ export class ProductsPrismaRepositoryAdapter
         brand: true,
         category: true,
       },
+      orderBy: { name: 'asc' },
     })
 
     return products.map((product) => ProductsMapper.toRes(product))
@@ -36,9 +35,7 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    if (!product) throw new Error('Product not found')
-
-    return product
+    return product ? ProductsMapper.toRes(product) : null
   }
 
   async createProduct(product: ICreateProductDto): Promise<IProductRes> {
@@ -50,15 +47,13 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    return ProductsMapper.toRes(createdProduct)
+    return createdProduct ? ProductsMapper.toRes(createdProduct) : null
   }
 
   async updateProduct(
     id: number,
     product: IUpdateProductDto,
   ): Promise<IProductRes> {
-    await this.getProductById(id)
-
     const updatedProduct = await this.prismaService.product.update({
       where: { id },
       data: product,
@@ -68,14 +63,13 @@ export class ProductsPrismaRepositoryAdapter
       },
     })
 
-    return ProductsMapper.toRes(updatedProduct)
+    return updatedProduct ? ProductsMapper.toRes(updatedProduct) : null
   }
 
-  async deleteProduct(id: number): Promise<boolean> {
-    await this.getProductById(id)
-
-    const product = await this.prismaService.product.delete({
+  async setProductActive(id: number, state: boolean): Promise<boolean> {
+    const product = await this.prismaService.product.update({
       where: { id },
+      data: { isActive: state },
     })
     return !!product
   }

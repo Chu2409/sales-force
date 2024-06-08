@@ -9,5 +9,6 @@ export interface ILocation {
   id: number
   name: string
   type: LocationType
+  isActive: boolean
   parent: ILocation | null
 }

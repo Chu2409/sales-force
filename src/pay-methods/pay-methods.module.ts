@@ -7,7 +7,7 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import {
   PAY_METHODS_REPOSITORY_PORT,
   PAY_METHODS_SERVICE_PORT,
-} from './shared/pay-methods-providers.consts'
+} from './shared/pay-methods.consts'
 
 @Module({
   imports: [],

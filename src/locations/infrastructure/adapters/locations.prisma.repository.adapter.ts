@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 
 import { ILocationsRepositoryPort } from 'src/locations/domain/ports/out/locations.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -18,9 +18,14 @@ export class LocationsPrismaRepositoryAdapter
   ) {}
 
   async getLocations(): Promise<ILocationRes[]> {
-    const locations = await this.prismaService.location.findMany()
+    const locations = await this.prismaService.location.findMany({
+      include: { parent: true },
+      orderBy: { name: 'asc' },
+    })
 
-    return locations.map((location) => LocationsMapper.toRes(location))
+    return locations.map((location) =>
+      LocationsMapper.toResWithParent(location),
+    )
   }
 
   async getLocationsWithParent(): Promise<ILocationWithParentRes[]> {
@@ -39,9 +44,15 @@ export class LocationsPrismaRepositoryAdapter
       include: { parent: true },
     })
 
-    if (!location) throw new NotFoundException('Location not found')
+    return location ? LocationsMapper.toResWithParent(location) : null
+  }
 
-    return LocationsMapper.toResWithParent(location)
+  async getLocationByName(name: string): Promise<ILocationRes> {
+    const location = await this.prismaService.location.findFirst({
+      where: { name },
+    })
+
+    return location ? LocationsMapper.toRes(location) : null
   }
 
   async createLocation(
@@ -52,29 +63,30 @@ export class LocationsPrismaRepositoryAdapter
       include: { parent: true },
     })
 
-    return LocationsMapper.toResWithParent(createdLocation)
+    return createdLocation
+      ? LocationsMapper.toResWithParent(createdLocation)
+      : null
   }
 
   async updateLocation(
     id: number,
     location: IUpdateLocationDto,
   ): Promise<ILocationWithParentRes> {
-    await this.getLocationById(id)
-
     const updatedLocation = await this.prismaService.location.update({
       where: { id },
       data: location,
       include: { parent: true },
     })
 
-    return LocationsMapper.toResWithParent(updatedLocation)
+    return updatedLocation
+      ? LocationsMapper.toResWithParent(updatedLocation)
+      : null
   }
 
-  async deleteLocation(id: number): Promise<boolean> {
-    await this.getLocationById(id)
-
-    const location = await this.prismaService.location.delete({
+  async setLocationActive(id: number, state: boolean): Promise<boolean> {
+    const location = await this.prismaService.location.update({
       where: { id },
+      data: { isActive: state },
     })
     return !!location
   }

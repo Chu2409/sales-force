@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import {
   BRANDS_REPOSITORY_PORT,
   BRANDS_SERVICE_PORT,
-} from './shared/brands-providers.consts'
+} from './shared/brands.consts'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Module({
@@ -26,5 +26,6 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
       useClass: BrandsPrismaRepositoryAdapter,
     },
   ],
+  exports: [BRANDS_SERVICE_PORT],
 })
 export class BrandsModule {}

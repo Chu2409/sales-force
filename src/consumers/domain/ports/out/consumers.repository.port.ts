@@ -10,5 +10,5 @@ export interface IConsumersRepositoryPort {
     id: number,
     consumer: IUpdateConsumerDto,
   ): Promise<IConsumerRes>
-  deleteConsumer(id: number): Promise<boolean>
+  setConsumerActive(id: number, state: boolean): Promise<boolean>
 }

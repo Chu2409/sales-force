@@ -8,6 +8,7 @@ export class Product implements IProduct {
   description: string | null
   stock: number
   price: number
+  isActive: boolean
   category: ICategory
   brand: IBrand
 
@@ -43,6 +44,11 @@ class ProductBuilder {
 
   price(price: number) {
     this.product.price = price
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.product.isActive = isActive
     return this
   }
 

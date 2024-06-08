@@ -1,4 +1,10 @@
-import { IsBoolean, IsNumber, IsString, MinLength } from 'class-validator'
+import {
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator'
 import { ICreateServiceDto } from 'src/services/domain/dtos/create-service.dto'
 
 export class CreateServiceReq implements ICreateServiceDto {
@@ -15,4 +21,8 @@ export class CreateServiceReq implements ICreateServiceDto {
 
   @IsBoolean()
   isAvailable: boolean
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean
 }

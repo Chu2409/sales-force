@@ -7,10 +7,12 @@ import { ProductsPrismaRepositoryAdapter } from './infrastructure/adapters/produ
 import {
   PRODUCTS_REPOSITORY_PORT,
   PRODUCTS_SERVICE_PORT,
-} from './shared/products-providers.consts'
+} from './shared/products.consts'
+import { CategoriesModule } from 'src/categories/categories.module'
+import { BrandsModule } from 'src/brands/brands.module'
 
 @Module({
-  imports: [],
+  imports: [CategoriesModule, BrandsModule],
   controllers: [ProductsController],
   providers: [
     {

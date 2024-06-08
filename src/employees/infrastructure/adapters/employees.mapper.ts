@@ -1,30 +1,41 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Employee, Location, Person } from '@prisma/client'
+import { Employee, Module, Permission } from '@prisma/client'
+import { IEmployeePermissionsRes } from 'src/employees/domain/dtos/employee-permissions.res'
 import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
 import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
-import { LocationType } from 'src/locations/domain/models/location.interface'
-import { PersonGender } from 'src/people/domain/models/person.interface'
+import {
+  IPrismaPersonWithLocation,
+  PeopleMapper,
+} from 'src/people/infrastructure/adapters/people.mapper'
 
-interface IFullEmployeePrisma extends Employee {
-  person: Person & { location: Location }
+export interface IPrismaFullEmployee extends Employee {
+  person: IPrismaPersonWithLocation
+}
+
+interface IPrismaPermissionWithModule extends Permission {
+  module: Module
+}
+
+interface IFullEmployeePrismaWithPermissions extends IPrismaFullEmployee {
+  permissions: IPrismaPermissionWithModule[]
 }
 
 export class EmployeesMapper {
-  static toRes({ personId, ...employee }: IFullEmployeePrisma): IEmployeeRes {
-    const { locationId, ...person } = employee.person
-    const { parentId, ...location } = person.location
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static toRes({ personId, ...employee }: IPrismaFullEmployee): IEmployeeRes {
     return {
       ...employee,
       role: employee.role as EmployeeRole,
-      person: {
-        ...person,
-        gender: employee.person.gender as PersonGender,
-        location: {
-          ...location,
-          type: location.type as LocationType,
-        },
-      },
+      person: PeopleMapper.toResWithLocation(employee.person),
+    }
+  }
+
+  static toResWithPermissions({
+    permissions,
+    ...employee
+  }: IFullEmployeePrismaWithPermissions): IEmployeePermissionsRes {
+    return {
+      ...this.toRes(employee),
+      modules: permissions.map((permission) => permission.module),
     }
   }
 }

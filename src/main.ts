@@ -7,7 +7,7 @@ import { EnvConfiguration } from 'config/configuration'
 import { AllExceptionFilter } from './shared/infrastructure/http-server/exception-filters/all-exception-filter'
 
 const bootstrap = async () => {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, { cors: true })
   app.setGlobalPrefix('api')
   app.useGlobalPipes(
     new ValidationPipe({

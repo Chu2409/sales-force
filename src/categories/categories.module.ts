@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import {
   CATEGORIES_REPOSITORY_PORT,
   CATEGORIES_SERVICE_PORT,
-} from './shared/categories-providers.consts'
+} from './shared/categories.consts'
 import { CategoriesController } from './infrastructure/http-server/controllers/categories.controller'
 import { CategoriesPrismaRepositoryAdapter } from './infrastructure/adapters/categories.prisma.repository.adapter'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
@@ -26,5 +26,6 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
       useClass: CategoriesPrismaRepositoryAdapter,
     },
   ],
+  exports: [CATEGORIES_SERVICE_PORT],
 })
 export class CategoriesModule {}

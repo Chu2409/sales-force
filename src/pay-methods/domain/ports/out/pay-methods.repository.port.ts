@@ -7,7 +7,8 @@ export interface IPayMethodsRepositoryPort {
     id: number,
     payMethod: IUpdatePayMethodDto,
   ): Promise<IPayMethodRes>
-  deletePayMethod(id: number): Promise<boolean>
+  setPayMethodActive(id: number, state: boolean): Promise<boolean>
   getPayMethods(): Promise<IPayMethodRes[]>
   getPayMethodById(id: number): Promise<IPayMethodRes>
+  getPayMethodByName(name: string): Promise<IPayMethodRes>
 }

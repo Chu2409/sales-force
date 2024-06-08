@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -15,6 +16,10 @@ export class CreateLocationReq implements ICreateLocationDto {
 
   @IsEnum(LocationType)
   type: LocationType
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean
 
   @IsNumber()
   @IsOptional()

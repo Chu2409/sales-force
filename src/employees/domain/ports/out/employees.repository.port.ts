@@ -1,6 +1,8 @@
 import { ICreateEmployeeDto } from '../../dtos/create-employee.dto'
 import { IEmployeeRes } from '../../dtos/employee.res'
 import { IUpdateEmployeeDto } from '../../dtos/update-employee.dto'
+import { IAssignPermissionDto } from '../../dtos/assign-permission.dto'
+import { IModuleRes } from 'src/modules/domain/dtos/module.res'
 
 export interface IEmployeesRepositoryPort {
   getEmployees(): Promise<IEmployeeRes[]>
@@ -10,5 +12,9 @@ export interface IEmployeesRepositoryPort {
     id: number,
     employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes>
-  deleteEmployee(id: number): Promise<boolean>
+  setEmployeeActive(id: number, state: boolean): Promise<boolean>
+  checkPermissionExists(employeeId: number, moduleId: number): Promise<boolean>
+  getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]>
+  assignPermission(id: number, dto: IAssignPermissionDto): Promise<boolean>
+  encryptPassword(password: string): string
 }

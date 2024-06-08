@@ -4,6 +4,7 @@ export class Location implements ILocation {
   id: number
   name: string
   type: LocationType
+  isActive: boolean
   parent: ILocation | null
 
   private constructor() {}
@@ -28,6 +29,11 @@ class LocationBuilder {
 
   type(type: LocationType) {
     this.location.type = type
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.location.isActive = isActive
     return this
   }
 

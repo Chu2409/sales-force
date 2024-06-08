@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -12,7 +11,7 @@ import {
 import { CategoriesService } from 'src/categories/application/categories.service'
 import { CreateCategoryReq } from '../models/create-category.req'
 import { UpdateCategoryReq } from '../models/update-category.req'
-import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories-providers.consts'
+import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories.consts'
 
 @Controller('categories')
 export class CategoriesController {
@@ -44,8 +43,8 @@ export class CategoriesController {
     return await this.categoriesService.updateCategory(id, category)
   }
 
-  @Delete(':id')
-  async deleteCategory(@Param('id', ParseIntPipe) id: number) {
-    return await this.categoriesService.deleteCategory(id)
+  @Patch(':id/toggle-active')
+  async toggleCategoryActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.categoriesService.toggleCategoryActive(id)
   }
 }

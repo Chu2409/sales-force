@@ -12,13 +12,19 @@ import { ConsumersModule } from './consumers/consumers.module'
 import { LocationsModule } from './locations/locations.module'
 import { ServicesModule } from './services/services.module'
 import { PayMethodsModule } from './pay-methods/pay-methods.module'
+import { ModulesModule } from './modules/modules.module'
+import { AuthModule } from './auth/auth.module'
+import { QuotasModule } from './quotas/quotas.module'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
+      isGlobal: true,
     }),
+    QuotasModule,
     PrismaModule,
+    ModulesModule,
     EmployeesModule,
     CategoriesModule,
     BrandsModule,
@@ -27,6 +33,7 @@ import { PayMethodsModule } from './pay-methods/pay-methods.module'
     ConsumersModule,
     LocationsModule,
     PayMethodsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,7 +6,7 @@ import { ServicesPrismaRepositoryAdapter } from './infraestructure/adapters/serv
 import {
   SERVICES_REPOSITORY_PORT,
   SERVICES_SERVICE_PORT,
-} from './shared/products-providers.consts'
+} from './shared/services.consts'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Module({

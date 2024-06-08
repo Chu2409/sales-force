@@ -9,5 +9,6 @@ export interface IConsumer {
   id: number
   type: ConsumerType
   isCustomer: boolean
+  isActive: boolean
   person: IPerson
 }

@@ -5,6 +5,7 @@ export class Consumer implements IConsumer {
   id: number
   type: ConsumerType
   isCustomer: boolean
+  isActive: boolean
   person: IPerson
 
   private constructor() {}
@@ -29,6 +30,11 @@ class ConsumerBuilder {
 
   isCustomer(isCustomer: boolean) {
     this.consumer.isCustomer = isCustomer
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.consumer.isActive = isActive
     return this
   }
 

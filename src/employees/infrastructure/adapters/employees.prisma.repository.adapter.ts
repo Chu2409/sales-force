@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { IEmployeesRepositoryPort } from 'src/employees/domain/ports/out/employees.repository.port'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IEmployeeRes } from 'src/employees/domain/dtos/employee.res'
@@ -6,6 +6,9 @@ import { ICreateEmployeeDto } from 'src/employees/domain/dtos/create-employee.dt
 import { IUpdateEmployeeDto } from 'src/employees/domain/dtos/update-employee.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { EmployeesMapper } from './employees.mapper'
+import { IAssignPermissionDto } from 'src/employees/domain/dtos/assign-permission.dto'
+import * as bcrypt from 'bcrypt'
+import { IModuleRes } from 'src/modules/domain/dtos/module.res'
 
 @Injectable()
 export class EmployeesPrismaRepositoryAdapter
@@ -27,6 +30,37 @@ export class EmployeesPrismaRepositoryAdapter
     return employees.map((employee) => EmployeesMapper.toRes(employee))
   }
 
+  async getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]> {
+    const modules = await this.prismaService.permission.findMany({
+      where: { employeeId: id },
+      include: { module: true },
+    })
+
+    return modules.map((module) => module.module)
+  }
+
+  async assignPermission(
+    employeeId: number,
+    dto: IAssignPermissionDto,
+  ): Promise<boolean> {
+    const permission = await this.prismaService.permission.create({
+      data: { employeeId, moduleId: dto.moduleId },
+    })
+
+    return !!permission
+  }
+
+  async checkPermissionExists(
+    employeeId: number,
+    moduleId: number,
+  ): Promise<boolean> {
+    const permissionExists = await this.prismaService.permission.findFirst({
+      where: { employeeId, moduleId },
+    })
+
+    return !!permissionExists
+  }
+
   async getEmployeeById(id: number): Promise<IEmployeeRes> {
     const employee = await this.prismaService.employee.findUnique({
       where: { id },
@@ -37,15 +71,18 @@ export class EmployeesPrismaRepositoryAdapter
       },
     })
 
-    if (!employee) throw new NotFoundException('Employee not found')
+    return employee ? EmployeesMapper.toRes(employee) : null
+  }
 
-    return EmployeesMapper.toRes(employee)
+  encryptPassword(password: string): string {
+    return bcrypt.hashSync(password, 10)
   }
 
   async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {
     const createdEmployee = await this.prismaService.employee.create({
       data: {
         ...employee,
+        password: this.encryptPassword(employee.password),
         person: {
           create: {
             ...employee.person,
@@ -59,19 +96,20 @@ export class EmployeesPrismaRepositoryAdapter
       },
     })
 
-    return EmployeesMapper.toRes(createdEmployee)
+    return createdEmployee ? EmployeesMapper.toRes(createdEmployee) : null
   }
 
   async updateEmployee(
     id: number,
     employee: IUpdateEmployeeDto,
   ): Promise<IEmployeeRes> {
-    await this.getEmployeeById(id)
-
     const updatedEmployee = await this.prismaService.employee.update({
       where: { id },
       data: {
         ...employee,
+        password: employee.password
+          ? this.encryptPassword(employee.password)
+          : undefined,
         person: {
           update: {
             data: {
@@ -87,15 +125,13 @@ export class EmployeesPrismaRepositoryAdapter
       },
     })
 
-    return EmployeesMapper.toRes(updatedEmployee)
+    return updatedEmployee ? EmployeesMapper.toRes(updatedEmployee) : null
   }
 
-  async deleteEmployee(id: number): Promise<boolean> {
-    await this.getEmployeeById(id)
-
+  async setEmployeeActive(id: number, state: boolean): Promise<boolean> {
     const employee = await this.prismaService.employee.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: state },
     })
     return !!employee
   }

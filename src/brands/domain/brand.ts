@@ -4,6 +4,7 @@ import { IBrand } from './models/brand.interface'
 export class Brand implements IBrand {
   id: number
   name: string
+  isActive: boolean
 
   private constructor() {}
 
@@ -28,6 +29,11 @@ class BrandBuilder {
 
   name(name: string) {
     this.brand.name = name
+    return this
+  }
+
+  isActive(isActive: boolean) {
+    this.brand.isActive = isActive
     return this
   }
 

@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsNumber,
   IsOptional,
   IsPositive,
@@ -24,6 +25,10 @@ export class CreateProductReq implements ICreateProductDto {
   @IsNumber()
   @Min(0)
   stock: number
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean
 
   @IsNumber()
   @IsPositive()

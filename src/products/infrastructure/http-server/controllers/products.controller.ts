@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -12,7 +11,7 @@ import {
 import { ProductsService } from 'src/products/application/products.service'
 import { CreateProductReq } from '../models/create-product.req'
 import { UpdateProductReq } from '../models/update-product.req'
-import { PRODUCTS_SERVICE_PORT } from 'src/products/shared/products-providers.consts'
+import { PRODUCTS_SERVICE_PORT } from 'src/products/shared/products.consts'
 
 @Controller('products')
 export class ProductsController {
@@ -44,8 +43,8 @@ export class ProductsController {
     return await this.productsService.updateProduct(id, product)
   }
 
-  @Delete(':id')
-  async deleteProduct(@Param('id', ParseIntPipe) id: number) {
-    return await this.productsService.deleteProduct(id)
+  @Patch(':id/toggle-active')
+  async toggleProductActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.productsService.toggleProductActive(id)
   }
 }
