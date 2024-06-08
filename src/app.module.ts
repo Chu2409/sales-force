@@ -14,6 +14,7 @@ import { ServicesModule } from './services/services.module'
 import { PayMethodsModule } from './pay-methods/pay-methods.module'
 import { ModulesModule } from './modules/modules.module'
 import { AuthModule } from './auth/auth.module'
+import { QuotasModule } from './quotas/quotas.module'
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './auth/auth.module'
       load: [configuration],
       isGlobal: true,
     }),
+    QuotasModule,
     PrismaModule,
     ModulesModule,
     EmployeesModule,

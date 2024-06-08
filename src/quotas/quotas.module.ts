@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import {
   QUOTAS_REPOSITORY_PORT,
   QUOTAS_SERVICE_PORT,
-} from './shared/quotas-providers.consts'
+} from './shared/quotas.consts'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { QuotasController } from './infrastructure/http-server/controllers/quotas.controller'
 import { QuotasPrismaRepositoryAdapter } from './infrastructure/adapters/quotas.prisma.repository.adapter'

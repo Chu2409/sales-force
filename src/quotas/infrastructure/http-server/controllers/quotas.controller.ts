@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -12,7 +11,7 @@ import {
 import { CreateQuotaReq } from '../models/create-quota.req'
 import { UpdateQuotaReq } from '../models/update-quota.req'
 import { QuotasService } from 'src/quotas/application/quotas.service'
-import { QUOTAS_SERVICE_PORT } from 'src/quotas/shared/quotas-providers.consts'
+import { QUOTAS_SERVICE_PORT } from 'src/quotas/shared/quotas.consts'
 
 @Controller('quotas')
 export class QuotasController {
@@ -51,8 +50,8 @@ export class QuotasController {
     return await this.quotasService.updateQuota(id, quota)
   }
 
-  @Delete(':id')
-  async deleteQuota(@Param('id', ParseIntPipe) id: number) {
-    return await this.quotasService.deleteQuota(id)
+  @Patch(':id/toggle-active')
+  async toggleQuotaActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.quotasService.toggleQuotaActive(id)
   }
 }

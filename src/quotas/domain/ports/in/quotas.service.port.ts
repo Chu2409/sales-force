@@ -9,7 +9,7 @@ export interface IQuotasServicePort {
     id: number,
     quota: IUpdateQuotaDto,
   ): Promise<IQuotaWithEmployeeRes>
-  deleteQuota(id: number): Promise<boolean>
+  toggleQuotaActive(id: number): Promise<boolean>
   getQuotas(): Promise<IQuotaWithEmployeeRes[]>
   getQuotaById(id: number): Promise<IQuotaWithEmployeeRes>
   getQuotasByEmployeeId(employeeId: number): Promise<IQuotaRes[]>

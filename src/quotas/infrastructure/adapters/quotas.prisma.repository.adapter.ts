@@ -1,12 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { IQuotasRepositoryPort } from 'src/quotas/domain/ports/out/quotas.repository.port'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ICreateQuotaDto } from 'src/quotas/domain/dtos/create-quota.dto'
 import { IUpdateQuotaDto } from 'src/quotas/domain/dtos/update-quota.dto'
 import { QuotasMapper } from './quotas.mapper'
-import { EMPLOYEES_SERVICE_PORT } from 'src/employees/shared/employees.consts'
-import { EmployeesService } from 'src/employees/application/employees.service'
 import { IQuotaRes } from 'src/quotas/domain/dtos/quota.res'
 import { IQuotaWithEmployeeRes } from 'src/quotas/domain/dtos/quota-with-employee.res'
 
@@ -14,8 +12,6 @@ import { IQuotaWithEmployeeRes } from 'src/quotas/domain/dtos/quota-with-employe
 export class QuotasPrismaRepositoryAdapter implements IQuotasRepositoryPort {
   constructor(
     @Inject(PRISMA_SERVICE) private readonly prismaService: PrismaService,
-    @Inject(EMPLOYEES_SERVICE_PORT)
-    private readonly employeesService: EmployeesService,
   ) {}
 
   async getQuotas(): Promise<IQuotaWithEmployeeRes[]> {
@@ -35,8 +31,6 @@ export class QuotasPrismaRepositoryAdapter implements IQuotasRepositoryPort {
   }
 
   async getQuotasByEmployeeId(employeeId: number): Promise<IQuotaRes[]> {
-    await this.employeesService.getEmployeeById(employeeId)
-
     return await this.prismaService.quota.findMany({
       where: { employeeId },
     })
@@ -56,14 +50,10 @@ export class QuotasPrismaRepositoryAdapter implements IQuotasRepositoryPort {
       },
     })
 
-    if (!quota) throw new NotFoundException('Quota not found')
-
-    return QuotasMapper.toRes(quota)
+    return quota ? QuotasMapper.toRes(quota) : null
   }
 
   async createQuota(quota: ICreateQuotaDto): Promise<IQuotaWithEmployeeRes> {
-    await this.employeesService.getEmployeeById(quota.employeeId)
-
     const createdQuota = await this.prismaService.quota.create({
       data: quota,
       include: {
@@ -77,19 +67,13 @@ export class QuotasPrismaRepositoryAdapter implements IQuotasRepositoryPort {
       },
     })
 
-    return QuotasMapper.toRes(createdQuota)
+    return createdQuota ? QuotasMapper.toRes(createdQuota) : null
   }
 
   async updateQuota(
     id: number,
     quota: IUpdateQuotaDto,
   ): Promise<IQuotaWithEmployeeRes> {
-    await this.getQuotaById(id)
-
-    if (quota.employeeId) {
-      await this.employeesService.getEmployeeById(quota.employeeId)
-    }
-
     const updatedQuota = await this.prismaService.quota.update({
       where: { id },
       data: quota,
@@ -104,15 +88,13 @@ export class QuotasPrismaRepositoryAdapter implements IQuotasRepositoryPort {
       },
     })
 
-    return QuotasMapper.toRes(updatedQuota)
+    return updatedQuota ? QuotasMapper.toRes(updatedQuota) : null
   }
 
-  async deleteQuota(id: number): Promise<boolean> {
-    await this.getQuotaById(id)
-
+  async setQuotaActive(id: number, state: boolean): Promise<boolean> {
     const quota = await this.prismaService.quota.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: state },
     })
 
     return !!quota
