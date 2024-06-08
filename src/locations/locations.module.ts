@@ -6,7 +6,7 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import {
   LOCATIONS_REPOSITORY_PORT,
   LOCATIONS_SERVICE_PORT,
-} from './shared/locations-providers.consts'
+} from './shared/locations.consts'
 import { LocationsPrismaRepositoryAdapter } from './infrastructure/adapters/locations.prisma.repository.adapter'
 
 @Module({

@@ -11,7 +11,7 @@ import {
 import { LocationsService } from 'src/locations/application/locations.service'
 import { CreateLocationReq } from '../models/create-location.req'
 import { UpdateLocationReq } from '../models/update-location.req'
-import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations-providers.consts'
+import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations.consts'
 
 @Controller('locations')
 export class LocationsController {

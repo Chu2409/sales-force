@@ -7,6 +7,7 @@ export interface ILocationsRepositoryPort {
   getLocationsWithParent(): Promise<ILocationWithParentRes[]>
   getLocations(): Promise<ILocationRes[]>
   getLocationById(id: number): Promise<ILocationWithParentRes>
+  getLocationByName(name: string): Promise<ILocationRes>
   createLocation(location: ICreateLocationDto): Promise<ILocationWithParentRes>
   updateLocation(
     id: number,

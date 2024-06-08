@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -10,7 +9,7 @@ import {
   Post,
 } from '@nestjs/common'
 import { ModulesService } from 'src/modules/application/modules.service'
-import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules-providers.consts'
+import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules.consts'
 import { CreateModuleReq } from '../models/create-module.req'
 import { UpdateModuleReq } from '../models/update-module.req'
 
@@ -44,8 +43,8 @@ export class ModulesController {
     return await this.modulesService.updateModule(id, module)
   }
 
-  @Delete(':id')
-  async deleteModule(@Param('id', ParseIntPipe) id: number) {
-    return await this.modulesService.deleteModule(id)
+  @Patch(':id/toggle-active')
+  async toggleModuleActive(@Param('id', ParseIntPipe) id: number) {
+    return await this.modulesService.toggleModuleActive(id)
   }
 }

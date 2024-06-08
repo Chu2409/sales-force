@@ -5,7 +5,7 @@ import { IUpdateModuleDto } from '../../dtos/update-module.dto'
 export interface IModulesServicePort {
   createModule(module: ICreateModuleDto): Promise<IModuleRes>
   updateModule(id: number, brand: IUpdateModuleDto): Promise<IModuleRes>
-  deleteModule(id: number): Promise<boolean>
+  toggleModuleActive(id: number): Promise<boolean>
   getModules(): Promise<IModuleRes[]>
   getModuleById(id: number): Promise<IModuleRes>
 }

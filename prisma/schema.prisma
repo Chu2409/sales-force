@@ -17,7 +17,7 @@ enum LocationType {
 
 model Location {
   id       Int          @id @default(autoincrement()) @map("id")
-  name     String       @map("name")
+  name     String       @unique @map("name")
   type     LocationType @map("type")
   isActive Boolean      @default(true) @map("is_active")
 

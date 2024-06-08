@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import {
   MODULES_REPOSITORY_PORT,
   MODULES_SERVICE_PORT,
-} from './shared/modules-providers.consts'
+} from './shared/modules.consts'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 
 @Module({

@@ -9,7 +9,7 @@ import {
   Post,
 } from '@nestjs/common'
 import { EmployeesService } from 'src/employees/application/employees.service'
-import { EMPLOYEES_SERVICE_PORT } from 'src/employees/shared/employees-providers.consts'
+import { EMPLOYEES_SERVICE_PORT } from 'src/employees/shared/employees.consts'
 import { CreateEmployeeReq } from '../models/create-employee.req'
 import { UpdateEmployeeReq } from '../models/update-employee.req'
 import { AssignPermissionReq } from '../models/assign-permission.req'

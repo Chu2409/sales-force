@@ -3,7 +3,7 @@ import { ILocationsServicePort } from '../domain/ports/in/locations.service.port
 import { ILocationsRepositoryPort } from '../domain/ports/out/locations.repository.port'
 import { ICreateLocationDto } from '../domain/dtos/create-location.dto'
 import { IUpdateLocationDto } from '../domain/dtos/update-location.dto'
-import { LOCATIONS_REPOSITORY_PORT } from '../shared/locations-providers.consts'
+import { LOCATIONS_REPOSITORY_PORT } from '../shared/locations.consts'
 import { ILocationWithParentRes } from '../domain/dtos/location-with-parent.res'
 import { ILocationRes } from '../domain/dtos/location.res'
 import { AppError } from 'src/shared/domain/models/app.error'
@@ -27,6 +27,12 @@ export class LocationsService implements ILocationsServicePort {
   async createLocation(
     location: ICreateLocationDto,
   ): Promise<ILocationWithParentRes> {
+    const locationExists = await this.repository.getLocationByName(
+      location.name,
+    )
+    if (locationExists)
+      throw new AppError('Location already exists', Errors.CONFLICT)
+
     const createdLocation = await this.repository.createLocation(location)
     if (!createdLocation)
       throw new AppError('Location not created', Errors.INTERNAL_SERVER_ERROR)
@@ -46,6 +52,12 @@ export class LocationsService implements ILocationsServicePort {
     location: IUpdateLocationDto,
   ): Promise<ILocationWithParentRes> {
     await this.getLocationById(id)
+
+    const locationExists = await this.repository.getLocationByName(
+      location.name,
+    )
+    if (locationExists && locationExists.id !== id)
+      throw new AppError('Location already exists', Errors.CONFLICT)
 
     const updatedLocation = await this.repository.updateLocation(id, location)
     if (!updatedLocation)

@@ -47,6 +47,14 @@ export class LocationsPrismaRepositoryAdapter
     return location ? LocationsMapper.toResWithParent(location) : null
   }
 
+  async getLocationByName(name: string): Promise<ILocationRes> {
+    const location = await this.prismaService.location.findFirst({
+      where: { name },
+    })
+
+    return location ? LocationsMapper.toRes(location) : null
+  }
+
   async createLocation(
     location: ICreateLocationDto,
   ): Promise<ILocationWithParentRes> {

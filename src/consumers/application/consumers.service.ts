@@ -7,7 +7,7 @@ import { ICreateConsumerDto } from '../domain/dtos/create-consumer.dto'
 import { IUpdateConsumerDto } from '../domain/dtos/update-consumer.dto'
 import { AppError } from 'src/shared/domain/models/app.error'
 import { Errors } from 'src/shared/domain/consts/errors'
-import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations-providers.consts'
+import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations.consts'
 import { LocationsService } from 'src/locations/application/locations.service'
 
 @Injectable()
