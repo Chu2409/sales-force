@@ -27,6 +27,19 @@ export class ConsumersPrismaRepositoryAdapter
     return consumers.map((consumer) => ConsumersMapper.toRes(consumer))
   }
 
+  async getConsumersByLocationId(locationId: number): Promise<IConsumerRes[]> {
+    const consumers = await this.prismaService.consumer.findMany({
+      where: { person: { locationId } },
+      include: {
+        person: {
+          include: { location: true },
+        },
+      },
+    })
+
+    return consumers.map((consumer) => ConsumersMapper.toRes(consumer))
+  }
+
   async getConsumerById(id: number): Promise<IConsumerRes> {
     const consumer = await this.prismaService.consumer.findUnique({
       where: { id },

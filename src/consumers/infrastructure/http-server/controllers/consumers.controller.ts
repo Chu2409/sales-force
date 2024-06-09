@@ -30,6 +30,13 @@ export class ConsumersController {
     return await this.consumersService.getConsumerById(id)
   }
 
+  @Get('location/:locationId')
+  async getConsumersByLocationId(
+    @Param('locationId', ParseIntPipe) locationId: number,
+  ) {
+    return await this.consumersService.getConsumersByLocationId(locationId)
+  }
+
   @Post()
   async createConsumer(@Body() consumer: CreateConsumerReq) {
     return await this.consumersService.createConsumer(consumer)
