@@ -1,5 +1,4 @@
 import { Location, Person } from '@prisma/client'
-import { LocationsMapper } from 'src/locations/infrastructure/adapters/locations.mapper'
 import { IPersonWithLocationRes } from 'src/people/domain/dtos/person-with-location.res'
 import { IPersonRes } from 'src/people/domain/dtos/person.res'
 import { PersonGender } from 'src/people/domain/models/person.interface'
@@ -22,7 +21,7 @@ export class PeopleMapper {
   ): IPersonWithLocationRes {
     return {
       ...this.toRes(person),
-      location: LocationsMapper.toRes(person.location),
+      location: person.location,
     }
   }
 }

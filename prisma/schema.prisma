@@ -8,24 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum LocationType {
-  COUNTRY
-  STATE
-  CITY
-  NEIGHBORHOOD
-}
-
 model Location {
-  id       Int          @id @default(autoincrement()) @map("id")
-  name     String       @unique @map("name")
-  type     LocationType @map("type")
-  isActive Boolean      @default(true) @map("is_active")
+  id       Int     @id @default(autoincrement()) @map("id")
+  name     String  @unique @map("name")
+  isActive Boolean @default(true) @map("is_active")
 
-  parentId Int?      @map("parent_id")
-  parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
-
-  locations Location[] @relation("Location2Locations")
-  people    Person[]
+  people Person[]
 
   @@map("locations")
 }
