@@ -6,7 +6,7 @@ import {
   IPrismaPersonWithLocation,
 } from 'src/people/infrastructure/adapters/people.mapper'
 
-interface IPrismaFullConsumer extends Consumer {
+export interface IPrismaFullConsumer extends Consumer {
   person: IPrismaPersonWithLocation
 }
 export class ConsumersMapper {

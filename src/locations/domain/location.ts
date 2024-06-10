@@ -1,11 +1,9 @@
-import { ILocation, LocationType } from './models/location.interface'
+import { ILocation } from './models/location.interface'
 
 export class Location implements ILocation {
   id: number
   name: string
-  type: LocationType
   isActive: boolean
-  parent: ILocation | null
 
   private constructor() {}
 
@@ -27,18 +25,8 @@ class LocationBuilder {
     return this
   }
 
-  type(type: LocationType) {
-    this.location.type = type
-    return this
-  }
-
   isActive(isActive: boolean) {
     this.location.isActive = isActive
-    return this
-  }
-
-  parent(parent: Location | null) {
-    this.location.parent = parent
     return this
   }
 
