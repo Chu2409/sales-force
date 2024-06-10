@@ -125,7 +125,7 @@ model Consumer {
 }
 
 model Delegation {
-  id Int @id @default(autoincrement()) @map("id")
+  id       Int     @id @default(autoincrement()) @map("id")
   isActive Boolean @default(true) @map("is_active")
 
   consumerId Int      @map("consumer_id")
