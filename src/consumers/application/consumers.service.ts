@@ -23,6 +23,12 @@ export class ConsumersService implements IConsumersServicePort {
     return await this.repository.getConsumers()
   }
 
+  async getConsumersByLocationId(locationId: number): Promise<IConsumerRes[]> {
+    await this.locationsService.getLocationById(locationId)
+
+    return await this.repository.getConsumersByLocationId(locationId)
+  }
+
   async createConsumer(consumer: ICreateConsumerDto): Promise<IConsumerRes> {
     await this.locationsService.getLocationById(consumer.person.locationId)
 

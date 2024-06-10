@@ -4,7 +4,6 @@ import { ILocationsRepositoryPort } from '../domain/ports/out/locations.reposito
 import { ICreateLocationDto } from '../domain/dtos/create-location.dto'
 import { IUpdateLocationDto } from '../domain/dtos/update-location.dto'
 import { LOCATIONS_REPOSITORY_PORT } from '../shared/locations.consts'
-import { ILocationWithParentRes } from '../domain/dtos/location-with-parent.res'
 import { ILocationRes } from '../domain/dtos/location.res'
 import { AppError } from 'src/shared/domain/models/app.error'
 import { Errors } from 'src/shared/domain/consts/errors'
@@ -20,13 +19,7 @@ export class LocationsService implements ILocationsServicePort {
     return await this.repository.getLocations()
   }
 
-  async getLocationsWithParent(): Promise<ILocationWithParentRes[]> {
-    return await this.repository.getLocationsWithParent()
-  }
-
-  async createLocation(
-    location: ICreateLocationDto,
-  ): Promise<ILocationWithParentRes> {
+  async createLocation(location: ICreateLocationDto): Promise<ILocationRes> {
     const locationExists = await this.repository.getLocationByName(
       location.name,
     )
@@ -40,7 +33,7 @@ export class LocationsService implements ILocationsServicePort {
     return createdLocation
   }
 
-  async getLocationById(locationId: number): Promise<ILocationWithParentRes> {
+  async getLocationById(locationId: number): Promise<ILocationRes> {
     const location = await this.repository.getLocationById(locationId)
     if (!location) throw new AppError('Location not found', Errors.NOT_FOUND)
 
@@ -50,7 +43,7 @@ export class LocationsService implements ILocationsServicePort {
   async updateLocation(
     id: number,
     location: IUpdateLocationDto,
-  ): Promise<ILocationWithParentRes> {
+  ): Promise<ILocationRes> {
     await this.getLocationById(id)
 
     const locationExists = await this.repository.getLocationByName(

@@ -27,5 +27,6 @@ import { LocationsModule } from 'src/locations/locations.module'
       useClass: ConsumersPrismaRepositoryAdapter,
     },
   ],
+  exports: [CONSUMERS_SERVICE_PORT],
 })
 export class ConsumersModule {}
