@@ -11,4 +11,8 @@ export interface IDelegationsRepositoryPort {
   ): Promise<boolean>
   setDelegationActive(delegationId: number, state: boolean): Promise<boolean>
   getDelegationById(delegationId: number): Promise<IFullDelegationRes>
+  getDelegationByEmployeeIdAndConsumerId(
+    employeeId: number,
+    consumerId: number,
+  ): Promise<IFullDelegationRes>
 }

@@ -28,5 +28,6 @@ import { ConsumersModule } from 'src/consumers/consumers.module'
       useClass: DelegationsPrismaRepositoryAdapter,
     },
   ],
+  exports: [DELEGATIONS_SERVICE_PORT],
 })
 export class DelegationsModule {}

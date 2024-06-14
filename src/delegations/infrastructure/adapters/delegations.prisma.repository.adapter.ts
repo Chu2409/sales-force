@@ -96,4 +96,31 @@ export class DelegationsPrismaRepositoryAdapter
 
     return delegation ? DelegationsMapper.toFullRes(delegation) : null
   }
+
+  async getDelegationByEmployeeIdAndConsumerId(
+    employeeId: number,
+    consumerId: number,
+  ): Promise<IFullDelegationRes> {
+    const delegation = await this.prismaService.delegation.findFirst({
+      where: {
+        employeeId,
+        consumerId,
+        isActive: true,
+      },
+      include: {
+        consumer: {
+          include: {
+            person: { include: { location: true } },
+          },
+        },
+        employee: {
+          include: {
+            person: { include: { location: true } },
+          },
+        },
+      },
+    })
+
+    return delegation ? DelegationsMapper.toFullRes(delegation) : null
+  }
 }
