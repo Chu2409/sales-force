@@ -16,6 +16,7 @@ import { ModulesModule } from './modules/modules.module'
 import { AuthModule } from './auth/auth.module'
 import { QuotasModule } from './quotas/quotas.module'
 import { DelegationsModule } from './delegations/delegations.module'
+import { ChancesModule } from './chances/chances.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DelegationsModule } from './delegations/delegations.module'
       load: [configuration],
       isGlobal: true,
     }),
+    ChancesModule,
     DelegationsModule,
     QuotasModule,
     PrismaModule,
