@@ -7,4 +7,8 @@ export interface IDelegationsServicePort {
   getDelegationsByEmployeeId(employeeId: number): Promise<IDelegationRes[]>
   toggleDelegationActive(delegationId: number): Promise<boolean>
   getDelegationById(delegationId: number): Promise<IFullDelegationRes>
+  getDelegationByEmployeeIdAndConsumerId(
+    employeeId: number,
+    consumerId: number,
+  ): Promise<IFullDelegationRes>
 }

@@ -14,7 +14,7 @@ interface IPrismaWithConsumerDelegation extends Delegation {
   consumer: IPrismaFullConsumer
 }
 
-interface IPrismaFullDelegation extends Delegation {
+export interface IPrismaFullDelegation extends Delegation {
   consumer: IPrismaFullConsumer
   employee: IPrismaFullEmployee
 }

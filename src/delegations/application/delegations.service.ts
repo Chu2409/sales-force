@@ -71,4 +71,17 @@ export class DelegationsService implements IDelegationsServicePort {
       !delegation.isActive,
     )
   }
+
+  async getDelegationByEmployeeIdAndConsumerId(
+    employeeId: number,
+    consumerId: number,
+  ): Promise<IFullDelegationRes> {
+    await this.employeesService.getEmployeeById(employeeId)
+    await this.consumersService.getConsumerById(consumerId)
+
+    return await this.repository.getDelegationByEmployeeIdAndConsumerId(
+      employeeId,
+      consumerId,
+    )
+  }
 }
