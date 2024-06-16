@@ -17,6 +17,7 @@ import { AuthModule } from './auth/auth.module'
 import { QuotasModule } from './quotas/quotas.module'
 import { DelegationsModule } from './delegations/delegations.module'
 import { ChancesModule } from './chances/chances.module'
+import { TasksModule } from './tasks/tasks.module'
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ChancesModule } from './chances/chances.module'
     EmployeesModule,
     CategoriesModule,
     BrandsModule,
+    TasksModule,
     ServicesModule,
     ProductsModule,
     ConsumersModule,

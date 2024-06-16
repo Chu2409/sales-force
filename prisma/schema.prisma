@@ -180,8 +180,19 @@ model Task {
   delegation   Delegation @relation(fields: [delegationId], references: [id])
 
   transactions Transaction[]
+  comments     Comment[]
 
   @@map("tasks")
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement()) @map("id")
+  content String @map("content")
+
+  taskId Int  @map("task_id")
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
 }
 
 model PayMethod {
