@@ -11,4 +11,9 @@ export interface ITasksRepositoryPort {
   getTasksByEmployeeId(employeeId: number): Promise<ITaskRes[]>
   getTasksByConsumerId(consumerId: number): Promise<ITaskRes[]>
   addComment(taskId: number, comment: string): Promise<ITaskRes>
+  getTasksByEmployeeIdAndDate(
+    employeeId: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ITaskRes[]>
 }

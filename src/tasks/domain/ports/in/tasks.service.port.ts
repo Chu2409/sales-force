@@ -11,4 +11,5 @@ export interface ITasksServicePort {
   getTasksByEmployeeId(employeeId: number): Promise<ITaskRes[]>
   getTasksByConsumerId(consumerId: number): Promise<ITaskRes[]>
   addComment(taskId: number, comment: string): Promise<ITaskRes>
+  checkEmployeeAvailability(employeeId: number, date: Date): Promise<boolean>
 }

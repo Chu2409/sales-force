@@ -28,7 +28,10 @@ export class TasksService implements ITasksServicePort {
   ) {}
 
   async createTask(task: ICreateTaskDto): Promise<ITaskRes> {
-    await this.delegationsService.getDelegationById(task.delegationId)
+    const delegation = await this.delegationsService.getDelegationById(
+      task.delegationId,
+    )
+    await this.checkEmployeeAvailability(delegation.employee.id, task.date)
 
     const createdTask = await this.repository.createTask(task)
     if (!createdTask)
@@ -90,5 +93,29 @@ export class TasksService implements ITasksServicePort {
       throw new AppError('Comment not added', Errors.INTERNAL_SERVER_ERROR)
 
     return updatedTask
+  }
+
+  async checkEmployeeAvailability(
+    employeeId: number,
+    date: Date,
+  ): Promise<boolean> {
+    await this.employeesService.getEmployeeById(employeeId)
+
+    const tasks = await this.repository.getTasksByEmployeeIdAndDate(
+      employeeId,
+      new Date(date.setHours(0, 0, 0, 0)),
+      new Date(date.setHours(23, 59, 59, 999)),
+    )
+
+    const isAvailable = tasks.some((task) => {
+      const endDate = new Date(task.date)
+      endDate.setMinutes(endDate.getMinutes() + task.estimatedTime)
+      if (date >= task.date && date <= endDate)
+        throw new AppError('Employee not available', Errors.BAD_REQUEST)
+
+      return true
+    })
+
+    return isAvailable
   }
 }

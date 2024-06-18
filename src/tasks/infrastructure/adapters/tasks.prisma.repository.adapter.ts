@@ -155,4 +155,32 @@ export class TasksPrismaRepositoryAdapter implements ITasksRepositoryPort {
 
     return createdComment ? TasksMapper.toRes(createdComment.task) : null
   }
+
+  async getTasksByEmployeeIdAndDate(
+    employeeId: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ITaskRes[]> {
+    const tasks = await this.prismaService.task.findMany({
+      where: {
+        delegation: { employeeId },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        status: null,
+      },
+      include: {
+        delegation: {
+          include: {
+            consumer: { include: { person: { include: { location: true } } } },
+            employee: { include: { person: { include: { location: true } } } },
+          },
+        },
+        comments: true,
+      },
+    })
+
+    return tasks.map((task) => TasksMapper.toRes(task))
+  }
 }
