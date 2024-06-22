@@ -40,12 +40,18 @@ export class EmployeesService implements IEmployeesServicePort {
     dto: IAssignPermissionDto,
   ): Promise<boolean> {
     await this.getEmployeeById(id)
-    await this.modulesService.getModuleById(dto.moduleId)
-
-    if (await this.repository.checkPermissionExists(id, dto.moduleId))
-      throw new AppError('Permission already exists', Errors.CONFLICT)
+    await this.removeAllPermissions(id)
+    dto.moduleId.forEach(async (moduleId) => {
+      await this.modulesService.getModuleById(moduleId)
+    })
 
     return await this.repository.assignPermission(id, dto)
+  }
+
+  async removeAllPermissions(employeeId: number): Promise<boolean> {
+    await this.getEmployeeById(employeeId)
+
+    return await this.repository.removeAllPermissions(employeeId)
   }
 
   async createEmployee(employee: ICreateEmployeeDto): Promise<IEmployeeRes> {

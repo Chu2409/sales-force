@@ -18,7 +18,6 @@ export class CreateEmployeeReq implements ICreateEmployeeDto {
   username: string
 
   @IsString()
-  @MinLength(6)
   password: string
 
   @IsEnum(EmployeeRole)

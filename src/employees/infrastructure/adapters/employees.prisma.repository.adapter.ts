@@ -43,11 +43,28 @@ export class EmployeesPrismaRepositoryAdapter
     employeeId: number,
     dto: IAssignPermissionDto,
   ): Promise<boolean> {
-    const permission = await this.prismaService.permission.create({
-      data: { employeeId, moduleId: dto.moduleId },
+    await this.removeAllPermissions(employeeId)
+
+    const moduleToAssign = [...dto.moduleId, 1]
+
+    const permissions = moduleToAssign.map((moduleId) => ({
+      employeeId,
+      moduleId,
+    }))
+
+    const createdPermissions = await this.prismaService.permission.createMany({
+      data: permissions,
     })
 
-    return !!permission
+    return !!createdPermissions
+  }
+
+  async removeAllPermissions(employeeId: number): Promise<boolean> {
+    const permissions = await this.prismaService.permission.deleteMany({
+      where: { employeeId },
+    })
+
+    return !!permissions
   }
 
   async checkPermissionExists(

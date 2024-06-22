@@ -16,5 +16,6 @@ export interface IEmployeesRepositoryPort {
   checkPermissionExists(employeeId: number, moduleId: number): Promise<boolean>
   getPermissionsByEmployeeId(id: number): Promise<IModuleRes[]>
   assignPermission(id: number, dto: IAssignPermissionDto): Promise<boolean>
+  removeAllPermissions(employeeId: number): Promise<boolean>
   encryptPassword(password: string): string
 }

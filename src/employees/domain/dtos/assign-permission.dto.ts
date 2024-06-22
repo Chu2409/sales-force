@@ -1,3 +1,3 @@
 export interface IAssignPermissionDto {
-  moduleId: number
+  moduleId: number[]
 }
