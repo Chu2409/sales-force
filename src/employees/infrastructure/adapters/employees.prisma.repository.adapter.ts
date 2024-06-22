@@ -34,6 +34,7 @@ export class EmployeesPrismaRepositoryAdapter
     const modules = await this.prismaService.permission.findMany({
       where: { employeeId: id },
       include: { module: true },
+      orderBy: { moduleId: 'asc' },
     })
 
     return modules.map((module) => module.module)
