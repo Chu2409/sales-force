@@ -6,6 +6,11 @@ interface Module {
 
 export const modules: Module[] = [
   {
+    name: 'COMMON',
+    description: 'Module for common operations',
+    isActive: true,
+  },
+  {
     name: 'ADMNISTRATOR',
     description: 'Module for managing user accounts and profiles',
     isActive: true,

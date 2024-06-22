@@ -23,6 +23,10 @@ export class DelegationsService implements IDelegationsServicePort {
     private readonly consumersService: IConsumersServicePort,
   ) {}
 
+  async getDelegations(): Promise<IDelegationRes[]> {
+    return await this.repository.getDelegations()
+  }
+
   async createDelegation(delegation: ICreateDelegationDto): Promise<boolean> {
     await this.employeesService.getEmployeeById(delegation.employeeId)
     await this.consumersService.getConsumerById(delegation.consumerId)

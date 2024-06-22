@@ -25,6 +25,28 @@ export class DelegationsPrismaRepositoryAdapter
     return !!createdDelegation
   }
 
+  async getDelegations(): Promise<IDelegationRes[]> {
+    const delegations = await this.prismaService.delegation.findMany({
+      include: {
+        consumer: {
+          include: {
+            person: { include: { location: true } },
+          },
+        },
+        employee: {
+          include: {
+            person: { include: { location: true } },
+          },
+        },
+      },
+      orderBy: {
+        employeeId: 'desc',
+      },
+    })
+
+    return delegations.map((delegation) => DelegationsMapper.toRes(delegation))
+  }
+
   async getDelegationsByEmployeeId(
     employeeId: number,
   ): Promise<IDelegationRes[]> {

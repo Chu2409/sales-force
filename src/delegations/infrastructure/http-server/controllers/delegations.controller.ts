@@ -19,6 +19,11 @@ export class DelegationsController {
     private readonly delegationsService: DelegationsService,
   ) {}
 
+  @Get()
+  async getDelegations() {
+    return await this.delegationsService.getDelegations()
+  }
+
   @Get('employee/:employeeId')
   async getDelegationsByEmployeeId(
     @Param('employeeId', ParseIntPipe) employeeId: number,

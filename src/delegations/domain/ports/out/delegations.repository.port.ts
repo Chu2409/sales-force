@@ -5,6 +5,7 @@ import { IFullDelegationRes } from '../../dtos/full-delegation.res'
 export interface IDelegationsRepositoryPort {
   createDelegation(delegation: ICreateDelegationDto): Promise<boolean>
   getDelegationsByEmployeeId(employeeId: number): Promise<IDelegationRes[]>
+  getDelegations(): Promise<IDelegationRes[]>
   validateDelegationActiveExists(
     employeeId: number,
     consumerId: number,
