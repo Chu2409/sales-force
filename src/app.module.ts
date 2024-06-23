@@ -18,6 +18,7 @@ import { QuotasModule } from './quotas/quotas.module'
 import { DelegationsModule } from './delegations/delegations.module'
 import { ChancesModule } from './chances/chances.module'
 import { TasksModule } from './tasks/tasks.module'
+import { TransactionsModule } from './transactions/transactions.module'
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TasksModule } from './tasks/tasks.module'
       load: [configuration],
       isGlobal: true,
     }),
+    TransactionsModule,
     ChancesModule,
     DelegationsModule,
     QuotasModule,

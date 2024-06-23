@@ -10,7 +10,7 @@ import {
   IPrismaFullEmployee,
 } from 'src/employees/infrastructure/adapters/employees.mapper'
 
-interface IPrismaWithConsumerDelegation extends Delegation {
+export interface IPrismaWithConsumerDelegation extends Delegation {
   consumer: IPrismaFullConsumer
 }
 

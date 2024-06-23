@@ -28,5 +28,6 @@ import { BrandsModule } from 'src/brands/brands.module'
       useClass: ProductsPrismaRepositoryAdapter,
     },
   ],
+  exports: [PRODUCTS_SERVICE_PORT],
 })
 export class ProductsModule {}

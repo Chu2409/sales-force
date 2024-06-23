@@ -2,7 +2,7 @@
 import { Brand, Category, Product } from '@prisma/client'
 import { IProductRes } from 'src/products/domain/dtos/product.res'
 
-interface IPrismaFullProduct extends Product {
+export interface IPrismaFullProduct extends Product {
   brand: Brand
   category: Category
 }
