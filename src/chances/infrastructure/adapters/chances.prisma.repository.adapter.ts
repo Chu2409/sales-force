@@ -96,4 +96,29 @@ export class ChancesPrismaRepositoryAdapter implements IChancesRepositoryPort {
 
     return chance ? ChancesMapper.toRes(chance) : null
   }
+
+  async updateStatus(id: number, status: ChanceStatus): Promise<IChanceRes> {
+    const updatedChance = await this.prismaService.chance.update({
+      where: { id },
+      data: { status },
+      include: {
+        delegation: {
+          include: {
+            consumer: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
+            employee: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
+          },
+        },
+      },
+    })
+
+    return updatedChance ? ChancesMapper.toRes(updatedChance) : null
+  }
 }

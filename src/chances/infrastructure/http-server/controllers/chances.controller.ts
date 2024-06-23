@@ -6,11 +6,13 @@ import {
   Inject,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common'
 import { CreateChanceReq } from '../models/create-chance.req'
 import { ChancesService } from 'src/chances/application/chances.service'
 import { CHANCES_SERVICE_PORT } from 'src/chances/shared/chances.consts'
+import { ChanceStatus } from 'src/chances/domain/models/chance.interface'
 
 @Controller('chances')
 export class ChancesController {
@@ -37,5 +39,13 @@ export class ChancesController {
   @Delete(':id')
   async deleteChance(@Param('id', ParseIntPipe) id: number) {
     return await this.chancesService.deleteChance(id)
+  }
+
+  @Patch(':id/status')
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status') status: ChanceStatus,
+  ) {
+    return await this.chancesService.updateStatus(id, status)
   }
 }

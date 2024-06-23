@@ -8,6 +8,7 @@ import { CHANCES_REPOSITORY_PORT } from 'src/chances/shared/chances.consts'
 import { DELEGATIONS_SERVICE_PORT } from 'src/delegations/shared/delegations.consts'
 import { IDelegationsServicePort } from 'src/delegations/domain/ports/in/delegations.service.port'
 import { ICreateChanceInDto } from '../domain/dtos/create-chance.in.dto'
+import { ChanceStatus } from '../domain/models/chance.interface'
 
 @Injectable()
 export class ChancesService implements IChancesServicePort {
@@ -71,5 +72,15 @@ export class ChancesService implements IChancesServicePort {
     if (!chance) throw new AppError('Chance not found', Errors.NOT_FOUND)
 
     return chance
+  }
+
+  async updateStatus(id: number, status: ChanceStatus): Promise<boolean> {
+    const chance = await this.getChanceById(id)
+
+    if (!chance) return false
+
+    const chanceUpdated = await this.repository.updateStatus(id, status)
+
+    return !!chanceUpdated
   }
 }
