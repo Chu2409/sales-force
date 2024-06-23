@@ -8,4 +8,10 @@ export interface IProductsRepositoryPort {
   createProduct(product: ICreateProductDto): Promise<IProductRes>
   updateProduct(id: number, product: IUpdateProductDto): Promise<IProductRes>
   setProductActive(id: number, state: boolean): Promise<boolean>
+  discountProductStock(
+    products: {
+      id: number
+      quantity: number
+    }[],
+  ): Promise<boolean>
 }

@@ -65,4 +65,10 @@ export class ProductsService implements IProductsServicePort {
 
     return await this.repository.setProductActive(productId, !product.isActive)
   }
+
+  async discountProductStock(
+    products: { id: number; quantity: number }[],
+  ): Promise<boolean> {
+    return await this.repository.discountProductStock(products)
+  }
 }
