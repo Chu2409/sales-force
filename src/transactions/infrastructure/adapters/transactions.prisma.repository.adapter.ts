@@ -35,6 +35,11 @@ export class TransactionsPrismaRepositoryAdapter
                 person: { include: { location: true } },
               },
             },
+            employee: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
           },
         },
         items: {
@@ -106,6 +111,11 @@ export class TransactionsPrismaRepositoryAdapter
                 person: { include: { location: true } },
               },
             },
+            employee: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
           },
         },
         items: {
@@ -136,6 +146,11 @@ export class TransactionsPrismaRepositoryAdapter
         delegation: {
           include: {
             consumer: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
+            employee: {
               include: {
                 person: { include: { location: true } },
               },
@@ -179,6 +194,11 @@ export class TransactionsPrismaRepositoryAdapter
                 person: { include: { location: true } },
               },
             },
+            employee: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
           },
         },
         items: {
@@ -205,6 +225,11 @@ export class TransactionsPrismaRepositoryAdapter
         delegation: {
           include: {
             consumer: {
+              include: {
+                person: { include: { location: true } },
+              },
+            },
+            employee: {
               include: {
                 person: { include: { location: true } },
               },

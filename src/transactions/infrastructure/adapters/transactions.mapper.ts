@@ -1,7 +1,7 @@
 import { PayMethod, Transaction } from '@prisma/client'
 import {
   DelegationsMapper,
-  IPrismaWithConsumerDelegation,
+  IPrismaFullDelegation,
 } from 'src/delegations/infrastructure/adapters/delegations.mapper'
 import {
   IPrismaItem,
@@ -15,7 +15,7 @@ import {
 } from 'src/transactions/domain/models/transaction.interface'
 
 export interface IPrismaTransaction extends Transaction {
-  delegation: IPrismaWithConsumerDelegation
+  delegation: IPrismaFullDelegation
   payMethod: PayMethod
   items: IPrismaItem[]
 }
@@ -36,7 +36,7 @@ export class TransactionsMapper {
       origin: transaction.origin as TransactionOrigin,
       status: transaction.status as TransactionStatus,
       type: transaction.type as TransactionType,
-      delegation: DelegationsMapper.toRes(transaction.delegation),
+      delegation: DelegationsMapper.toFullRes(transaction.delegation),
       items: items.map(ItemsMapper.toRes),
     }
   }
