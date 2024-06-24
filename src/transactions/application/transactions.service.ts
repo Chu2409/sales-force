@@ -9,7 +9,10 @@ import { AppError } from 'src/shared/domain/models/app.error'
 import { Errors } from 'src/shared/domain/consts/errors'
 import { PRODUCTS_SERVICE_PORT } from 'src/products/shared/products.consts'
 import { IProductsServicePort } from 'src/products/domain/ports/in/products.service.port'
-import { TransactionOrigin } from '../domain/models/transaction.interface'
+import {
+  TransactionOrigin,
+  TransactionStatus,
+} from '../domain/models/transaction.interface'
 
 @Injectable()
 export class TransactionsService implements ITransactionServicePort {
@@ -31,8 +34,13 @@ export class TransactionsService implements ITransactionServicePort {
         )
     })
 
-    const transaction =
-      await this.repository.createTransaction(createTransactionDto)
+    const transaction = await this.repository.createTransaction({
+      ...createTransactionDto,
+      status:
+        createTransactionDto.origin === TransactionOrigin.SALE
+          ? TransactionStatus.PAID
+          : createTransactionDto.status || TransactionStatus.PENDING,
+    })
     if (!transaction)
       throw new AppError(
         'Transaction could not be created',
@@ -84,10 +92,13 @@ export class TransactionsService implements ITransactionServicePort {
         Errors.BAD_REQUEST,
       )
 
-    const transaction = await this.repository.updateTransaction(
-      id,
-      updateTransactionDto,
-    )
+    const transaction = await this.repository.updateTransaction(id, {
+      ...updateTransactionDto,
+      status:
+        updateTransactionDto.origin === TransactionOrigin.SALE
+          ? TransactionStatus.PAID
+          : updateTransactionDto.status || TransactionStatus.PENDING,
+    })
     if (!transaction)
       throw new AppError(
         'Transaction could not be updated',
@@ -116,7 +127,12 @@ export class TransactionsService implements ITransactionServicePort {
   }
 
   async deleteTransaction(id: number): Promise<boolean> {
-    await this.getTransactionById(id)
+    const transaction = await this.getTransactionById(id)
+    if (transaction.status === TransactionStatus.PAID)
+      throw new AppError(
+        'Paid transactions cannot be deleted',
+        Errors.BAD_REQUEST,
+      )
 
     const deleted = await this.repository.deleteTransaction(id)
     if (!deleted)
