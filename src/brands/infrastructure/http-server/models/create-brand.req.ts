@@ -5,7 +5,7 @@ import { ICreateBrandDto } from 'src/brands/domain/dtos/create-brand.dto'
 export class CreateBrandReq implements ICreateBrandDto {
   @IsString()
   @MinLength(3)
-  @ApiProperty()
+  @ApiProperty({ minLength: 3 })
   name: string
 
   @IsOptional()
