@@ -11,8 +11,11 @@ import {
 import { DelegationsService } from 'src/delegations/application/delegations.service'
 import { DELEGATIONS_SERVICE_PORT } from 'src/delegations/shared/delegations.consts'
 import { CreateDelegationReq } from '../models/create-delegation.req'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('delegations')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class DelegationsController {
   constructor(
     @Inject(DELEGATIONS_SERVICE_PORT)
@@ -20,6 +23,7 @@ export class DelegationsController {
   ) {}
 
   @Get()
+  @Auth()
   async getDelegations() {
     return await this.delegationsService.getDelegations()
   }

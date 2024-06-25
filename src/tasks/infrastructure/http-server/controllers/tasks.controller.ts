@@ -13,8 +13,11 @@ import { CreateTaskReq } from '../models/create-task.req'
 import { UpdateTaskReq } from '../models/update-task.req'
 import { TasksService } from 'src/tasks/application/tasks.service'
 import { TASKS_SERVICE_PORT } from 'src/tasks/shared/tasks.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('tasks')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class TasksController {
   constructor(
     @Inject(TASKS_SERVICE_PORT)
@@ -22,6 +25,7 @@ export class TasksController {
   ) {}
 
   @Get()
+  @Auth()
   async getTasks() {
     return await this.tasksService.getTasks()
   }

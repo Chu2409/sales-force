@@ -12,8 +12,11 @@ import { LocationsService } from 'src/locations/application/locations.service'
 import { CreateLocationReq } from '../models/create-location.req'
 import { UpdateLocationReq } from '../models/update-location.req'
 import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('locations')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class LocationsController {
   constructor(
     @Inject(LOCATIONS_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class LocationsController {
   ) {}
 
   @Get()
+  @Auth()
   async getLocations() {
     return await this.locationsService.getLocations()
   }

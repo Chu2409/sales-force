@@ -12,8 +12,11 @@ import { PayMethodsService } from 'src/pay-methods/application/pay-methods.servi
 import { CreatePayMethodReq } from '../models/create-pay-method.dto'
 import { UpdatePayMethoReq } from '../models/update-pay-method.dto'
 import { PAY_METHODS_SERVICE_PORT } from 'src/pay-methods/shared/pay-methods.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('pay-methods')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class PayMethodsController {
   constructor(
     @Inject(PAY_METHODS_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class PayMethodsController {
   ) {}
 
   @Get()
+  @Auth()
   async getPayMethods() {
     return await this.payMethodsService.getPayMethods()
   }

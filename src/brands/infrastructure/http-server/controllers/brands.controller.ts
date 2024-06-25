@@ -12,8 +12,11 @@ import { CreateBrandReq } from '../models/create-brand.req'
 import { UpdateBrandReq } from '../models/update-brand.req'
 import { BrandsService } from 'src/brands/application/brands.service'
 import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands.consts'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 
 @Controller('brands')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class BrandsController {
   constructor(
     @Inject(BRANDS_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class BrandsController {
   ) {}
 
   @Get()
+  @Auth()
   async getBrands() {
     return await this.brandsService.getBrands()
   }

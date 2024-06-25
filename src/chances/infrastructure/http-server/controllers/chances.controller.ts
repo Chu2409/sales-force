@@ -13,8 +13,11 @@ import { CreateChanceReq } from '../models/create-chance.req'
 import { ChancesService } from 'src/chances/application/chances.service'
 import { CHANCES_SERVICE_PORT } from 'src/chances/shared/chances.consts'
 import { ChanceStatus } from 'src/chances/domain/models/chance.interface'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('chances')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class ChancesController {
   constructor(
     @Inject(CHANCES_SERVICE_PORT)
@@ -22,6 +25,7 @@ export class ChancesController {
   ) {}
 
   @Get()
+  @Auth()
   async getChances() {
     return await this.chancesService.getChances()
   }

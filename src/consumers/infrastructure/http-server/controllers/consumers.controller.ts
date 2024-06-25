@@ -12,8 +12,11 @@ import { ConsumersService } from 'src/consumers/application/consumers.service'
 import { CONSUMERS_SERVICE_PORT } from 'src/consumers/shared/consumers.consts'
 import { CreateConsumerReq } from '../models/create-consumer.req'
 import { UpdateConsumerReq } from '../models/update-consumer.req'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('consumers')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class ConsumersController {
   constructor(
     @Inject(CONSUMERS_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class ConsumersController {
   ) {}
 
   @Get()
+  @Auth()
   async getConsumers() {
     return await this.consumersService.getConsumers()
   }

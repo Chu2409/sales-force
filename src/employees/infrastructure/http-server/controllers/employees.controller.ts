@@ -13,8 +13,11 @@ import { EMPLOYEES_SERVICE_PORT } from 'src/employees/shared/employees.consts'
 import { CreateEmployeeReq } from '../models/create-employee.req'
 import { UpdateEmployeeReq } from '../models/update-employee.req'
 import { AssignPermissionReq } from '../models/assign-permission.req'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('employees')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class EmployeesController {
   constructor(
     @Inject(EMPLOYEES_SERVICE_PORT)
@@ -22,6 +25,7 @@ export class EmployeesController {
   ) {}
 
   @Get()
+  @Auth()
   async getEmployees() {
     return await this.employeesService.getEmployees()
   }

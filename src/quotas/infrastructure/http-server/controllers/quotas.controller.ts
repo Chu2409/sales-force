@@ -12,8 +12,11 @@ import { CreateQuotaReq } from '../models/create-quota.req'
 import { UpdateQuotaReq } from '../models/update-quota.req'
 import { QuotasService } from 'src/quotas/application/quotas.service'
 import { QUOTAS_SERVICE_PORT } from 'src/quotas/shared/quotas.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('quotas')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class QuotasController {
   constructor(
     @Inject(QUOTAS_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class QuotasController {
   ) {}
 
   @Get()
+  @Auth()
   async getQuotas() {
     return await this.quotasService.getQuotas()
   }

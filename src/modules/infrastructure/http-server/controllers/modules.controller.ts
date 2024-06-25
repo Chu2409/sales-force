@@ -12,8 +12,11 @@ import { ModulesService } from 'src/modules/application/modules.service'
 import { MODULES_SERVICE_PORT } from 'src/modules/shared/modules.consts'
 import { CreateModuleReq } from '../models/create-module.req'
 import { UpdateModuleReq } from '../models/update-module.req'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('modules')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class ModulesController {
   constructor(
     @Inject(MODULES_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class ModulesController {
   ) {}
 
   @Get()
+  @Auth()
   async getModules() {
     return await this.modulesService.getModules()
   }

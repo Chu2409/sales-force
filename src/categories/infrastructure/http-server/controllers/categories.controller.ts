@@ -12,8 +12,11 @@ import { CategoriesService } from 'src/categories/application/categories.service
 import { CreateCategoryReq } from '../models/create-category.req'
 import { UpdateCategoryReq } from '../models/update-category.req'
 import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('categories')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class CategoriesController {
   constructor(
     @Inject(CATEGORIES_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class CategoriesController {
   ) {}
 
   @Get()
+  @Auth()
   async getCategories() {
     return await this.categoriesService.getCategories()
   }

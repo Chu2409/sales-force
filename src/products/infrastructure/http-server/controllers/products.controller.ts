@@ -12,8 +12,11 @@ import { ProductsService } from 'src/products/application/products.service'
 import { CreateProductReq } from '../models/create-product.req'
 import { UpdateProductReq } from '../models/update-product.req'
 import { PRODUCTS_SERVICE_PORT } from 'src/products/shared/products.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 
 @Controller('products')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 export class ProductsController {
   constructor(
     @Inject(PRODUCTS_SERVICE_PORT)
@@ -21,6 +24,7 @@ export class ProductsController {
   ) {}
 
   @Get()
+  @Auth()
   async getProducts() {
     return await this.productsService.getProducts()
   }
