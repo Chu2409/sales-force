@@ -307,6 +307,7 @@ export class TransactionsPrismaRepositoryAdapter
         },
         payMethod: true,
       },
+      orderBy: { id: 'desc' },
     })
 
     return transactions.map((transaction) =>
