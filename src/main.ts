@@ -19,6 +19,7 @@ const bootstrap = async () => {
 
   const config = new DocumentBuilder()
     .setTitle('Sales-Force API')
+    .addBearerAuth()
     .setDescription('Sales-Force API endpoints')
     .setVersion('1.0')
     .build()
