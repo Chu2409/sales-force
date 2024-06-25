@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import {
   IsBoolean,
@@ -12,18 +13,22 @@ import { CreatePersonReq } from 'src/people/infrastructure/http-server/models/cr
 
 export class CreateConsumerReq implements ICreateConsumerDto {
   @IsEnum(ConsumerType)
+  @ApiProperty({ enum: ConsumerType })
   type: ConsumerType
 
   @IsBoolean()
   @IsOptional()
+  @ApiProperty({ required: false })
   isCustomer?: boolean
 
   @IsOptional()
   @IsBoolean()
+  @ApiProperty({ required: false })
   isActive?: boolean
 
   @ValidateNested()
   @Type(() => CreatePersonReq)
   @IsDefined()
+  @ApiProperty()
   person: CreatePersonReq
 }
