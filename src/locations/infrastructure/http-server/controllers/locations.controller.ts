@@ -14,9 +14,12 @@ import { UpdateLocationReq } from '../models/update-location.req'
 import { LOCATIONS_SERVICE_PORT } from 'src/locations/shared/locations.consts'
 import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { LocationRes } from '../models/location.res'
 
 @Controller('locations')
 @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
+@ApiTags('Locations')
 export class LocationsController {
   constructor(
     @Inject(LOCATIONS_SERVICE_PORT)
@@ -25,21 +28,29 @@ export class LocationsController {
 
   @Get()
   @Auth()
+  @ApiOperation({ summary: 'Get all locations' })
+  @ApiResponse({ status: 200, isArray: true, type: LocationRes })
   async getLocations() {
     return await this.locationsService.getLocations()
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get location by id' })
+  @ApiResponse({ status: 200, type: LocationRes })
   async getLocationById(@Param('id', ParseIntPipe) id: number) {
     return await this.locationsService.getLocationById(id)
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create location' })
+  @ApiResponse({ status: 201, type: LocationRes })
   async createLocation(@Body() location: CreateLocationReq) {
     return await this.locationsService.createLocation(location)
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update location' })
+  @ApiResponse({ status: 200, type: LocationRes })
   async updateLocation(
     @Param('id', ParseIntPipe) id: number,
     @Body() location: UpdateLocationReq,
@@ -48,6 +59,8 @@ export class LocationsController {
   }
 
   @Patch(':id/toggle-active')
+  @ApiOperation({ summary: 'Toggle location active' })
+  @ApiResponse({ status: 200, type: Boolean })
   async toggleLocationActive(@Param('id', ParseIntPipe) id: number) {
     return await this.locationsService.toggleLocationActive(id)
   }
