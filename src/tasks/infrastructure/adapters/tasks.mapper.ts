@@ -6,7 +6,7 @@ import {
 import { ITaskRes } from 'src/tasks/domain/dtos/task.res'
 import { TaskStatus, TaskType } from 'src/tasks/domain/models/task.interface'
 
-interface IPrismaFullTask extends Task {
+export interface IPrismaFullTask extends Task {
   delegation: IPrismaFullDelegation
   comments: Comment[]
 }

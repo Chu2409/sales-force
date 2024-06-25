@@ -7,6 +7,10 @@ import {
   IPrismaItem,
   ItemsMapper,
 } from 'src/items/infrastructure/adapters/items.mapper'
+import {
+  IPrismaFullTask,
+  TasksMapper,
+} from 'src/tasks/infrastructure/adapters/tasks.mapper'
 import { ITransactionRes } from 'src/transactions/domain/dtos/transaction.res'
 import {
   TransactionOrigin,
@@ -18,6 +22,7 @@ export interface IPrismaTransaction extends Transaction {
   delegation: IPrismaFullDelegation
   payMethod: PayMethod
   items: IPrismaItem[]
+  task?: IPrismaFullTask
 }
 
 export class TransactionsMapper {
@@ -37,6 +42,7 @@ export class TransactionsMapper {
       status: transaction.status as TransactionStatus,
       type: transaction.type as TransactionType,
       delegation: DelegationsMapper.toFullRes(transaction.delegation),
+      task: transaction.task ? TasksMapper.toRes(transaction.task) : null,
       items: items.map(ItemsMapper.toRes),
     }
   }

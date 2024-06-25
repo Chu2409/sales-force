@@ -53,6 +53,21 @@ export class TransactionsPrismaRepositoryAdapter
             service: true,
           },
         },
+        task: {
+          include: {
+            delegation: {
+              include: {
+                consumer: {
+                  include: { person: { include: { location: true } } },
+                },
+                employee: {
+                  include: { person: { include: { location: true } } },
+                },
+              },
+            },
+            comments: true,
+          },
+        },
         payMethod: true,
       },
     })
@@ -64,45 +79,30 @@ export class TransactionsPrismaRepositoryAdapter
     id: number,
     updateTransactionDto: IUpdateTransactionDto,
   ): Promise<ITransactionRes> {
-    const currentTransaction = await this.prismaService.transaction.findUnique({
-      where: { id },
-      include: { items: true },
-    })
+    let transactionToUpdate
 
-    const newItems = []
-    const existingItems = []
-    updateTransactionDto.items.forEach((incomingItem) => {
-      const exists = currentTransaction.items.find(
-        (currentItem) =>
-          currentItem.serviceId === incomingItem.serviceId ||
-          currentItem.productId === incomingItem.productId,
-      )
-      if (exists) existingItems.push(incomingItem)
-      else newItems.push(incomingItem)
-    })
+    if (updateTransactionDto.items) {
+      await this.prismaService.item.deleteMany({
+        where: { transactionId: id },
+      })
 
-    const updatedTransaction = await this.prismaService.transaction.update({
+      await this.prismaService.item.createMany({
+        data: updateTransactionDto.items.map((item) => ({
+          ...item,
+          quantity: item.quantity,
+          transactionId: id,
+        })),
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { items, ...restTransaction } = updateTransactionDto
+
+      transactionToUpdate = restTransaction
+    }
+
+    const transaction = await this.prismaService.transaction.update({
       where: { id },
-      data: {
-        ...updateTransactionDto,
-        items: {
-          updateMany: existingItems.map((item) => ({
-            where: {
-              AND: [
-                { transactionId: id },
-                {
-                  OR: [
-                    { serviceId: item.serviceId },
-                    { productId: item.productId },
-                  ],
-                },
-              ],
-            },
-            data: item,
-          })),
-          create: newItems,
-        },
-      },
+      data: transactionToUpdate || updateTransactionDto,
       include: {
         delegation: {
           include: {
@@ -129,13 +129,26 @@ export class TransactionsPrismaRepositoryAdapter
             service: true,
           },
         },
+        task: {
+          include: {
+            delegation: {
+              include: {
+                consumer: {
+                  include: { person: { include: { location: true } } },
+                },
+                employee: {
+                  include: { person: { include: { location: true } } },
+                },
+              },
+            },
+            comments: true,
+          },
+        },
         payMethod: true,
       },
     })
 
-    return updatedTransaction
-      ? TransactionsMapper.toRes(updatedTransaction)
-      : null
+    return transaction ? TransactionsMapper.toRes(transaction) : null
   }
 
   async setTotal(id: number, total: number): Promise<ITransactionRes> {
@@ -166,6 +179,21 @@ export class TransactionsPrismaRepositoryAdapter
               },
             },
             service: true,
+          },
+        },
+        task: {
+          include: {
+            delegation: {
+              include: {
+                consumer: {
+                  include: { person: { include: { location: true } } },
+                },
+                employee: {
+                  include: { person: { include: { location: true } } },
+                },
+              },
+            },
+            comments: true,
           },
         },
         payMethod: true,
@@ -212,6 +240,21 @@ export class TransactionsPrismaRepositoryAdapter
             service: true,
           },
         },
+        task: {
+          include: {
+            delegation: {
+              include: {
+                consumer: {
+                  include: { person: { include: { location: true } } },
+                },
+                employee: {
+                  include: { person: { include: { location: true } } },
+                },
+              },
+            },
+            comments: true,
+          },
+        },
         payMethod: true,
       },
     })
@@ -245,6 +288,21 @@ export class TransactionsPrismaRepositoryAdapter
               },
             },
             service: true,
+          },
+        },
+        task: {
+          include: {
+            delegation: {
+              include: {
+                consumer: {
+                  include: { person: { include: { location: true } } },
+                },
+                employee: {
+                  include: { person: { include: { location: true } } },
+                },
+              },
+            },
+            comments: true,
           },
         },
         payMethod: true,
