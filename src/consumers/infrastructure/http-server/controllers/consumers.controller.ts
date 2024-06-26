@@ -17,9 +17,9 @@ import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decora
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ConsumerRes } from '../models/consumer.res'
 
-@Controller('Consumers')
+@Controller('consumers')
 @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
-@ApiTags('consumers')
+@ApiTags('Consumers')
 export class ConsumersController {
   constructor(
     @Inject(CONSUMERS_SERVICE_PORT)
