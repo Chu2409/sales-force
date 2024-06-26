@@ -35,6 +35,7 @@ export class ServicesController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get service by id' })
   @ApiResponse({ status: 200, type: ServiceRes })
   async getServiceById(@Param('id', ParseIntPipe) id: number) {
@@ -42,6 +43,7 @@ export class ServicesController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create service' })
   @ApiResponse({ status: 200, type: ServiceRes })
   async CreateService(@Body() service: CreateServiceReq) {
@@ -49,6 +51,7 @@ export class ServicesController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Update service' })
   @ApiResponse({ status: 200, type: ServiceRes })
   async updateService(
@@ -59,6 +62,7 @@ export class ServicesController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle service active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleServiceActive(@Param('id', ParseIntPipe) id: number) {

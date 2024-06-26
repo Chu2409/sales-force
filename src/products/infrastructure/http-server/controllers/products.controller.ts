@@ -18,7 +18,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ProductRes } from '../models/product.res'
 
 @Controller('products')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Products')
 export class ProductsController {
   constructor(
@@ -35,6 +34,7 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get product by id' })
   @ApiResponse({ status: 200, type: ProductRes })
   async getProductById(@Param('id', ParseIntPipe) id: number) {
@@ -42,6 +42,7 @@ export class ProductsController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: 200, type: ProductRes })
   async createProduct(@Body() product: CreateProductReq) {
@@ -49,6 +50,7 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Update product' })
   @ApiResponse({ status: 200, type: ProductRes })
   async updateProduct(
@@ -59,6 +61,7 @@ export class ProductsController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle product active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleProductActive(@Param('id', ParseIntPipe) id: number) {

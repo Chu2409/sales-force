@@ -18,7 +18,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { LocationRes } from '../models/location.res'
 
 @Controller('locations')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Locations')
 export class LocationsController {
   constructor(
@@ -35,6 +34,7 @@ export class LocationsController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get location by id' })
   @ApiResponse({ status: 200, type: LocationRes })
   async getLocationById(@Param('id', ParseIntPipe) id: number) {
@@ -42,6 +42,7 @@ export class LocationsController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create location' })
   @ApiResponse({ status: 201, type: LocationRes })
   async createLocation(@Body() location: CreateLocationReq) {
@@ -49,6 +50,7 @@ export class LocationsController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Update location' })
   @ApiResponse({ status: 200, type: LocationRes })
   async updateLocation(
@@ -59,6 +61,7 @@ export class LocationsController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle location active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleLocationActive(@Param('id', ParseIntPipe) id: number) {

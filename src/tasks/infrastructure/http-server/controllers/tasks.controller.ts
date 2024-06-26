@@ -13,13 +13,11 @@ import { CreateTaskReq } from '../models/create-task.req'
 import { UpdateTaskReq } from '../models/update-task.req'
 import { TasksService } from 'src/tasks/application/tasks.service'
 import { TASKS_SERVICE_PORT } from 'src/tasks/shared/tasks.consts'
-import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { TaskRes } from '../models/task.res'
 
 @Controller('tasks')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Tasks')
 export class TasksController {
   constructor(
@@ -36,6 +34,7 @@ export class TasksController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get task by id' })
   @ApiResponse({ status: 200, type: TaskRes })
   async getTaskById(@Param('id', ParseIntPipe) id: number) {
@@ -43,6 +42,7 @@ export class TasksController {
   }
 
   @Get('consumer/:id')
+  @Auth()
   @ApiOperation({ summary: 'Get tasks by consumer id' })
   @ApiResponse({ status: 200, isArray: true, type: TaskRes })
   async getTasksByConsumerId(@Param('id', ParseIntPipe) id: number) {
@@ -50,6 +50,7 @@ export class TasksController {
   }
 
   @Get('employee/:id')
+  @Auth()
   @ApiOperation({ summary: 'Get tasks by employee id' })
   @ApiResponse({ status: 200, isArray: true, type: TaskRes })
   async getTasksByEmployeeId(@Param('id', ParseIntPipe) id: number) {
@@ -57,6 +58,7 @@ export class TasksController {
   }
 
   @Post()
+  @Auth()
   @ApiOperation({ summary: 'Create task' })
   @ApiResponse({ status: 200, type: TaskRes })
   async createTask(@Body() task: CreateTaskReq) {
@@ -64,6 +66,7 @@ export class TasksController {
   }
 
   @Patch(':id')
+  @Auth()
   @ApiOperation({ summary: 'Update task' })
   @ApiResponse({ status: 200, type: TaskRes })
   async updateTask(
@@ -74,6 +77,7 @@ export class TasksController {
   }
 
   @Delete(':id')
+  @Auth()
   @ApiOperation({ summary: 'Delete task' })
   @ApiResponse({ status: 200, type: Boolean })
   async deleteTask(@Param('id', ParseIntPipe) id: number) {
@@ -81,6 +85,7 @@ export class TasksController {
   }
 
   @Post(':id/comment')
+  @Auth()
   @ApiOperation({ summary: 'Add comment to task' })
   @ApiResponse({ status: 200, type: TaskRes })
   async addComment(
