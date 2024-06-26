@@ -2,6 +2,7 @@ import { ITransactionRes } from '../../dtos/transaction.res'
 import { ICreateTransactionDto } from '../../dtos/create-transaction.dto'
 import { IUpdateTransactionDto } from '../../dtos/update-transaction.dto'
 import { ITotalMonthlyRes } from '../../dtos/total-monthly.res'
+import { ITotalByEmployeeRes } from '../../dtos/total-by-employee.res'
 
 export interface ITransactionsRepositoryPort {
   createTransaction(
@@ -16,4 +17,5 @@ export interface ITransactionsRepositoryPort {
   getTransactions(): Promise<ITransactionRes[]>
   setTotal(id: number, total: number): Promise<ITransactionRes>
   getTotalMonthlyByYear(year: number): Promise<ITotalMonthlyRes>
+  getTotalByEmployeeId(employeeId: number): Promise<ITotalByEmployeeRes[]>
 }

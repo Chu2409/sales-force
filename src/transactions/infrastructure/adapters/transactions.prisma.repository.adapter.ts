@@ -8,6 +8,7 @@ import { IUpdateTransactionDto } from 'src/transactions/domain/dtos/update-trans
 import { TransactionsMapper } from './transactions.mapper'
 import { ITotalMonthlyRes } from 'src/transactions/domain/dtos/total-monthly.res'
 import { getMonthsBase } from 'src/shared/domain/consts/get-months-base'
+import { ITotalByEmployeeRes } from 'src/transactions/domain/dtos/total-by-employee.res'
 
 @Injectable()
 export class TransactionsPrismaRepositoryAdapter
@@ -339,5 +340,27 @@ export class TransactionsPrismaRepositoryAdapter
     })
 
     return monthsWithTotal
+  }
+
+  async getTotalByEmployeeId(
+    employeeId: number,
+  ): Promise<ITotalByEmployeeRes[]> {
+    const data: any = await this.prismaService.$queryRaw`
+      SELECT
+        t.type as type,
+        SUM(t.total) as total
+      FROM
+        "transactions" t
+      JOIN
+        "delegations" d ON d.id = t.delegation_id
+      JOIN
+        "employees" e ON e.id = d.employee_id
+      WHERE
+        e.id = ${employeeId} AND t.status = 'PAID'
+      GROUP BY
+        t.type
+    `
+
+    return data
   }
 }
