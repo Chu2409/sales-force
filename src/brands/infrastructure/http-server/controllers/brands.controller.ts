@@ -14,9 +14,12 @@ import { BrandsService } from 'src/brands/application/brands.service'
 import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands.consts'
 import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { BrandRes } from '../models/brand.res'
 
 @Controller('brands')
 @Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
+@ApiTags('Brands')
 export class BrandsController {
   constructor(
     @Inject(BRANDS_SERVICE_PORT)
@@ -25,21 +28,29 @@ export class BrandsController {
 
   @Get()
   @Auth()
+  @ApiOperation({ summary: 'Get all brands' })
+  @ApiResponse({ status: 200, type: BrandRes, isArray: true })
   async getBrands() {
     return await this.brandsService.getBrands()
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get brand by id' })
+  @ApiResponse({ status: 200, type: BrandRes })
   async getBrandById(@Param('id', ParseIntPipe) id: number) {
     return await this.brandsService.getBrandById(id)
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create brand' })
+  @ApiResponse({ status: 201, type: BrandRes })
   async createBrand(@Body() brand: CreateBrandReq) {
     return await this.brandsService.createBrand(brand)
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update brand' })
+  @ApiResponse({ status: 200, type: BrandRes })
   async updateBrand(
     @Param('id', ParseIntPipe) id: number,
     @Body() brand: UpdateBrandReq,
@@ -48,6 +59,8 @@ export class BrandsController {
   }
 
   @Patch(':id/toggle-active')
+  @ApiOperation({ summary: 'Toggle brand active' })
+  @ApiResponse({ status: 200, type: Boolean })
   async toggleBrandActive(@Param('id', ParseIntPipe) id: number) {
     return await this.brandsService.toggleBrandActive(id)
   }

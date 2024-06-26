@@ -11,7 +11,7 @@ export enum TaskType {
   CALL = 'CALL',
 }
 
-interface IComment {
+export interface IComment {
   id: number
   content: string
 }
