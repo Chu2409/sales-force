@@ -13,6 +13,8 @@ import {
   TransactionOrigin,
   TransactionStatus,
 } from '../domain/models/transaction.interface'
+import { ITotalMonthlyRes } from '../domain/dtos/total-monthly.res'
+import { ITotalByEmployeeRes } from '../domain/dtos/total-by-employee.res'
 
 @Injectable()
 export class TransactionsService implements ITransactionServicePort {
@@ -155,5 +157,15 @@ export class TransactionsService implements ITransactionServicePort {
 
   async getTransactions(): Promise<ITransactionRes[]> {
     return this.repository.getTransactions()
+  }
+
+  async getTotalMonthlyByYear(year: number): Promise<ITotalMonthlyRes> {
+    return this.repository.getTotalMonthlyByYear(year)
+  }
+
+  async getTotalByEmployeeId(
+    employeeId: number,
+  ): Promise<ITotalByEmployeeRes[]> {
+    return this.repository.getTotalByEmployeeId(employeeId)
   }
 }

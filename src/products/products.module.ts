@@ -10,10 +10,11 @@ import {
 } from './shared/products.consts'
 import { CategoriesModule } from 'src/categories/categories.module'
 import { BrandsModule } from 'src/brands/brands.module'
+import { ProductsReportsController } from './infrastructure/http-server/controllers/products-reports.controller'
 
 @Module({
   imports: [CategoriesModule, BrandsModule],
-  controllers: [ProductsController],
+  controllers: [ProductsController, ProductsReportsController],
   providers: [
     {
       provide: PRISMA_SERVICE,

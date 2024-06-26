@@ -8,10 +8,11 @@ import {
   SERVICES_SERVICE_PORT,
 } from './shared/services.consts'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
+import { ServicesReportsController } from './infraestructure/http-server/controllers/services-reports.controller'
 
 @Module({
   imports: [],
-  controllers: [ServicesController],
+  controllers: [ServicesController, ServicesReportsController],
   providers: [
     {
       provide: PRISMA_SERVICE,

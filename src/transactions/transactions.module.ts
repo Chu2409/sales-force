@@ -9,10 +9,11 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { TransactionsController } from './infrastructure/http-server/controllers/transactions.controller'
 import { TransactionsPrismaRepositoryAdapter } from './infrastructure/adapters/transactions.prisma.repository.adapter'
 import { ProductsModule } from 'src/products/products.module'
+import { TransactionsReportsController } from './infrastructure/http-server/controllers/transactions-reports.controller'
 
 @Module({
   imports: [ProductsModule],
-  controllers: [TransactionsController],
+  controllers: [TransactionsController, TransactionsReportsController],
   providers: [
     {
       provide: PRISMA_SERVICE,
