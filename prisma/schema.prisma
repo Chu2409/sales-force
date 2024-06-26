@@ -8,24 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum LocationType {
-  COUNTRY
-  STATE
-  CITY
-  NEIGHBORHOOD
-}
-
 model Location {
-  id       Int          @id @default(autoincrement()) @map("id")
-  name     String       @unique @map("name")
-  type     LocationType @map("type")
-  isActive Boolean      @default(true) @map("is_active")
+  id       Int     @id @default(autoincrement()) @map("id")
+  name     String  @unique @map("name")
+  isActive Boolean @default(true) @map("is_active")
 
-  parentId Int?      @map("parent_id")
-  parent   Location? @relation("Location2Locations", fields: [parentId], references: [id])
-
-  locations Location[] @relation("Location2Locations")
-  people    Person[]
+  people Person[]
 
   @@map("locations")
 }
@@ -137,7 +125,8 @@ model Consumer {
 }
 
 model Delegation {
-  id Int @id @default(autoincrement()) @map("id")
+  id       Int     @id @default(autoincrement()) @map("id")
+  isActive Boolean @default(true) @map("is_active")
 
   consumerId Int      @map("consumer_id")
   consumer   Consumer @relation(fields: [consumerId], references: [id])
@@ -191,8 +180,19 @@ model Task {
   delegation   Delegation @relation(fields: [delegationId], references: [id])
 
   transactions Transaction[]
+  comments     Comment[]
 
   @@map("tasks")
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement()) @map("id")
+  content String @map("content")
+
+  taskId Int  @map("task_id")
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
 }
 
 model PayMethod {
@@ -276,7 +276,7 @@ enum TransactionOrigin {
 
 model Transaction {
   id                 Int                @id @default(autoincrement()) @map("id")
-  date               DateTime           @map("date")
+  date               DateTime           @default(now()) @map("date")
   total              Float?             @map("total")
   status             TransactionStatus? @map("status")
   type               TransactionType    @map("type")
@@ -302,7 +302,7 @@ model Item {
   discount Float? @map("discount")
 
   transactionId Int         @map("transaction_id")
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   productId     Int?        @map("product_id")
   product       Product?    @relation(fields: [productId], references: [id])
   serviceId     Int?        @map("service_id")

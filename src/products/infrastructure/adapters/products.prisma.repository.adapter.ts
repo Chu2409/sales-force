@@ -73,4 +73,19 @@ export class ProductsPrismaRepositoryAdapter
     })
     return !!product
   }
+
+  async discountProductStock(
+    products: { id: number; quantity: number }[],
+  ): Promise<boolean> {
+    for (const product of products) {
+      const updatedProduct = await this.prismaService.product.update({
+        where: { id: product.id },
+        data: { stock: { decrement: product.quantity } },
+      })
+
+      if (!updatedProduct) return false
+    }
+
+    return true
+  }
 }

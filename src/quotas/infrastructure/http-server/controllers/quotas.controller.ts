@@ -12,8 +12,15 @@ import { CreateQuotaReq } from '../models/create-quota.req'
 import { UpdateQuotaReq } from '../models/update-quota.req'
 import { QuotasService } from 'src/quotas/application/quotas.service'
 import { QUOTAS_SERVICE_PORT } from 'src/quotas/shared/quotas.consts'
+import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
+import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { QuotaRes } from '../models/quota.res'
+import { QuotaWithEmployeeRes } from '../models/quota-with-employee.res'
 
 @Controller('quotas')
+@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
+@ApiTags('Quotas')
 export class QuotasController {
   constructor(
     @Inject(QUOTAS_SERVICE_PORT)
@@ -21,11 +28,16 @@ export class QuotasController {
   ) {}
 
   @Get()
+  @Auth()
+  @ApiOperation({ summary: 'Get all quotas' })
+  @ApiResponse({ status: 200, isArray: true, type: QuotaWithEmployeeRes })
   async getQuotas() {
     return await this.quotasService.getQuotas()
   }
 
   @Get('employee/:employeeId')
+  @ApiOperation({ summary: 'Get quotas by employee id' })
+  @ApiResponse({ status: 200, isArray: true, type: QuotaRes })
   async getQuotasByEmployeeId(
     @Param('employeeId', ParseIntPipe) employeeId: number,
   ) {
@@ -33,16 +45,22 @@ export class QuotasController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get quota by id' })
+  @ApiResponse({ status: 200, type: QuotaWithEmployeeRes })
   async getQuotaById(@Param('id', ParseIntPipe) id: number) {
     return await this.quotasService.getQuotaById(id)
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create quota' })
+  @ApiResponse({ status: 200, type: QuotaWithEmployeeRes })
   async createQuota(@Body() quota: CreateQuotaReq) {
     return await this.quotasService.createQuota(quota)
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update quota' })
+  @ApiResponse({ status: 200, type: QuotaWithEmployeeRes })
   async updateQuota(
     @Param('id', ParseIntPipe) id: number,
     @Body() quota: UpdateQuotaReq,
@@ -51,6 +69,8 @@ export class QuotasController {
   }
 
   @Patch(':id/toggle-active')
+  @ApiOperation({ summary: 'Toggle quota active' })
+  @ApiResponse({ status: 200, type: Boolean })
   async toggleQuotaActive(@Param('id', ParseIntPipe) id: number) {
     return await this.quotasService.toggleQuotaActive(id)
   }

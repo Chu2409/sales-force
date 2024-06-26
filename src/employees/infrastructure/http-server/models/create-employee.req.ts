@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import {
   IsBoolean,
@@ -15,21 +16,25 @@ import { CreatePersonReq } from 'src/people/infrastructure/http-server/models/cr
 export class CreateEmployeeReq implements ICreateEmployeeDto {
   @IsString()
   @MinLength(3)
+  @ApiProperty({ minLength: 3 })
   username: string
 
   @IsString()
-  @MinLength(6)
+  @ApiProperty()
   password: string
 
   @IsEnum(EmployeeRole)
+  @ApiProperty({ enum: EmployeeRole })
   role: EmployeeRole
 
   @IsBoolean()
   @IsOptional()
+  @ApiProperty({ required: false })
   isActive?: boolean
 
   @ValidateNested()
   @Type(() => CreatePersonReq)
   @IsDefined()
+  @ApiProperty()
   person: CreatePersonReq
 }

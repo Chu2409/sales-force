@@ -16,6 +16,7 @@ export class QuotasPrismaRepositoryAdapter implements IQuotasRepositoryPort {
 
   async getQuotas(): Promise<IQuotaWithEmployeeRes[]> {
     const quotas = await this.prismaService.quota.findMany({
+      orderBy: { startDate: 'desc' },
       include: {
         employee: {
           include: {

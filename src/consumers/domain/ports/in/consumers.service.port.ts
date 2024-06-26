@@ -5,6 +5,7 @@ import { IUpdateConsumerDto } from '../../dtos/update-consumer.dto'
 export interface IConsumersServicePort {
   getConsumers(): Promise<IConsumerRes[]>
   getConsumerById(id: number): Promise<IConsumerRes>
+  getConsumersByLocationId(locationId: number): Promise<IConsumerRes[]>
   createConsumer(consumer: ICreateConsumerDto): Promise<IConsumerRes>
   updateConsumer(
     id: number,

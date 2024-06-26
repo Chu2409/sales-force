@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
 import { PrismaModule } from './prisma/prisma.module'
 import { ConfigModule } from '@nestjs/config'
 import configuration from 'config/configuration'
@@ -15,6 +13,10 @@ import { PayMethodsModule } from './pay-methods/pay-methods.module'
 import { ModulesModule } from './modules/modules.module'
 import { AuthModule } from './auth/auth.module'
 import { QuotasModule } from './quotas/quotas.module'
+import { DelegationsModule } from './delegations/delegations.module'
+import { ChancesModule } from './chances/chances.module'
+import { TasksModule } from './tasks/tasks.module'
+import { TransactionsModule } from './transactions/transactions.module'
 
 @Module({
   imports: [
@@ -22,12 +24,16 @@ import { QuotasModule } from './quotas/quotas.module'
       load: [configuration],
       isGlobal: true,
     }),
+    TransactionsModule,
+    ChancesModule,
+    DelegationsModule,
     QuotasModule,
     PrismaModule,
     ModulesModule,
     EmployeesModule,
     CategoriesModule,
     BrandsModule,
+    TasksModule,
     ServicesModule,
     ProductsModule,
     ConsumersModule,
@@ -35,7 +41,5 @@ import { QuotasModule } from './quotas/quotas.module'
     PayMethodsModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
