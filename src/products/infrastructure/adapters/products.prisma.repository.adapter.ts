@@ -6,6 +6,7 @@ import { ICreateProductDto } from 'src/products/domain/dtos/create-product.dto'
 import { IUpdateProductDto } from 'src/products/domain/dtos/update-product.dto'
 import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { ProductsMapper } from './products.mapper'
+import { IMostSoldProduct } from 'src/products/domain/dtos/most-sold-products.res'
 @Injectable()
 export class ProductsPrismaRepositoryAdapter
   implements IProductsRepositoryPort
@@ -87,5 +88,23 @@ export class ProductsPrismaRepositoryAdapter
     }
 
     return true
+  }
+
+  async getMostSoldProducts(): Promise<IMostSoldProduct[]> {
+    const mostSoldProducts: any = await this.prismaService.$queryRaw`
+      SELECT p.name, SUM(i.quantity) as quantity
+      FROM products p
+      JOIN items i ON p.id = i.product_id
+      JOIN transactions t ON i.transaction_id = t.id
+        WHERE t.status = 'PAID'
+      GROUP BY p.id
+      ORDER BY quantity DESC
+      LIMIT 10
+    `
+
+    return mostSoldProducts.map((product) => ({
+      name: product.name,
+      quantity: Number(product.quantity),
+    }))
   }
 }
