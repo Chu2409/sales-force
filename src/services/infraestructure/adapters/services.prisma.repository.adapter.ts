@@ -5,6 +5,7 @@ import { PRISMA_SERVICE } from 'src/prisma/prisma-provider.const'
 import { IServiceRes } from 'src/services/domain/dtos/service.res'
 import { IUpdateServiceDto } from 'src/services/domain/dtos/update-service.dto'
 import { ICreateServiceDto } from 'src/services/domain/dtos/create-service.dto'
+import { IMostSoldService } from 'src/services/domain/dtos/most-sold-service.res'
 
 export class ServicesPrismaRepositoryAdapter
   implements IServicesRepositoryPort
@@ -46,5 +47,22 @@ export class ServicesPrismaRepositoryAdapter
       data: { isActive: state },
     })
     return !!service
+  }
+  async getMostSoldServices(): Promise<IMostSoldService[]> {
+    const mostSoldServices: any = await this.prismaService.$queryRaw`
+      SELECT s.name, SUM(i.quantity) as quantity
+      FROM services s
+      JOIN items i ON s.id = i.service_id
+      JOIN transactions t ON i.transaction_id = t.id
+        WHERE t.status = 'PAID'
+      GROUP BY s.id
+      ORDER BY quantity DESC
+      LIMIT 5
+    `
+
+    return mostSoldServices.map((service) => ({
+      name: service.name,
+      quantity: Number(service.quantity),
+    }))
   }
 }

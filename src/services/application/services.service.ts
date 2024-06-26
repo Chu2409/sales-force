@@ -7,6 +7,7 @@ import { IServiceRes } from '../domain/dtos/service.res'
 import { IUpdateServiceDto } from '../domain/dtos/update-service.dto'
 import { AppError } from 'src/shared/domain/models/app.error'
 import { Errors } from 'src/shared/domain/consts/errors'
+import { IMostSoldService } from '../domain/dtos/most-sold-service.res'
 
 export class ServicesService implements IServicesServicePort {
   constructor(
@@ -50,5 +51,9 @@ export class ServicesService implements IServicesServicePort {
     if (!service) throw new AppError('Service not found', Errors.NOT_FOUND)
 
     return service
+  }
+
+  async getMostSoldServices(): Promise<IMostSoldService[]> {
+    return await this.repository.getMostSoldServices()
   }
 }
