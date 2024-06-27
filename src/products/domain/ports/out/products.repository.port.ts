@@ -1,4 +1,5 @@
 import { ICreateProductDto } from '../../dtos/create-product.dto'
+import { IMostSoldProduct } from '../../dtos/most-sold-products.res'
 import { IProductRes } from '../../dtos/product.res'
 import { IUpdateProductDto } from '../../dtos/update-product.dto'
 
@@ -14,4 +15,5 @@ export interface IProductsRepositoryPort {
       quantity: number
     }[],
   ): Promise<boolean>
+  getMostSoldProducts(): Promise<IMostSoldProduct[]>
 }

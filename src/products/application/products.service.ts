@@ -11,6 +11,7 @@ import { BrandsService } from 'src/brands/application/brands.service'
 import { BRANDS_SERVICE_PORT } from 'src/brands/shared/brands.consts'
 import { CATEGORIES_SERVICE_PORT } from 'src/categories/shared/categories.consts'
 import { CategoriesService } from 'src/categories/application/categories.service'
+import { IMostSoldProduct } from '../domain/dtos/most-sold-products.res'
 
 @Injectable()
 export class ProductsService implements IProductsServicePort {
@@ -70,5 +71,9 @@ export class ProductsService implements IProductsServicePort {
     products: { id: number; quantity: number }[],
   ): Promise<boolean> {
     return await this.repository.discountProductStock(products)
+  }
+
+  async getMostSoldProducts(): Promise<IMostSoldProduct[]> {
+    return await this.repository.getMostSoldProducts()
   }
 }

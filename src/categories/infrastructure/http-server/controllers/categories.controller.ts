@@ -18,7 +18,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CategoryRes } from '../models/category.res'
 
 @Controller('categories')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Categories')
 export class CategoriesController {
   constructor(
@@ -35,6 +34,7 @@ export class CategoriesController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get category by id' })
   @ApiResponse({ status: 200, type: CategoryRes })
   async getCategoryById(@Param('id', ParseIntPipe) id: number) {
@@ -42,6 +42,7 @@ export class CategoriesController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create category' })
   @ApiResponse({ status: 201, type: CategoryRes })
   async createCategory(@Body() category: CreateCategoryReq) {
@@ -49,6 +50,7 @@ export class CategoriesController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Update category' })
   @ApiResponse({ status: 200, type: CategoryRes })
   async updateCategory(
@@ -59,6 +61,7 @@ export class CategoriesController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle category active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleCategoryActive(@Param('id', ParseIntPipe) id: number) {

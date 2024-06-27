@@ -19,7 +19,6 @@ import { QuotaRes } from '../models/quota.res'
 import { QuotaWithEmployeeRes } from '../models/quota-with-employee.res'
 
 @Controller('quotas')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Quotas')
 export class QuotasController {
   constructor(
@@ -36,6 +35,7 @@ export class QuotasController {
   }
 
   @Get('employee/:employeeId')
+  @Auth()
   @ApiOperation({ summary: 'Get quotas by employee id' })
   @ApiResponse({ status: 200, isArray: true, type: QuotaRes })
   async getQuotasByEmployeeId(
@@ -45,6 +45,7 @@ export class QuotasController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get quota by id' })
   @ApiResponse({ status: 200, type: QuotaWithEmployeeRes })
   async getQuotaById(@Param('id', ParseIntPipe) id: number) {
@@ -52,6 +53,7 @@ export class QuotasController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create quota' })
   @ApiResponse({ status: 200, type: QuotaWithEmployeeRes })
   async createQuota(@Body() quota: CreateQuotaReq) {
@@ -59,6 +61,7 @@ export class QuotasController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Update quota' })
   @ApiResponse({ status: 200, type: QuotaWithEmployeeRes })
   async updateQuota(
@@ -69,6 +72,7 @@ export class QuotasController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle quota active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleQuotaActive(@Param('id', ParseIntPipe) id: number) {

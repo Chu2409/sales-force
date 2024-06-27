@@ -18,7 +18,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { BrandRes } from '../models/brand.res'
 
 @Controller('brands')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Brands')
 export class BrandsController {
   constructor(
@@ -35,6 +34,7 @@ export class BrandsController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get brand by id' })
   @ApiResponse({ status: 200, type: BrandRes })
   async getBrandById(@Param('id', ParseIntPipe) id: number) {
@@ -42,6 +42,7 @@ export class BrandsController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create brand' })
   @ApiResponse({ status: 201, type: BrandRes })
   async createBrand(@Body() brand: CreateBrandReq) {
@@ -49,6 +50,7 @@ export class BrandsController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Update brand' })
   @ApiResponse({ status: 200, type: BrandRes })
   async updateBrand(
@@ -59,6 +61,7 @@ export class BrandsController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle brand active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleBrandActive(@Param('id', ParseIntPipe) id: number) {

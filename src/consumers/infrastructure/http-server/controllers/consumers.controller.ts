@@ -12,13 +12,11 @@ import { ConsumersService } from 'src/consumers/application/consumers.service'
 import { CONSUMERS_SERVICE_PORT } from 'src/consumers/shared/consumers.consts'
 import { CreateConsumerReq } from '../models/create-consumer.req'
 import { UpdateConsumerReq } from '../models/update-consumer.req'
-import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ConsumerRes } from '../models/consumer.res'
 
 @Controller('consumers')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Consumers')
 export class ConsumersController {
   constructor(
@@ -35,6 +33,7 @@ export class ConsumersController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get consumer by id' })
   @ApiResponse({ status: 200, type: ConsumerRes })
   async getConsumerById(@Param('id', ParseIntPipe) id: number) {
@@ -42,6 +41,7 @@ export class ConsumersController {
   }
 
   @Get('location/:locationId')
+  @Auth()
   @ApiOperation({ summary: 'Get consumers by location id' })
   @ApiResponse({ status: 200, isArray: true, type: ConsumerRes })
   async getConsumersByLocationId(
@@ -51,6 +51,7 @@ export class ConsumersController {
   }
 
   @Post()
+  @Auth()
   @ApiOperation({ summary: 'Create consumer' })
   @ApiResponse({ status: 201, type: ConsumerRes })
   async createConsumer(@Body() consumer: CreateConsumerReq) {
@@ -58,6 +59,7 @@ export class ConsumersController {
   }
 
   @Patch(':id')
+  @Auth()
   @ApiOperation({ summary: 'Update consumer' })
   @ApiResponse({ status: 200, type: ConsumerRes })
   async updateConsumer(
@@ -68,6 +70,7 @@ export class ConsumersController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth()
   @ApiOperation({ summary: 'Toggle consumer active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleConsumerActive(@Param('id', ParseIntPipe) id: number) {

@@ -6,6 +6,9 @@ import { ICreateTransactionDto } from 'src/transactions/domain/dtos/create-trans
 import { ITransactionRes } from 'src/transactions/domain/dtos/transaction.res'
 import { IUpdateTransactionDto } from 'src/transactions/domain/dtos/update-transaction.dto'
 import { TransactionsMapper } from './transactions.mapper'
+import { ITotalMonthlyRes } from 'src/transactions/domain/dtos/total-monthly.res'
+import { getMonthsBase } from 'src/shared/domain/consts/get-months-base'
+import { ITotalByEmployeeRes } from 'src/transactions/domain/dtos/total-by-employee.res'
 
 @Injectable()
 export class TransactionsPrismaRepositoryAdapter
@@ -313,5 +316,51 @@ export class TransactionsPrismaRepositoryAdapter
     return transactions.map((transaction) =>
       TransactionsMapper.toRes(transaction),
     )
+  }
+
+  async getTotalMonthlyByYear(year: number): Promise<ITotalMonthlyRes> {
+    const data: any = await this.prismaService.$queryRaw`
+      SELECT
+        EXTRACT(MONTH FROM date) as month,
+        SUM(total) as total
+      FROM
+        "transactions"
+      WHERE
+        EXTRACT(YEAR FROM date) = ${year} AND status = 'PAID'
+      GROUP BY
+        EXTRACT(MONTH FROM date)
+      ORDER BY
+        month ASC
+    `
+
+    const monthsWithTotal = getMonthsBase()
+
+    data.forEach((item) => {
+      monthsWithTotal[item.month] = item.total
+    })
+
+    return monthsWithTotal
+  }
+
+  async getTotalByEmployeeId(
+    employeeId: number,
+  ): Promise<ITotalByEmployeeRes[]> {
+    const data: any = await this.prismaService.$queryRaw`
+      SELECT
+        t.type as type,
+        SUM(t.total) as total
+      FROM
+        "transactions" t
+      JOIN
+        "delegations" d ON d.id = t.delegation_id
+      JOIN
+        "employees" e ON e.id = d.employee_id
+      WHERE
+        e.id = ${employeeId} AND t.status = 'PAID'
+      GROUP BY
+        t.type
+    `
+
+    return data
   }
 }

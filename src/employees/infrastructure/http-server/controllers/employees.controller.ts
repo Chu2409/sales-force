@@ -37,6 +37,7 @@ export class EmployeesController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get employee by id' })
   @ApiResponse({ status: 200, type: EmployeeRes })
   async getEmployeeById(@Param('id', ParseIntPipe) id: number) {
@@ -51,6 +52,7 @@ export class EmployeesController {
   }
 
   @Post(':id/permissions')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Assign permission' })
   @ApiResponse({ status: 200, type: Boolean })
   async assignPermission(
@@ -61,6 +63,7 @@ export class EmployeesController {
   }
 
   @Post()
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Create employee' })
   @ApiResponse({ status: 201, type: EmployeeRes })
   async createEmployee(@Body() employee: CreateEmployeeReq) {
@@ -68,6 +71,7 @@ export class EmployeesController {
   }
 
   @Patch(':id')
+  @Auth(EmployeeRole.ADMIN, EmployeeRole.SUPERVISOR)
   @ApiOperation({ summary: 'Update employee' })
   @ApiResponse({ status: 200, type: EmployeeRes })
   async updateEmployee(
@@ -78,6 +82,7 @@ export class EmployeesController {
   }
 
   @Patch(':id/toggle-active')
+  @Auth(EmployeeRole.ADMIN)
   @ApiOperation({ summary: 'Toggle employee active' })
   @ApiResponse({ status: 200, type: Boolean })
   async toggleEmployeeActive(@Param('id', ParseIntPipe) id: number) {

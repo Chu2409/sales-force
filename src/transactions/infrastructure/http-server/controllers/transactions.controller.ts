@@ -13,13 +13,11 @@ import { TransactionsService } from 'src/transactions/application/transactions.s
 import { TRANSACTIONS_SERVICE_PORT } from 'src/transactions/shared/transactions.consts'
 import { CreateTransactionReq } from '../models/create-transaction.req'
 import { UpdateTransactionReq } from '../models/update-transaction.req'
-import { EmployeeRole } from 'src/employees/domain/models/employee.interface'
 import { Auth } from 'src/auth/infrastructure/http-server/decorators/auth.decorator'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { TransactionRes } from '../models/transaction.res'
 
 @Controller('transactions')
-@Auth(EmployeeRole.SUPERVISOR, EmployeeRole.ADMIN)
 @ApiTags('Transactions')
 export class TransactionsController {
   constructor(
@@ -28,6 +26,7 @@ export class TransactionsController {
   ) {}
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Get transaction by id' })
   @ApiResponse({ status: 200, type: TransactionRes })
   async getTransactionById(@Param('id', ParseIntPipe) id: number) {
@@ -43,6 +42,7 @@ export class TransactionsController {
   }
 
   @Post()
+  @Auth()
   @ApiOperation({ summary: 'Create transaction' })
   @ApiResponse({ status: 201, type: TransactionRes })
   async createTransaction(@Body() transaction: CreateTransactionReq) {
@@ -50,6 +50,7 @@ export class TransactionsController {
   }
 
   @Patch(':id')
+  @Auth()
   @ApiOperation({ summary: 'Update transaction' })
   @ApiResponse({ status: 200, type: TransactionRes })
   async updateTransaction(
@@ -60,6 +61,7 @@ export class TransactionsController {
   }
 
   @Delete(':id')
+  @Auth()
   @ApiOperation({ summary: 'Delete transaction' })
   @ApiResponse({ status: 200, type: Boolean })
   async deleteTransaction(@Param('id', ParseIntPipe) id: number) {
